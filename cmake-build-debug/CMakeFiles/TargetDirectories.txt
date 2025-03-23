@@ -1,0 +1,5 @@
+/home/kollibroman/Studia/AIZO/Projekt1/cmake-build-debug/CMakeFiles/Projekt1.dir
+/home/kollibroman/Studia/AIZO/Projekt1/cmake-build-debug/CMakeFiles/package.dir
+/home/kollibroman/Studia/AIZO/Projekt1/cmake-build-debug/CMakeFiles/package_source.dir
+/home/kollibroman/Studia/AIZO/Projekt1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/kollibroman/Studia/AIZO/Projekt1/cmake-build-debug/CMakeFiles/rebuild_cache.dir

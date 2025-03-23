@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/kollibroman/Studia/AIZO/Projekt1/build",
+  "command": "/usr/bin/clang++ -g -std=gnu++20 @CMakeFiles/Projekt1.dir/main.cpp.o.modmap -o CMakeFiles/Projekt1.dir/main.cpp.o -c /home/kollibroman/Studia/AIZO/Projekt1/main.cpp",
+  "file": "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp",
+  "output": "CMakeFiles/Projekt1.dir/main.cpp.o"
+}
+]

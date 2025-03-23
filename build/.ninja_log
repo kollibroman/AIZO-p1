@@ -1,0 +1,8 @@
+# ninja log v6
+2	105	1742763891635899463	CMakeFiles/Projekt1.dir/main.cpp.o.ddi	c157bbe429589108
+1	7	1742762841668967996	clean	a31eedcededa8236
+105	121	1742763891738900364	CMakeFiles/Projekt1.dir/CXX.dd	895b6d52b7daaaeb
+3281	3441	1742763894914928116	Projekt1	2bcbb680c1fe8fdf
+105	121	1742763891738900364	/home/kollibroman/Studia/AIZO/Projekt1/build/CMakeFiles/Projekt1.dir/CXXModules.json	895b6d52b7daaaeb
+105	121	1742763891738900364	CMakeFiles/Projekt1.dir/main.cpp.o.modmap	895b6d52b7daaaeb
+121	3281	1742763891754900503	CMakeFiles/Projekt1.dir/main.cpp.o	ce795bc4172bf31c
