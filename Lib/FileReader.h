@@ -1,6 +1,8 @@
 #ifndef FILEREADER_H
 #define FILEREADER_H
 #include<fstream>
+#include<string>
+#include<algorithm>
 
 template <typename T> class FileReader
 {
@@ -16,39 +18,43 @@ public:
         // Dynamicznie wpisuję rzeczy z plików do tablicy
         while (file >> line)
         {
-            //W razie czego to jest do zmiany, bo w plikach testowych jest najpierw licza jako size
-            T *temp = new T[base_size];
-            for (int i = 1; i < base_size; i++)
+            //pierwsza linijka to rozmiar tablicy, na razie w ten sposob robie skip
+            if (line != "49")
             {
-                temp[i] = tab[i];
+                T *temp = new T[base_size];
+                for (int i = 0; i < base_size; i++)
+                {
+                    temp[i] = tab[i];
+                }
+
+                delete[] tab;
+                base_size++;
+
+                tab = new T[base_size];
+                for (int i = 0; i < base_size - 1; i++)
+                {
+                    tab[i] = temp[i];
+                }
+
+                if (IsFloat(line) == false)
+                {
+                    tab[base_size - 1] = std::stoi(line);
+                }
+
+                else if(IsFloat(line))
+                {
+                    std::ranges::replace(line, ',', '.');
+                    tab[base_size - 1] = std::stof(line);
+                }
+
+                else
+                {
+                    std::cout << "Niepoprawne dane w pliku" << std::endl;
+                    return nullptr;
+                }
+
+                delete[] temp;
             }
-
-            delete[] tab;
-            base_size++;
-
-            tab = new T[base_size];
-            for (int i = 0; i < base_size - 1; i++)
-            {
-                tab[i] = temp[i];
-            }
-
-            if (IsFloat(line) == false)
-            {
-                tab[base_size - 1] = std::stoi(line);
-            }
-
-            else if(IsFloat(line))
-            {
-                tab[base_size - 1] = std::stof(line);
-            }
-
-            else 
-            {
-                std::cout << "Niepoprawne dane w pliku" << std::endl;
-                return nullptr;
-            }
-
-            delete[] temp;
         }
 
         file.close();

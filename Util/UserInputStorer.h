@@ -5,11 +5,10 @@
 //Struct gdzie przechowywane są dane wprowadzone przez użytkownika
 struct UserInputStorer
 {
-       UserInputStorer(int option, std::string dataType, int chosenAlgorithm)
+       UserInputStorer(int option, std::string dataType)
        {
               Option = option;
               DataType = dataType;
-              ChosenAlgorithm = chosenAlgorithm;
        }
        
        int Option;

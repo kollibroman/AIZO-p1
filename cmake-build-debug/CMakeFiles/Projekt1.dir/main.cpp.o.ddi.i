@@ -48568,11 +48568,10 @@ namespace std __attribute__ ((__visibility__ ("default")))
 # 6 "/home/kollibroman/Studia/AIZO/Projekt1/UI/../Util/UserInputStorer.h"
 struct UserInputStorer
 {
-       UserInputStorer(int option, std::string dataType, int chosenAlgorithm)
+       UserInputStorer(int option, std::string dataType)
        {
               Option = option;
               DataType = dataType;
-              ChosenAlgorithm = chosenAlgorithm;
        }
 
        int Option;
@@ -68736,7 +68735,7 @@ template <typename T> class ArrayDataGenerator
 # 25 "/home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/ArrayDataGenerator.h" 3 4
                                                                                                     2147483647
 # 25 "/home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/ArrayDataGenerator.h"
-                                                                                                            ) * 100) / 100;
+                                                                                                            ));
                     tab[i] = newFloat + std::rand() % 1001;
                 }
             }
@@ -71457,3535 +71456,10 @@ namespace std __attribute__ ((__visibility__ ("default")))
 # 1361 "/usr/include/c++/14.2.1/fstream" 2 3
 # 4 "/home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/FileReader.h" 2
 
-
-# 5 "/home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/FileReader.h"
-template <typename T> class FileReader
-{
-public:
-    T *ReadFile(std::string path)
-    {
-        std::ifstream file(path);
-        std::string line;
-        int base_size = 0;
-
-        T *tab;
-
-
-        while (file >> line)
-        {
-
-            T *temp = new T[base_size];
-            for (int i = 1; i < base_size; i++)
-            {
-                temp[i] = tab[i];
-            }
-
-            delete[] tab;
-            base_size++;
-
-            tab = new T[base_size];
-            for (int i = 0; i < base_size - 1; i++)
-            {
-                tab[i] = temp[i];
-            }
-
-            if (IsFloat(line) == false)
-            {
-                tab[base_size - 1] = std::stoi(line);
-            }
-
-            else if(IsFloat(line))
-            {
-                tab[base_size - 1] = std::stof(line);
-            }
-
-            else
-            {
-                std::cout << "Niepoprawne dane w pliku" << std::endl;
-                return nullptr;
-            }
-
-            delete[] temp;
-        }
-
-        file.close();
-        return tab;
-    }
-
-private:
-    static bool IsFloat(std::string line)
-    {
-        return line.find(',') != std::string::npos || line.find('.') != std::string::npos;
-    }
-};
-# 10 "/home/kollibroman/Studia/AIZO/Projekt1/UI/MainMenu.h" 2
-
-class MainMenu
-{
-public:
-    int GENERATION_COUNT = 1000;
-    int ARRAY_SIZE = 100000;
-
-    explicit MainMenu(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer)
-    {
-            std::cout<< "Menu programu" << std::endl;
-
-            std::vector<std::string> options =
-            {
-                "Wygeneruj dane danego typu (1)",
-                "Wczytaj dane z pliku (2)",
-                "Opusc program (3)"
-            };
-
-            int choice;
-
-            for (auto option : options)
-            {
-                std::cout << option << std::endl;
-            }
-
-            std::cin >> choice;
-
-            switch (choice)
-            {
-                case 1:
-                    userInput->Option = choice;
-                    ChooseDataType(userInput);
-                    ChooseAlgorithm(userInput);
-                    HandleDataGeneration(userInput, intArrayStorer, floatArrayStorer);
-                    break;
-
-                case 2:
-                    userInput->Option = choice;
-                    ChooseDataType(userInput);
-                    ChooseAlgorithm(userInput);
-                    HandleDataRead(userInput, intArrayStorer, floatArrayStorer);
-                    break;
-
-                case 3:
-                    std::cout << "Koncze prace programu" << std::endl;
-                    return;
-
-                default:
-                    std::cout << "Wrong input" << std::endl;
-                    break;
-            }
-    }
-
-private:
-
-    void ChooseAlgorithm(UserInputStorer* &userInput)
-    {
-        std::cout<< "Menu programu" << std::endl;
-
-        std::vector<std::string> options =
-        {
-            "Sortowanie szybkie (1)",
-            "Sortowanie przez wstawianie (2)",
-            "Sortowanie przez wstawianie binarne (3)",
-            "Sortowanie przez kopcowanie (4)"
-        };
-
-        int choice;
-
-        for (auto option : options)
-        {
-            std::cout << option << std::endl;
-        }
-
-        std::cin >> choice;
-
-        switch(choice)
-        {
-            case 1:
-                std::cout << "Wybrano sortowanie szybkie" << std::endl;
-                userInput->ChosenAlgorithm = choice;
-                break;
-
-            case 2:
-                std::cout << "Wybrano sortowanie przez wstawianie" << std::endl;
-                userInput->ChosenAlgorithm = choice;
-                break;
-
-            case 3:
-                std::cout << "Wybrano sortowanie przez wstawianie binarne" << std::endl;
-                userInput->ChosenAlgorithm = choice;
-                break;
-
-            case 4:
-                std::cout << "Wybrano sortowanie przez kopcowanie" << std::endl;
-                userInput->ChosenAlgorithm = choice;
-                break;
-
-            default:
-                std::cout << "nieakceptowalny wybor" << std::endl;
-                break;
-        }
-    }
-
-    void ChooseDataType(UserInputStorer* &userInput)
-    {
-        std::cout<< "Wybierz typ danych" << std::endl;
-
-        std::vector<std::string> options =
-        {
-            "Int (1)",
-            "Float (2)",
-        };
-
-        int choice;
-
-        for (auto option : options)
-        {
-            std::cout << option << std::endl;
-        }
-
-        std::cin >> choice;
-
-        switch(choice)
-        {
-            case 1:
-                std::cout << "Wybrano int" << std::endl;
-                userInput->DataType = "int";
-                break;
-
-            case 2:
-                std::cout << "Wybrano float" << std::endl;
-                userInput->DataType = "float";
-                break;
-
-            default:
-                std::cout << "nieakceptowalny wybor" << std::endl;
-                break;
-        }
-    }
-
-    void HandleDataGeneration(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer)
-    {
-        for (int i = 0; i < GENERATION_COUNT; i++)
-        {
-            if (userInput->DataType == "int")
-            {
-                auto arrayDataGenerator = new ArrayDataGenerator<int>();
-                int *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
-                intArrayStorer->Arrays[i] = tab;
-            }
-
-            else if (userInput->DataType == "float")
-            {
-                auto arrayDataGenerator = new ArrayDataGenerator<float>();
-                float *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
-                floatArrayStorer->Arrays[i] = tab;
-            }
-        }
-    }
-
-    void HandleDataRead(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer)
-    {
-        std::cout << "Podaj nazwe pliku" << std::endl;
-        std::string fileName;
-        std::cin >> fileName;
-
-        if(fileName.find(".txt") == std::string::npos)
-        {
-            fileName += ".txt";
-        }
-
-        for (int i = 0; i < GENERATION_COUNT; i++)
-        {
-            if (userInput->DataType == "int")
-            {
-                auto fileReader = new FileReader<int>();
-                int *tab = fileReader->ReadFile(fileName);
-                intArrayStorer->Arrays[i] = tab;
-            }
-
-            else if (userInput->DataType == "float")
-            {
-                auto fileReader = new FileReader<float>();
-                float *tab = fileReader->ReadFile(fileName);
-                floatArrayStorer->Arrays[i] = tab;
-            }
-        }
-    }
-};
-# 3 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
-# 1 "/home/kollibroman/Studia/AIZO/Projekt1/Util/UserInputStorer.h" 1
-# 4 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
-# 1 "/home/kollibroman/Studia/AIZO/Projekt1/Lib/Algorithms.h" 1
-
-
-
-template <typename T>
-class Algorithms
-{
-    public:
-        Algorithms()
-        {
-        }
-
-        void QuickSort(T *tab, int left, int right)
-        {
-            if (left >= right)
-                return;
-
-            T v = tab[(right + left) / 2];
-            int i = left, j = right;
-
-            do
-            {
-                while (tab[i] < v)
-                    i++;
-                while (tab[j] > v)
-                    j--;
-
-                if (i <= j)
-                {
-                    std::swap(tab[i], tab[j]);
-                    i++;
-                    j--;
-                }
-            } while (i <= j);
-
-            if (j > left)
-                QuickSort(tab, left, j);
-            if (i < right)
-                QuickSort(tab, i, right);
-        }
-
-        void HeapSort(T *tab, int n)
-        {
-
-        }
-
-        void InsertSort(T *tab, int n)
-        {
-            T temp;
-            int j;
-            for (int i = 1; i < n; i++)
-            {
-                temp = tab[i];
-                j = i - 1;
-
-                while (j >= 0 && tab[j] > temp)
-                {
-                    tab[j + 1] = tab[j];
-                    j--;
-                }
-                tab[j + 1] = temp;
-            }
-        }
-
-        void InsertSortBinary(T *tab, int n)
-        {
-
-        }
-};
-# 5 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
-
-# 1 "/usr/include/c++/14.2.1/chrono" 1 3
-# 33 "/usr/include/c++/14.2.1/chrono" 3
+# 1 "/usr/include/c++/14.2.1/algorithm" 1 3
+# 58 "/usr/include/c++/14.2.1/algorithm" 3
        
-# 34 "/usr/include/c++/14.2.1/chrono" 3
-
-
-
-
-
-
-
-# 1 "/usr/include/c++/14.2.1/bits/chrono.h" 1 3
-# 33 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-       
-# 34 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-
-
-
-# 1 "/usr/include/c++/14.2.1/ratio" 1 3
-# 33 "/usr/include/c++/14.2.1/ratio" 3
-       
-# 34 "/usr/include/c++/14.2.1/ratio" 3
-# 43 "/usr/include/c++/14.2.1/ratio" 3
-# 1 "/usr/include/c++/14.2.1/bits/version.h" 1 3
-# 47 "/usr/include/c++/14.2.1/bits/version.h" 3
-       
-# 48 "/usr/include/c++/14.2.1/bits/version.h" 3
-# 44 "/usr/include/c++/14.2.1/ratio" 2 3
-
-
-# 45 "/usr/include/c++/14.2.1/ratio" 3
-namespace std __attribute__ ((__visibility__ ("default")))
-{
-
-# 59 "/usr/include/c++/14.2.1/ratio" 3
-  template<intmax_t _Pn>
-    struct __static_sign
-    : integral_constant<intmax_t, (_Pn < 0) ? -1 : 1>
-    { };
-
-  template<intmax_t _Pn>
-    struct __static_abs
-    : integral_constant<intmax_t, _Pn * __static_sign<_Pn>::value>
-    { };
-
-  template<intmax_t _Pn, intmax_t _Qn>
-    struct __static_gcd
-    : __static_gcd<_Qn, (_Pn % _Qn)>
-    { };
-
-  template<intmax_t _Pn>
-    struct __static_gcd<_Pn, 0>
-    : integral_constant<intmax_t, __static_abs<_Pn>::value>
-    { };
-
-  template<intmax_t _Qn>
-    struct __static_gcd<0, _Qn>
-    : integral_constant<intmax_t, __static_abs<_Qn>::value>
-    { };
-
-
-
-
-
-
-
-  template<intmax_t _Pn, intmax_t _Qn>
-    struct __safe_multiply
-    {
-    private:
-      static const uintmax_t __c = uintmax_t(1) << (sizeof(intmax_t) * 4);
-
-      static const uintmax_t __a0 = __static_abs<_Pn>::value % __c;
-      static const uintmax_t __a1 = __static_abs<_Pn>::value / __c;
-      static const uintmax_t __b0 = __static_abs<_Qn>::value % __c;
-      static const uintmax_t __b1 = __static_abs<_Qn>::value / __c;
-
-      static_assert(__a1 == 0 || __b1 == 0,
-      "overflow in multiplication");
-      static_assert(__a0 * __b1 + __b0 * __a1 < (__c >> 1),
-      "overflow in multiplication");
-      static_assert(__b0 * __a0 <= 0x7fffffffffffffffL,
-      "overflow in multiplication");
-      static_assert((__a0 * __b1 + __b0 * __a1) * __c
-      <= 0x7fffffffffffffffL - __b0 * __a0,
-      "overflow in multiplication");
-
-    public:
-      static const intmax_t value = _Pn * _Qn;
-    };
-
-
-
-  template<uintmax_t __hi1, uintmax_t __lo1, uintmax_t __hi2, uintmax_t __lo2>
-    struct __big_less
-    : integral_constant<bool, (__hi1 < __hi2
-          || (__hi1 == __hi2 && __lo1 < __lo2))>
-    { };
-
-  template<uintmax_t __hi1, uintmax_t __lo1, uintmax_t __hi2, uintmax_t __lo2>
-    struct __big_add
-    {
-      static constexpr uintmax_t __lo = __lo1 + __lo2;
-      static constexpr uintmax_t __hi = (__hi1 + __hi2 +
-      (__lo1 + __lo2 < __lo1));
-    };
-
-
-  template<uintmax_t __hi1, uintmax_t __lo1, uintmax_t __hi2, uintmax_t __lo2>
-    struct __big_sub
-    {
-      static_assert(!__big_less<__hi1, __lo1, __hi2, __lo2>::value,
-      "Internal library error");
-      static constexpr uintmax_t __lo = __lo1 - __lo2;
-      static constexpr uintmax_t __hi = (__hi1 - __hi2 -
-      (__lo1 < __lo2));
-    };
-
-
-  template<uintmax_t __x, uintmax_t __y>
-    struct __big_mul
-    {
-    private:
-      static constexpr uintmax_t __c = uintmax_t(1) << (sizeof(intmax_t) * 4);
-      static constexpr uintmax_t __x0 = __x % __c;
-      static constexpr uintmax_t __x1 = __x / __c;
-      static constexpr uintmax_t __y0 = __y % __c;
-      static constexpr uintmax_t __y1 = __y / __c;
-      static constexpr uintmax_t __x0y0 = __x0 * __y0;
-      static constexpr uintmax_t __x0y1 = __x0 * __y1;
-      static constexpr uintmax_t __x1y0 = __x1 * __y0;
-      static constexpr uintmax_t __x1y1 = __x1 * __y1;
-      static constexpr uintmax_t __mix = __x0y1 + __x1y0;
-      static constexpr uintmax_t __mix_lo = __mix * __c;
-      static constexpr uintmax_t __mix_hi
-      = __mix / __c + ((__mix < __x0y1) ? __c : 0);
-      typedef __big_add<__mix_hi, __mix_lo, __x1y1, __x0y0> _Res;
-    public:
-      static constexpr uintmax_t __hi = _Res::__hi;
-      static constexpr uintmax_t __lo = _Res::__lo;
-    };
-
-
-
-  template<uintmax_t __n1, uintmax_t __n0, uintmax_t __d>
-    struct __big_div_impl
-    {
-    private:
-      static_assert(__d >= (uintmax_t(1) << (sizeof(intmax_t) * 8 - 1)),
-      "Internal library error");
-      static_assert(__n1 < __d, "Internal library error");
-      static constexpr uintmax_t __c = uintmax_t(1) << (sizeof(intmax_t) * 4);
-      static constexpr uintmax_t __d1 = __d / __c;
-      static constexpr uintmax_t __d0 = __d % __c;
-
-      static constexpr uintmax_t __q1x = __n1 / __d1;
-      static constexpr uintmax_t __r1x = __n1 % __d1;
-      static constexpr uintmax_t __m = __q1x * __d0;
-      static constexpr uintmax_t __r1y = __r1x * __c + __n0 / __c;
-      static constexpr uintmax_t __r1z = __r1y + __d;
-      static constexpr uintmax_t __r1
-      = ((__r1y < __m) ? ((__r1z >= __d) && (__r1z < __m))
-  ? (__r1z + __d) : __r1z : __r1y) - __m;
-      static constexpr uintmax_t __q1
-      = __q1x - ((__r1y < __m)
-   ? ((__r1z >= __d) && (__r1z < __m)) ? 2 : 1 : 0);
-      static constexpr uintmax_t __q0x = __r1 / __d1;
-      static constexpr uintmax_t __r0x = __r1 % __d1;
-      static constexpr uintmax_t __n = __q0x * __d0;
-      static constexpr uintmax_t __r0y = __r0x * __c + __n0 % __c;
-      static constexpr uintmax_t __r0z = __r0y + __d;
-      static constexpr uintmax_t __r0
-      = ((__r0y < __n) ? ((__r0z >= __d) && (__r0z < __n))
-  ? (__r0z + __d) : __r0z : __r0y) - __n;
-      static constexpr uintmax_t __q0
-      = __q0x - ((__r0y < __n) ? ((__r0z >= __d)
-      && (__r0z < __n)) ? 2 : 1 : 0);
-
-    public:
-      static constexpr uintmax_t __quot = __q1 * __c + __q0;
-      static constexpr uintmax_t __rem = __r0;
-
-    private:
-      typedef __big_mul<__quot, __d> _Prod;
-      typedef __big_add<_Prod::__hi, _Prod::__lo, 0, __rem> _Sum;
-      static_assert(_Sum::__hi == __n1 && _Sum::__lo == __n0,
-      "Internal library error");
-  };
-
-  template<uintmax_t __n1, uintmax_t __n0, uintmax_t __d>
-    struct __big_div
-    {
-    private:
-      static_assert(__d != 0, "Internal library error");
-      static_assert(sizeof (uintmax_t) == sizeof (unsigned long long),
-      "This library calls __builtin_clzll on uintmax_t, which "
-      "is unsafe on your platform. Please complain to "
-      "http://gcc.gnu.org/bugzilla/");
-      static constexpr int __shift = __builtin_clzll(__d);
-      static constexpr int __coshift_ = sizeof(uintmax_t) * 8 - __shift;
-      static constexpr int __coshift = (__shift != 0) ? __coshift_ : 0;
-      static constexpr uintmax_t __c1 = uintmax_t(1) << __shift;
-      static constexpr uintmax_t __c2 = uintmax_t(1) << __coshift;
-      static constexpr uintmax_t __new_d = __d * __c1;
-      static constexpr uintmax_t __new_n0 = __n0 * __c1;
-      static constexpr uintmax_t __n1_shifted = (__n1 % __d) * __c1;
-      static constexpr uintmax_t __n0_top = (__shift != 0) ? (__n0 / __c2) : 0;
-      static constexpr uintmax_t __new_n1 = __n1_shifted + __n0_top;
-      typedef __big_div_impl<__new_n1, __new_n0, __new_d> _Res;
-
-    public:
-      static constexpr uintmax_t __quot_hi = __n1 / __d;
-      static constexpr uintmax_t __quot_lo = _Res::__quot;
-      static constexpr uintmax_t __rem = _Res::__rem / __c1;
-
-    private:
-      typedef __big_mul<__quot_lo, __d> _P0;
-      typedef __big_mul<__quot_hi, __d> _P1;
-      typedef __big_add<_P0::__hi, _P0::__lo, _P1::__lo, __rem> _Sum;
-
-      static_assert(_P1::__hi == 0, "Internal library error");
-      static_assert(_Sum::__hi >= _P0::__hi, "Internal library error");
-
-      static_assert(_Sum::__hi == __n1 && _Sum::__lo == __n0,
-      "Internal library error");
-      static_assert(__rem < __d, "Internal library error");
-    };
-# 268 "/usr/include/c++/14.2.1/ratio" 3
-  template<intmax_t _Num, intmax_t _Den = 1>
-    struct ratio
-    {
-      static_assert(_Den != 0, "denominator cannot be zero");
-      static_assert(_Num >= -0x7fffffffffffffffL && _Den >= -0x7fffffffffffffffL,
-      "out of range");
-
-
-      static constexpr intmax_t num =
-        _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
-
-      static constexpr intmax_t den =
-        __static_abs<_Den>::value / __static_gcd<_Num, _Den>::value;
-
-      typedef ratio<num, den> type;
-    };
-# 295 "/usr/include/c++/14.2.1/ratio" 3
-  template<typename _Tp>
-    struct __is_ratio
-    : std::false_type
-    { };
-
-  template<intmax_t _Num, intmax_t _Den>
-    struct __is_ratio<ratio<_Num, _Den>>
-    : std::true_type
-    { };
-
-
-  template<typename _Tp>
-    constexpr bool __is_ratio_v = false;
-  template<intmax_t _Num, intmax_t _Den>
-    constexpr bool __is_ratio_v<ratio<_Num, _Den>> = true;
-
-
-  template<typename _R1, typename _R2>
-    constexpr bool
-    __are_both_ratios() noexcept
-    {
-
-      if constexpr (__is_ratio_v<_R1>)
- if constexpr (__is_ratio_v<_R2>)
-   return true;
-      return false;
-
-
-
-    }
-
-  template<typename _R1, typename _R2>
-    struct __ratio_multiply
-    {
-      static_assert(std::__are_both_ratios<_R1, _R2>(),
-      "both template arguments must be a std::ratio");
-
-    private:
-      static const intmax_t __gcd1 =
-        __static_gcd<_R1::num, _R2::den>::value;
-      static const intmax_t __gcd2 =
-        __static_gcd<_R2::num, _R1::den>::value;
-
-    public:
-      typedef ratio<
-        __safe_multiply<(_R1::num / __gcd1),
-                        (_R2::num / __gcd2)>::value,
-        __safe_multiply<(_R1::den / __gcd2),
-                        (_R2::den / __gcd1)>::value> type;
-
-      static constexpr intmax_t num = type::num;
-      static constexpr intmax_t den = type::den;
-    };
-# 360 "/usr/include/c++/14.2.1/ratio" 3
-  template<typename _R1, typename _R2>
-    using ratio_multiply = typename __ratio_multiply<_R1, _R2>::type;
-
-
-
-  template<typename _R1, typename _R2>
-    struct __ratio_divide
-    {
-      static_assert(_R2::num != 0, "division by 0");
-
-      typedef typename __ratio_multiply<
-        _R1,
-        ratio<_R2::den, _R2::num>>::type type;
-
-      static constexpr intmax_t num = type::num;
-      static constexpr intmax_t den = type::den;
-    };
-# 389 "/usr/include/c++/14.2.1/ratio" 3
-  template<typename _R1, typename _R2>
-    using ratio_divide = typename __ratio_divide<_R1, _R2>::type;
-
-
-  template<typename _R1, typename _R2>
-    struct ratio_equal
-    : integral_constant<bool, _R1::num == _R2::num && _R1::den == _R2::den>
-    {
-      static_assert(std::__are_both_ratios<_R1, _R2>(),
-      "both template arguments must be a std::ratio");
-    };
-
-
-  template<typename _R1, typename _R2>
-    struct ratio_not_equal
-    : integral_constant<bool, !ratio_equal<_R1, _R2>::value>
-    { };
-
-
-
-
-  template<typename _R1, typename _R2,
-           typename _Left = __big_mul<_R1::num,_R2::den>,
-           typename _Right = __big_mul<_R2::num,_R1::den> >
-    struct __ratio_less_impl_1
-    : integral_constant<bool, __big_less<_Left::__hi, _Left::__lo,
-           _Right::__hi, _Right::__lo>::value>
-    { };
-
-  template<typename _R1, typename _R2,
-    bool = (_R1::num == 0 || _R2::num == 0
-     || (__static_sign<_R1::num>::value
-         != __static_sign<_R2::num>::value)),
-    bool = (__static_sign<_R1::num>::value == -1
-     && __static_sign<_R2::num>::value == -1)>
-    struct __ratio_less_impl
-    : __ratio_less_impl_1<_R1, _R2>::type
-    { };
-
-  template<typename _R1, typename _R2>
-    struct __ratio_less_impl<_R1, _R2, true, false>
-    : integral_constant<bool, _R1::num < _R2::num>
-    { };
-
-  template<typename _R1, typename _R2>
-    struct __ratio_less_impl<_R1, _R2, false, true>
-    : __ratio_less_impl_1<ratio<-_R2::num, _R2::den>,
-           ratio<-_R1::num, _R1::den> >::type
-    { };
-
-
-
-
-  template<typename _R1, typename _R2>
-    struct ratio_less
-    : __ratio_less_impl<_R1, _R2>::type
-    {
-      static_assert(std::__are_both_ratios<_R1, _R2>(),
-      "both template arguments must be a std::ratio");
-    };
-
-
-  template<typename _R1, typename _R2>
-    struct ratio_less_equal
-    : integral_constant<bool, !ratio_less<_R2, _R1>::value>
-    { };
-
-
-  template<typename _R1, typename _R2>
-    struct ratio_greater
-    : integral_constant<bool, ratio_less<_R2, _R1>::value>
-    { };
-
-
-  template<typename _R1, typename _R2>
-    struct ratio_greater_equal
-    : integral_constant<bool, !ratio_less<_R1, _R2>::value>
-    { };
-
-
-  template <typename _R1, typename _R2>
-    inline constexpr bool ratio_equal_v = ratio_equal<_R1, _R2>::value;
-  template <typename _R1, typename _R2>
-    inline constexpr bool ratio_not_equal_v = ratio_not_equal<_R1, _R2>::value;
-  template <typename _R1, typename _R2>
-    inline constexpr bool ratio_less_v = ratio_less<_R1, _R2>::value;
-  template <typename _R1, typename _R2>
-    inline constexpr bool ratio_less_equal_v
-      = ratio_less_equal<_R1, _R2>::value;
-  template <typename _R1, typename _R2>
-    inline constexpr bool ratio_greater_v = ratio_greater<_R1, _R2>::value;
-  template <typename _R1, typename _R2>
-    inline constexpr bool ratio_greater_equal_v
-      = ratio_greater_equal<_R1, _R2>::value;
-
-
-
-
-  template<typename _R1, typename _R2,
-      bool = (_R1::num >= 0),
-      bool = (_R2::num >= 0),
-      bool = ratio_less<ratio<__static_abs<_R1::num>::value, _R1::den>,
-        ratio<__static_abs<_R2::num>::value, _R2::den> >::value>
-    struct __ratio_add_impl
-    {
-    private:
-      typedef typename __ratio_add_impl<
-        ratio<-_R1::num, _R1::den>,
-        ratio<-_R2::num, _R2::den> >::type __t;
-    public:
-      typedef ratio<-__t::num, __t::den> type;
-    };
-
-
-  template<typename _R1, typename _R2, bool __b>
-    struct __ratio_add_impl<_R1, _R2, true, true, __b>
-    {
-    private:
-      static constexpr uintmax_t __g = __static_gcd<_R1::den, _R2::den>::value;
-      static constexpr uintmax_t __d2 = _R2::den / __g;
-      typedef __big_mul<_R1::den, __d2> __d;
-      typedef __big_mul<_R1::num, _R2::den / __g> __x;
-      typedef __big_mul<_R2::num, _R1::den / __g> __y;
-      typedef __big_add<__x::__hi, __x::__lo, __y::__hi, __y::__lo> __n;
-      static_assert(__n::__hi >= __x::__hi, "Internal library error");
-      typedef __big_div<__n::__hi, __n::__lo, __g> __ng;
-      static constexpr uintmax_t __g2 = __static_gcd<__ng::__rem, __g>::value;
-      typedef __big_div<__n::__hi, __n::__lo, __g2> __n_final;
-      static_assert(__n_final::__rem == 0, "Internal library error");
-      static_assert(__n_final::__quot_hi == 0 &&
-        __n_final::__quot_lo <= 0x7fffffffffffffffL, "overflow in addition");
-      typedef __big_mul<_R1::den / __g2, __d2> __d_final;
-      static_assert(__d_final::__hi == 0 &&
-        __d_final::__lo <= 0x7fffffffffffffffL, "overflow in addition");
-    public:
-      typedef ratio<__n_final::__quot_lo, __d_final::__lo> type;
-    };
-
-  template<typename _R1, typename _R2>
-    struct __ratio_add_impl<_R1, _R2, false, true, true>
-    : __ratio_add_impl<_R2, _R1>
-    { };
-
-
-  template<typename _R1, typename _R2>
-    struct __ratio_add_impl<_R1, _R2, true, false, false>
-    {
-    private:
-      static constexpr uintmax_t __g = __static_gcd<_R1::den, _R2::den>::value;
-      static constexpr uintmax_t __d2 = _R2::den / __g;
-      typedef __big_mul<_R1::den, __d2> __d;
-      typedef __big_mul<_R1::num, _R2::den / __g> __x;
-      typedef __big_mul<-_R2::num, _R1::den / __g> __y;
-      typedef __big_sub<__x::__hi, __x::__lo, __y::__hi, __y::__lo> __n;
-      typedef __big_div<__n::__hi, __n::__lo, __g> __ng;
-      static constexpr uintmax_t __g2 = __static_gcd<__ng::__rem, __g>::value;
-      typedef __big_div<__n::__hi, __n::__lo, __g2> __n_final;
-      static_assert(__n_final::__rem == 0, "Internal library error");
-      static_assert(__n_final::__quot_hi == 0 &&
-        __n_final::__quot_lo <= 0x7fffffffffffffffL, "overflow in addition");
-      typedef __big_mul<_R1::den / __g2, __d2> __d_final;
-      static_assert(__d_final::__hi == 0 &&
-        __d_final::__lo <= 0x7fffffffffffffffL, "overflow in addition");
-    public:
-      typedef ratio<__n_final::__quot_lo, __d_final::__lo> type;
-    };
-
-  template<typename _R1, typename _R2>
-    struct __ratio_add
-    {
-      static_assert(std::__are_both_ratios<_R1, _R2>(),
-      "both template arguments must be a std::ratio");
-
-      typedef typename __ratio_add_impl<_R1, _R2>::type type;
-      static constexpr intmax_t num = type::num;
-      static constexpr intmax_t den = type::den;
-    };
-# 578 "/usr/include/c++/14.2.1/ratio" 3
-  template<typename _R1, typename _R2>
-    using ratio_add = typename __ratio_add<_R1, _R2>::type;
-
-
-
-  template<typename _R1, typename _R2>
-    struct __ratio_subtract
-    {
-      typedef typename __ratio_add<
-        _R1,
-        ratio<-_R2::num, _R2::den>>::type type;
-
-      static constexpr intmax_t num = type::num;
-      static constexpr intmax_t den = type::den;
-    };
-# 605 "/usr/include/c++/14.2.1/ratio" 3
-  template<typename _R1, typename _R2>
-    using ratio_subtract = typename __ratio_subtract<_R1, _R2>::type;
-# 618 "/usr/include/c++/14.2.1/ratio" 3
-  using atto = ratio< 1, 1000000000000000000>;
-  using femto = ratio< 1, 1000000000000000>;
-  using pico = ratio< 1, 1000000000000>;
-  using nano = ratio< 1, 1000000000>;
-  using micro = ratio< 1, 1000000>;
-  using milli = ratio< 1, 1000>;
-  using centi = ratio< 1, 100>;
-  using deci = ratio< 1, 10>;
-  using deca = ratio< 10, 1>;
-  using hecto = ratio< 100, 1>;
-  using kilo = ratio< 1000, 1>;
-  using mega = ratio< 1000000, 1>;
-  using giga = ratio< 1000000000, 1>;
-  using tera = ratio< 1000000000000, 1>;
-  using peta = ratio< 1000000000000000, 1>;
-  using exa = ratio< 1000000000000000000, 1>;
-# 646 "/usr/include/c++/14.2.1/ratio" 3
-
-}
-# 38 "/usr/include/c++/14.2.1/bits/chrono.h" 2 3
-
-
-# 1 "/usr/include/c++/14.2.1/ctime" 1 3
-# 39 "/usr/include/c++/14.2.1/ctime" 3
-       
-# 40 "/usr/include/c++/14.2.1/ctime" 3
-# 58 "/usr/include/c++/14.2.1/ctime" 3
-namespace std
-{
-  using ::clock_t;
-  using ::time_t;
-  using ::tm;
-
-  using ::clock;
-  using ::difftime;
-  using ::mktime;
-  using ::time;
-  using ::asctime;
-  using ::ctime;
-  using ::gmtime;
-  using ::localtime;
-  using ::strftime;
-}
-
-
-
-namespace std
-{
-  using ::timespec;
-  using ::timespec_get;
-}
-# 41 "/usr/include/c++/14.2.1/bits/chrono.h" 2 3
-# 1 "/usr/include/c++/14.2.1/bits/parse_numbers.h" 1 3
-# 33 "/usr/include/c++/14.2.1/bits/parse_numbers.h" 3
-       
-# 34 "/usr/include/c++/14.2.1/bits/parse_numbers.h" 3
-# 42 "/usr/include/c++/14.2.1/bits/parse_numbers.h" 3
-namespace std __attribute__ ((__visibility__ ("default")))
-{
-
-
-namespace __parse_int
-{
-  template<unsigned _Base, char _Dig>
-    struct _Digit;
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '0'> : integral_constant<unsigned, 0>
-    {
-      using __valid = true_type;
-    };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '1'> : integral_constant<unsigned, 1>
-    {
-      using __valid = true_type;
-    };
-
-  template<unsigned _Base, unsigned _Val>
-    struct _Digit_impl : integral_constant<unsigned, _Val>
-    {
-      static_assert(_Base > _Val, "invalid digit");
-      using __valid = true_type;
-    };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '2'> : _Digit_impl<_Base, 2>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '3'> : _Digit_impl<_Base, 3>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '4'> : _Digit_impl<_Base, 4>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '5'> : _Digit_impl<_Base, 5>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '6'> : _Digit_impl<_Base, 6>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '7'> : _Digit_impl<_Base, 7>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '8'> : _Digit_impl<_Base, 8>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '9'> : _Digit_impl<_Base, 9>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'a'> : _Digit_impl<_Base, 0xa>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'A'> : _Digit_impl<_Base, 0xa>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'b'> : _Digit_impl<_Base, 0xb>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'B'> : _Digit_impl<_Base, 0xb>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'c'> : _Digit_impl<_Base, 0xc>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'C'> : _Digit_impl<_Base, 0xc>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'd'> : _Digit_impl<_Base, 0xd>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'D'> : _Digit_impl<_Base, 0xd>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'e'> : _Digit_impl<_Base, 0xe>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'E'> : _Digit_impl<_Base, 0xe>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'f'> : _Digit_impl<_Base, 0xf>
-    { };
-
-  template<unsigned _Base>
-    struct _Digit<_Base, 'F'> : _Digit_impl<_Base, 0xf>
-    { };
-
-
-  template<unsigned _Base>
-    struct _Digit<_Base, '\''> : integral_constant<unsigned, 0>
-    {
-      using __valid = false_type;
-    };
-
-
-
-  template<unsigned long long _Val>
-    using __ull_constant = integral_constant<unsigned long long, _Val>;
-
-  template<unsigned _Base, char _Dig, char... _Digs>
-    struct _Power_help
-    {
-      using __next = typename _Power_help<_Base, _Digs...>::type;
-      using __valid_digit = typename _Digit<_Base, _Dig>::__valid;
-      using type
- = __ull_constant<__next::value * (__valid_digit{} ? _Base : 1ULL)>;
-    };
-
-  template<unsigned _Base, char _Dig>
-    struct _Power_help<_Base, _Dig>
-    {
-      using __valid_digit = typename _Digit<_Base, _Dig>::__valid;
-      using type = __ull_constant<__valid_digit::value>;
-    };
-
-  template<unsigned _Base, char... _Digs>
-    struct _Power : _Power_help<_Base, _Digs...>::type
-    { };
-
-  template<unsigned _Base>
-    struct _Power<_Base> : __ull_constant<0>
-    { };
-
-
-
-  template<unsigned _Base, unsigned long long _Pow, char _Dig, char... _Digs>
-    struct _Number_help
-    {
-      using __digit = _Digit<_Base, _Dig>;
-      using __valid_digit = typename __digit::__valid;
-      using __next = _Number_help<_Base,
-      __valid_digit::value ? _Pow / _Base : _Pow,
-      _Digs...>;
-      using type = __ull_constant<_Pow * __digit::value + __next::type::value>;
-      static_assert((type::value / _Pow) == __digit::value,
-      "integer literal does not fit in unsigned long long");
-    };
-
-
-  template<unsigned _Base, unsigned long long _Pow, char _Dig, char..._Digs>
-    struct _Number_help<_Base, _Pow, '\'', _Dig, _Digs...>
-    : _Number_help<_Base, _Pow, _Dig, _Digs...>
-    { };
-
-
-  template<unsigned _Base, char _Dig>
-    struct _Number_help<_Base, 1ULL, _Dig>
-    {
-      using type = __ull_constant<_Digit<_Base, _Dig>::value>;
-    };
-
-  template<unsigned _Base, char... _Digs>
-    struct _Number
-    : _Number_help<_Base, _Power<_Base, _Digs...>::value, _Digs...>::type
-    { };
-
-  template<unsigned _Base>
-    struct _Number<_Base>
-    : __ull_constant<0>
-    { };
-
-
-
-  template<char... _Digs>
-    struct _Parse_int;
-
-  template<char... _Digs>
-    struct _Parse_int<'0', 'b', _Digs...>
-    : _Number<2U, _Digs...>::type
-    { };
-
-  template<char... _Digs>
-    struct _Parse_int<'0', 'B', _Digs...>
-    : _Number<2U, _Digs...>::type
-    { };
-
-  template<char... _Digs>
-    struct _Parse_int<'0', 'x', _Digs...>
-    : _Number<16U, _Digs...>::type
-    { };
-
-  template<char... _Digs>
-    struct _Parse_int<'0', 'X', _Digs...>
-    : _Number<16U, _Digs...>::type
-    { };
-
-  template<char... _Digs>
-    struct _Parse_int<'0', _Digs...>
-    : _Number<8U, _Digs...>::type
-    { };
-
-  template<char... _Digs>
-    struct _Parse_int
-    : _Number<10U, _Digs...>::type
-    { };
-
-}
-
-
-namespace __select_int
-{
-  template<unsigned long long _Val, typename... _Ints>
-    struct _Select_int_base;
-
-  template<unsigned long long _Val, typename _IntType, typename... _Ints>
-    struct _Select_int_base<_Val, _IntType, _Ints...>
-    : __conditional_t<(_Val <= __gnu_cxx::__int_traits<_IntType>::__max),
-        integral_constant<_IntType, (_IntType)_Val>,
-        _Select_int_base<_Val, _Ints...>>
-    { };
-
-  template<unsigned long long _Val>
-    struct _Select_int_base<_Val>
-    { };
-
-  template<char... _Digs>
-    using _Select_int = typename _Select_int_base<
- __parse_int::_Parse_int<_Digs...>::value,
- unsigned char,
- unsigned short,
- unsigned int,
- unsigned long,
- unsigned long long
-      >::type;
-
-}
-
-
-}
-# 42 "/usr/include/c++/14.2.1/bits/chrono.h" 2 3
-
-
-
-
-
-# 1 "/usr/include/c++/14.2.1/bits/version.h" 1 3
-# 47 "/usr/include/c++/14.2.1/bits/version.h" 3
-       
-# 48 "/usr/include/c++/14.2.1/bits/version.h" 3
-# 48 "/usr/include/c++/14.2.1/bits/chrono.h" 2 3
-
-namespace std __attribute__ ((__visibility__ ("default")))
-{
-
-
-
-  namespace filesystem { struct __file_clock; };
-
-
-  namespace chrono
-  {
-
-
-
-
-    template<typename _Rep, typename _Period = ratio<1>>
-      class duration;
-
-
-    template<typename _Clock, typename _Dur = typename _Clock::duration>
-      class time_point;
-
-  }
-# 79 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-  template<typename _CT, typename _Period1, typename _Period2, typename = void>
-    struct __duration_common_type
-    { };
-
-  template<typename _CT, typename _Period1, typename _Period2>
-    struct __duration_common_type<_CT, _Period1, _Period2,
-      __void_t<typename _CT::type>>
-    {
-    private:
-      using __gcd_num = __static_gcd<_Period1::num, _Period2::num>;
-      using __gcd_den = __static_gcd<_Period1::den, _Period2::den>;
-      using __cr = typename _CT::type;
-      using __r = ratio<__gcd_num::value,
-   (_Period1::den / __gcd_den::value) * _Period2::den>;
-
-    public:
-      using type = chrono::duration<__cr, typename __r::type>;
-    };
-
-
-
-
-
-
-
-  template<typename _Rep1, typename _Period1, typename _Rep2, typename _Period2>
-    struct common_type<chrono::duration<_Rep1, _Period1>,
-         chrono::duration<_Rep2, _Period2>>
-    : __duration_common_type<common_type<_Rep1, _Rep2>,
-        typename _Period1::type,
-        typename _Period2::type>
-    { };
-
-
-  template<typename _Rep, typename _Period>
-    struct common_type<chrono::duration<_Rep, _Period>,
-         chrono::duration<_Rep, _Period>>
-    {
-      using type = chrono::duration<typename common_type<_Rep>::type,
-        typename _Period::type>;
-    };
-
-
-  template<typename _Rep, typename _Period>
-    struct common_type<chrono::duration<_Rep, _Period>>
-    {
-      using type = chrono::duration<typename common_type<_Rep>::type,
-        typename _Period::type>;
-    };
-
-
-
-
-
-
-  template<typename _CT, typename _Clock, typename = void>
-    struct __timepoint_common_type
-    { };
-
-  template<typename _CT, typename _Clock>
-    struct __timepoint_common_type<_CT, _Clock, __void_t<typename _CT::type>>
-    {
-      using type = chrono::time_point<_Clock, typename _CT::type>;
-    };
-
-
-
-
-
-
-
-  template<typename _Clock, typename _Duration1, typename _Duration2>
-    struct common_type<chrono::time_point<_Clock, _Duration1>,
-         chrono::time_point<_Clock, _Duration2>>
-    : __timepoint_common_type<common_type<_Duration1, _Duration2>, _Clock>
-    { };
-
-
-  template<typename _Clock, typename _Duration>
-    struct common_type<chrono::time_point<_Clock, _Duration>,
-         chrono::time_point<_Clock, _Duration>>
-    { using type = chrono::time_point<_Clock, _Duration>; };
-
-
-  template<typename _Clock, typename _Duration>
-    struct common_type<chrono::time_point<_Clock, _Duration>>
-    { using type = chrono::time_point<_Clock, _Duration>; };
-
-
-
-
-  namespace chrono
-  {
-
-
-
-
-
-
-    template<typename _ToDur, typename _CF, typename _CR,
-      bool _NumIsOne = false, bool _DenIsOne = false>
-      struct __duration_cast_impl
-      {
- template<typename _Rep, typename _Period>
-   static constexpr _ToDur
-   __cast(const duration<_Rep, _Period>& __d)
-   {
-     typedef typename _ToDur::rep __to_rep;
-     return _ToDur(static_cast<__to_rep>(static_cast<_CR>(__d.count())
-       * static_cast<_CR>(_CF::num)
-       / static_cast<_CR>(_CF::den)));
-   }
-      };
-
-    template<typename _ToDur, typename _CF, typename _CR>
-      struct __duration_cast_impl<_ToDur, _CF, _CR, true, true>
-      {
- template<typename _Rep, typename _Period>
-   static constexpr _ToDur
-   __cast(const duration<_Rep, _Period>& __d)
-   {
-     typedef typename _ToDur::rep __to_rep;
-     return _ToDur(static_cast<__to_rep>(__d.count()));
-   }
-      };
-
-    template<typename _ToDur, typename _CF, typename _CR>
-      struct __duration_cast_impl<_ToDur, _CF, _CR, true, false>
-      {
- template<typename _Rep, typename _Period>
-   static constexpr _ToDur
-   __cast(const duration<_Rep, _Period>& __d)
-   {
-     typedef typename _ToDur::rep __to_rep;
-     return _ToDur(static_cast<__to_rep>(
-       static_cast<_CR>(__d.count()) / static_cast<_CR>(_CF::den)));
-   }
-      };
-
-    template<typename _ToDur, typename _CF, typename _CR>
-      struct __duration_cast_impl<_ToDur, _CF, _CR, false, true>
-      {
- template<typename _Rep, typename _Period>
-   static constexpr _ToDur
-   __cast(const duration<_Rep, _Period>& __d)
-   {
-     typedef typename _ToDur::rep __to_rep;
-     return _ToDur(static_cast<__to_rep>(
-       static_cast<_CR>(__d.count()) * static_cast<_CR>(_CF::num)));
-   }
-      };
-
-    template<typename _Tp>
-      struct __is_duration
-      : std::false_type
-      { };
-
-    template<typename _Rep, typename _Period>
-      struct __is_duration<duration<_Rep, _Period>>
-      : std::true_type
-      { };
-
-    template<typename _Tp>
-      using __enable_if_is_duration
- = typename enable_if<__is_duration<_Tp>::value, _Tp>::type;
-
-    template<typename _Tp>
-      using __disable_if_is_duration
- = typename enable_if<!__is_duration<_Tp>::value, _Tp>::type;
-
-
-    template<typename _Tp>
-      inline constexpr bool __is_duration_v = false;
-    template<typename _Rep, typename _Period>
-      inline constexpr bool __is_duration_v<duration<_Rep, _Period>> = true;
-    template<typename _Tp>
-      inline constexpr bool __is_time_point_v = false;
-    template<typename _Clock, typename _Dur>
-      inline constexpr bool __is_time_point_v<time_point<_Clock, _Dur>> = true;
-# 272 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _ToDur, typename _Rep, typename _Period>
-      [[__nodiscard__]]
-      constexpr __enable_if_is_duration<_ToDur>
-      duration_cast(const duration<_Rep, _Period>& __d)
-      {
-
- if constexpr (is_same_v<_ToDur, duration<_Rep, _Period>>)
-   return __d;
- else
-   {
-
-   using __to_period = typename _ToDur::period;
-   using __to_rep = typename _ToDur::rep;
-   using __cf = ratio_divide<_Period, __to_period>;
-   using __cr = typename common_type<__to_rep, _Rep, intmax_t>::type;
-   using __dc = __duration_cast_impl<_ToDur, __cf, __cr,
-         __cf::num == 1, __cf::den == 1>;
-   return __dc::__cast(__d);
-
-   }
-
-      }
-# 306 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _Rep>
-      struct treat_as_floating_point
-      : is_floating_point<_Rep>
-      { };
-
-
-    template <typename _Rep>
-      inline constexpr bool treat_as_floating_point_v =
- treat_as_floating_point<_Rep>::value;
-
-    template<>
-      inline constexpr bool treat_as_floating_point_v<int> = false;
-    template<>
-      inline constexpr bool treat_as_floating_point_v<long> = false;
-    template<>
-      inline constexpr bool treat_as_floating_point_v<long long> = false;
-    template<>
-      inline constexpr bool treat_as_floating_point_v<float> = true;
-    template<>
-      inline constexpr bool treat_as_floating_point_v<double> = true;
-    template<>
-      inline constexpr bool treat_as_floating_point_v<long double> = true;
-
-
-
-
-    template<typename _Tp>
-      inline constexpr bool is_clock_v = false;
-
-    template<typename _Tp>
-      requires requires {
- typename _Tp::rep;
- typename _Tp::period;
- typename _Tp::duration;
- typename _Tp::time_point::clock;
- typename _Tp::time_point::duration;
- { &_Tp::is_steady } -> same_as<const bool*>;
- { _Tp::now() } -> same_as<typename _Tp::time_point>;
- requires same_as<typename _Tp::duration,
-    duration<typename _Tp::rep, typename _Tp::period>>;
- requires same_as<typename _Tp::time_point::duration,
-    typename _Tp::duration>;
-      }
-    inline constexpr bool is_clock_v<_Tp> = true;
-# 369 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _Tp>
-      struct is_clock
-      : bool_constant<is_clock_v<_Tp>>
-      { };
-# 386 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _ToDur, typename _Rep, typename _Period>
-      [[nodiscard]] constexpr __enable_if_is_duration<_ToDur>
-      floor(const duration<_Rep, _Period>& __d)
-      {
- auto __to = chrono::duration_cast<_ToDur>(__d);
- if (__to > __d)
-   return __to - _ToDur{1};
- return __to;
-      }
-# 406 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _ToDur, typename _Rep, typename _Period>
-      [[nodiscard]] constexpr __enable_if_is_duration<_ToDur>
-      ceil(const duration<_Rep, _Period>& __d)
-      {
- auto __to = chrono::duration_cast<_ToDur>(__d);
- if (__to < __d)
-   return __to + _ToDur{1};
- return __to;
-      }
-# 427 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template <typename _ToDur, typename _Rep, typename _Period>
-      [[nodiscard]] constexpr
-      enable_if_t<
- __and_<__is_duration<_ToDur>,
-        __not_<treat_as_floating_point<typename _ToDur::rep>>>::value,
- _ToDur>
-      round(const duration<_Rep, _Period>& __d)
-      {
- _ToDur __t0 = chrono::floor<_ToDur>(__d);
- _ToDur __t1 = __t0 + _ToDur{1};
- auto __diff0 = __d - __t0;
- auto __diff1 = __t1 - __d;
- if (__diff0 == __diff1)
-   {
-     if (__t0.count() & 1)
-       return __t1;
-     return __t0;
-   }
- else if (__diff0 < __diff1)
-   return __t0;
- return __t1;
-      }
-
-
-
-
-
-
-
-    template<typename _Rep, typename _Period>
-      [[nodiscard]] constexpr
-      enable_if_t<numeric_limits<_Rep>::is_signed, duration<_Rep, _Period>>
-      abs(duration<_Rep, _Period> __d)
-      {
- if (__d >= __d.zero())
-   return __d;
- return -__d;
-      }
-
-
-    namespace __detail { using chrono::ceil; }
-# 494 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _Rep>
-      struct duration_values
-      {
- static constexpr _Rep
- zero() noexcept
- { return _Rep(0); }
-
- static constexpr _Rep
- max() noexcept
- { return numeric_limits<_Rep>::max(); }
-
- static constexpr _Rep
- min() noexcept
- { return numeric_limits<_Rep>::lowest(); }
-      };
-
-    template<typename _Rep, typename _Period>
-      class duration
-      {
- static_assert(!__is_duration<_Rep>::value,
-        "rep cannot be a std::chrono::duration");
- static_assert(__is_ratio<_Period>::value,
-        "period must be a specialization of std::ratio");
- static_assert(_Period::num > 0, "period must be positive");
-
- template<typename _Rep2>
-   using __is_float = treat_as_floating_point<_Rep2>;
-
- static constexpr intmax_t
- _S_gcd(intmax_t __m, intmax_t __n) noexcept
- {
-
-
-
-   do
-     {
-       intmax_t __rem = __m % __n;
-       __m = __n;
-       __n = __rem;
-     }
-   while (__n != 0);
-   return __m;
-
-
-
-
-
- }
-
-
-
-
-
- template<typename _R1, typename _R2,
-   intmax_t __gcd1 = _S_gcd(_R1::num, _R2::num),
-   intmax_t __gcd2 = _S_gcd(_R1::den, _R2::den)>
-   using __divide = ratio<(_R1::num / __gcd1) * (_R2::den / __gcd2),
-     (_R1::den / __gcd2) * (_R2::num / __gcd1)>;
-
-
- template<typename _Period2>
-   using __is_harmonic
-     = __bool_constant<__divide<_Period2, _Period>::den == 1>;
-
-      public:
-
- using rep = _Rep;
- using period = typename _Period::type;
-
-
- constexpr duration() = default;
-
- duration(const duration&) = default;
-
-
-
- template<typename _Rep2, typename = _Require<
-   is_convertible<const _Rep2&, rep>,
-   __or_<__is_float<rep>, __not_<__is_float<_Rep2>>>>>
-   constexpr explicit duration(const _Rep2& __rep)
-   : __r(static_cast<rep>(__rep)) { }
-
- template<typename _Rep2, typename _Period2, typename = _Require<
-   is_convertible<const _Rep2&, rep>,
-   __or_<__is_float<rep>,
-         __and_<__is_harmonic<_Period2>,
-         __not_<__is_float<_Rep2>>>>>>
-   constexpr duration(const duration<_Rep2, _Period2>& __d)
-   : __r(duration_cast<duration>(__d).count()) { }
-
- ~duration() = default;
- duration& operator=(const duration&) = default;
-
-
- constexpr rep
- count() const
- { return __r; }
-
-
-
- constexpr duration<typename common_type<rep>::type, period>
- operator+() const
- { return duration<typename common_type<rep>::type, period>(__r); }
-
- constexpr duration<typename common_type<rep>::type, period>
- operator-() const
- { return duration<typename common_type<rep>::type, period>(-__r); }
-
- constexpr duration&
- operator++()
- {
-   ++__r;
-   return *this;
- }
-
- constexpr duration
- operator++(int)
- { return duration(__r++); }
-
- constexpr duration&
- operator--()
- {
-   --__r;
-   return *this;
- }
-
- constexpr duration
- operator--(int)
- { return duration(__r--); }
-
- constexpr duration&
- operator+=(const duration& __d)
- {
-   __r += __d.count();
-   return *this;
- }
-
- constexpr duration&
- operator-=(const duration& __d)
- {
-   __r -= __d.count();
-   return *this;
- }
-
- constexpr duration&
- operator*=(const rep& __rhs)
- {
-   __r *= __rhs;
-   return *this;
- }
-
- constexpr duration&
- operator/=(const rep& __rhs)
- {
-   __r /= __rhs;
-   return *this;
- }
-
-
- template<typename _Rep2 = rep>
-   constexpr
-   __enable_if_t<!treat_as_floating_point<_Rep2>::value, duration&>
-   operator%=(const rep& __rhs)
-   {
-     __r %= __rhs;
-     return *this;
-   }
-
- template<typename _Rep2 = rep>
-   constexpr
-   __enable_if_t<!treat_as_floating_point<_Rep2>::value, duration&>
-   operator%=(const duration& __d)
-   {
-     __r %= __d.count();
-     return *this;
-   }
-
-
- static constexpr duration
- zero() noexcept
- { return duration(duration_values<rep>::zero()); }
-
- static constexpr duration
- min() noexcept
- { return duration(duration_values<rep>::min()); }
-
- static constexpr duration
- max() noexcept
- { return duration(duration_values<rep>::max()); }
-
-      private:
- rep __r;
-      };
-
-
-
-
-
-    template<typename _Rep1, typename _Period1,
-      typename _Rep2, typename _Period2>
-      constexpr typename common_type<duration<_Rep1, _Period1>,
-         duration<_Rep2, _Period2>>::type
-      operator+(const duration<_Rep1, _Period1>& __lhs,
-  const duration<_Rep2, _Period2>& __rhs)
-      {
- typedef duration<_Rep1, _Period1> __dur1;
- typedef duration<_Rep2, _Period2> __dur2;
- typedef typename common_type<__dur1,__dur2>::type __cd;
- return __cd(__cd(__lhs).count() + __cd(__rhs).count());
-      }
-
-
-    template<typename _Rep1, typename _Period1,
-      typename _Rep2, typename _Period2>
-      constexpr typename common_type<duration<_Rep1, _Period1>,
-         duration<_Rep2, _Period2>>::type
-      operator-(const duration<_Rep1, _Period1>& __lhs,
-  const duration<_Rep2, _Period2>& __rhs)
-      {
- typedef duration<_Rep1, _Period1> __dur1;
- typedef duration<_Rep2, _Period2> __dur2;
- typedef typename common_type<__dur1,__dur2>::type __cd;
- return __cd(__cd(__lhs).count() - __cd(__rhs).count());
-      }
-# 727 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _Rep1, typename _Rep2,
-      typename _CRep = typename common_type<_Rep1, _Rep2>::type>
-      using __common_rep_t = typename
- enable_if<is_convertible<const _Rep2&, _CRep>::value, _CRep>::type;
-# 739 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _Rep1, typename _Period, typename _Rep2>
-      constexpr duration<__common_rep_t<_Rep1, _Rep2>, _Period>
-      operator*(const duration<_Rep1, _Period>& __d, const _Rep2& __s)
-      {
- typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
-   __cd;
- return __cd(__cd(__d).count() * __s);
-      }
-
-    template<typename _Rep1, typename _Rep2, typename _Period>
-      constexpr duration<__common_rep_t<_Rep2, _Rep1>, _Period>
-      operator*(const _Rep1& __s, const duration<_Rep2, _Period>& __d)
-      { return __d * __s; }
-
-    template<typename _Rep1, typename _Period, typename _Rep2>
-      constexpr
-      duration<__common_rep_t<_Rep1, __disable_if_is_duration<_Rep2>>, _Period>
-      operator/(const duration<_Rep1, _Period>& __d, const _Rep2& __s)
-      {
- typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
-   __cd;
- return __cd(__cd(__d).count() / __s);
-      }
-
-    template<typename _Rep1, typename _Period1,
-      typename _Rep2, typename _Period2>
-      constexpr typename common_type<_Rep1, _Rep2>::type
-      operator/(const duration<_Rep1, _Period1>& __lhs,
-  const duration<_Rep2, _Period2>& __rhs)
-      {
- typedef duration<_Rep1, _Period1> __dur1;
- typedef duration<_Rep2, _Period2> __dur2;
- typedef typename common_type<__dur1,__dur2>::type __cd;
- return __cd(__lhs).count() / __cd(__rhs).count();
-      }
-
-
-    template<typename _Rep1, typename _Period, typename _Rep2>
-      constexpr
-      duration<__common_rep_t<_Rep1, __disable_if_is_duration<_Rep2>>, _Period>
-      operator%(const duration<_Rep1, _Period>& __d, const _Rep2& __s)
-      {
- typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
-   __cd;
- return __cd(__cd(__d).count() % __s);
-      }
-
-    template<typename _Rep1, typename _Period1,
-      typename _Rep2, typename _Period2>
-      constexpr typename common_type<duration<_Rep1, _Period1>,
-         duration<_Rep2, _Period2>>::type
-      operator%(const duration<_Rep1, _Period1>& __lhs,
-  const duration<_Rep2, _Period2>& __rhs)
-      {
- typedef duration<_Rep1, _Period1> __dur1;
- typedef duration<_Rep2, _Period2> __dur2;
- typedef typename common_type<__dur1,__dur2>::type __cd;
- return __cd(__cd(__lhs).count() % __cd(__rhs).count());
-      }
-# 807 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _Rep1, typename _Period1,
-      typename _Rep2, typename _Period2>
-      constexpr bool
-      operator==(const duration<_Rep1, _Period1>& __lhs,
-   const duration<_Rep2, _Period2>& __rhs)
-      {
- typedef duration<_Rep1, _Period1> __dur1;
- typedef duration<_Rep2, _Period2> __dur2;
- typedef typename common_type<__dur1,__dur2>::type __ct;
- return __ct(__lhs).count() == __ct(__rhs).count();
-      }
-
-    template<typename _Rep1, typename _Period1,
-      typename _Rep2, typename _Period2>
-      constexpr bool
-      operator<(const duration<_Rep1, _Period1>& __lhs,
-  const duration<_Rep2, _Period2>& __rhs)
-      {
- typedef duration<_Rep1, _Period1> __dur1;
- typedef duration<_Rep2, _Period2> __dur2;
- typedef typename common_type<__dur1,__dur2>::type __ct;
- return __ct(__lhs).count() < __ct(__rhs).count();
-      }
-
-
-    template<typename _Rep1, typename _Period1,
-      typename _Rep2, typename _Period2>
-      requires three_way_comparable<common_type_t<_Rep1, _Rep2>>
-      constexpr auto
-      operator<=>(const duration<_Rep1, _Period1>& __lhs,
-    const duration<_Rep2, _Period2>& __rhs)
-      {
- using __ct = common_type_t<duration<_Rep1, _Period1>,
-       duration<_Rep2, _Period2>>;
- return __ct(__lhs).count() <=> __ct(__rhs).count();
-      }
-# 852 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _Rep1, typename _Period1,
-      typename _Rep2, typename _Period2>
-      constexpr bool
-      operator<=(const duration<_Rep1, _Period1>& __lhs,
-   const duration<_Rep2, _Period2>& __rhs)
-      { return !(__rhs < __lhs); }
-
-    template<typename _Rep1, typename _Period1,
-      typename _Rep2, typename _Period2>
-      constexpr bool
-      operator>(const duration<_Rep1, _Period1>& __lhs,
-  const duration<_Rep2, _Period2>& __rhs)
-      { return __rhs < __lhs; }
-
-    template<typename _Rep1, typename _Period1,
-      typename _Rep2, typename _Period2>
-      constexpr bool
-      operator>=(const duration<_Rep1, _Period1>& __lhs,
-   const duration<_Rep2, _Period2>& __rhs)
-      { return !(__lhs < __rhs); }
-# 888 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    using nanoseconds = duration<int64_t, nano>;
-
-
-    using microseconds = duration<int64_t, micro>;
-
-
-    using milliseconds = duration<int64_t, milli>;
-
-
-    using seconds = duration<int64_t>;
-
-
-    using minutes = duration<int64_t, ratio< 60>>;
-
-
-    using hours = duration<int64_t, ratio<3600>>;
-
-
-
-    using days = duration<int64_t, ratio<86400>>;
-
-
-    using weeks = duration<int64_t, ratio<604800>>;
-
-
-    using years = duration<int64_t, ratio<31556952>>;
-
-
-    using months = duration<int64_t, ratio<2629746>>;
-
-
-
-
-    template<typename _Clock, typename _Dur>
-      class time_point
-      {
- static_assert(__is_duration<_Dur>::value,
-     "duration must be a specialization of std::chrono::duration");
-
-      public:
- typedef _Clock clock;
- typedef _Dur duration;
- typedef typename duration::rep rep;
- typedef typename duration::period period;
-
- constexpr time_point() : __d(duration::zero())
- { }
-
- constexpr explicit time_point(const duration& __dur)
- : __d(__dur)
- { }
-
-
- template<typename _Dur2,
-   typename = _Require<is_convertible<_Dur2, _Dur>>>
-   constexpr time_point(const time_point<clock, _Dur2>& __t)
-   : __d(__t.time_since_epoch())
-   { }
-
-
- constexpr duration
- time_since_epoch() const
- { return __d; }
-
-
- constexpr time_point&
- operator++()
- {
-   ++__d;
-   return *this;
- }
-
- constexpr time_point
- operator++(int)
- { return time_point{__d++}; }
-
- constexpr time_point&
- operator--()
- {
-   --__d;
-   return *this;
- }
-
- constexpr time_point
- operator--(int)
- { return time_point{__d--}; }
-
-
-
- constexpr time_point&
- operator+=(const duration& __dur)
- {
-   __d += __dur;
-   return *this;
- }
-
- constexpr time_point&
- operator-=(const duration& __dur)
- {
-   __d -= __dur;
-   return *this;
- }
-
-
- static constexpr time_point
- min() noexcept
- { return time_point(duration::min()); }
-
- static constexpr time_point
- max() noexcept
- { return time_point(duration::max()); }
-
-      private:
- duration __d;
-      };
-# 1016 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _ToDur, typename _Clock, typename _Dur>
-      [[__nodiscard__]] constexpr
-      __enable_if_t<__is_duration<_ToDur>::value, time_point<_Clock, _ToDur>>
-      time_point_cast(const time_point<_Clock, _Dur>& __t)
-      {
- typedef time_point<_Clock, _ToDur> __time_point;
- return __time_point(duration_cast<_ToDur>(__t.time_since_epoch()));
-      }
-# 1038 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _ToDur, typename _Clock, typename _Dur>
-      [[nodiscard]] constexpr
-      enable_if_t<__is_duration_v<_ToDur>, time_point<_Clock, _ToDur>>
-      floor(const time_point<_Clock, _Dur>& __tp)
-      {
- return time_point<_Clock, _ToDur>{
-     chrono::floor<_ToDur>(__tp.time_since_epoch())};
-      }
-# 1059 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _ToDur, typename _Clock, typename _Dur>
-      [[nodiscard]] constexpr
-      enable_if_t<__is_duration_v<_ToDur>, time_point<_Clock, _ToDur>>
-      ceil(const time_point<_Clock, _Dur>& __tp)
-      {
- return time_point<_Clock, _ToDur>{
-     chrono::ceil<_ToDur>(__tp.time_since_epoch())};
-      }
-# 1081 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _ToDur, typename _Clock, typename _Dur>
-      [[nodiscard]] constexpr
-      enable_if_t<__is_duration_v<_ToDur>
-      && !treat_as_floating_point_v<typename _ToDur::rep>,
-    time_point<_Clock, _ToDur>>
-      round(const time_point<_Clock, _Dur>& __tp)
-      {
- return time_point<_Clock, _ToDur>{
-     chrono::round<_ToDur>(__tp.time_since_epoch())};
-      }
-
-
-
-
-
-
-    template<typename _Clock, typename _Dur1,
-      typename _Rep2, typename _Period2>
-      constexpr time_point<_Clock,
- typename common_type<_Dur1, duration<_Rep2, _Period2>>::type>
-      operator+(const time_point<_Clock, _Dur1>& __lhs,
-  const duration<_Rep2, _Period2>& __rhs)
-      {
- typedef duration<_Rep2, _Period2> __dur2;
- typedef typename common_type<_Dur1,__dur2>::type __ct;
- typedef time_point<_Clock, __ct> __time_point;
- return __time_point(__lhs.time_since_epoch() + __rhs);
-      }
-
-
-    template<typename _Rep1, typename _Period1,
-      typename _Clock, typename _Dur2>
-      constexpr time_point<_Clock,
- typename common_type<duration<_Rep1, _Period1>, _Dur2>::type>
-      operator+(const duration<_Rep1, _Period1>& __lhs,
-  const time_point<_Clock, _Dur2>& __rhs)
-      {
- typedef duration<_Rep1, _Period1> __dur1;
- typedef typename common_type<__dur1,_Dur2>::type __ct;
- typedef time_point<_Clock, __ct> __time_point;
- return __time_point(__rhs.time_since_epoch() + __lhs);
-      }
-
-
-    template<typename _Clock, typename _Dur1,
-      typename _Rep2, typename _Period2>
-      constexpr time_point<_Clock,
- typename common_type<_Dur1, duration<_Rep2, _Period2>>::type>
-      operator-(const time_point<_Clock, _Dur1>& __lhs,
-  const duration<_Rep2, _Period2>& __rhs)
-      {
- typedef duration<_Rep2, _Period2> __dur2;
- typedef typename common_type<_Dur1,__dur2>::type __ct;
- typedef time_point<_Clock, __ct> __time_point;
- return __time_point(__lhs.time_since_epoch() -__rhs);
-      }
-
-
-    template<typename _Clock, typename _Dur1, typename _Dur2>
-      constexpr typename common_type<_Dur1, _Dur2>::type
-      operator-(const time_point<_Clock, _Dur1>& __lhs,
-  const time_point<_Clock, _Dur2>& __rhs)
-      { return __lhs.time_since_epoch() - __rhs.time_since_epoch(); }
-
-
-
-
-
-
-
-    template<typename _Clock, typename _Dur1, typename _Dur2>
-      constexpr bool
-      operator==(const time_point<_Clock, _Dur1>& __lhs,
-   const time_point<_Clock, _Dur2>& __rhs)
-      { return __lhs.time_since_epoch() == __rhs.time_since_epoch(); }
-
-
-    template<typename _Clock, typename _Dur1,
-      three_way_comparable_with<_Dur1> _Dur2>
-      constexpr auto
-      operator<=>(const time_point<_Clock, _Dur1>& __lhs,
-    const time_point<_Clock, _Dur2>& __rhs)
-      { return __lhs.time_since_epoch() <=> __rhs.time_since_epoch(); }
-# 1172 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    template<typename _Clock, typename _Dur1, typename _Dur2>
-      constexpr bool
-      operator<(const time_point<_Clock, _Dur1>& __lhs,
-  const time_point<_Clock, _Dur2>& __rhs)
-      { return __lhs.time_since_epoch() < __rhs.time_since_epoch(); }
-
-    template<typename _Clock, typename _Dur1, typename _Dur2>
-      constexpr bool
-      operator<=(const time_point<_Clock, _Dur1>& __lhs,
-   const time_point<_Clock, _Dur2>& __rhs)
-      { return !(__rhs < __lhs); }
-
-    template<typename _Clock, typename _Dur1, typename _Dur2>
-      constexpr bool
-      operator>(const time_point<_Clock, _Dur1>& __lhs,
-  const time_point<_Clock, _Dur2>& __rhs)
-      { return __rhs < __lhs; }
-
-    template<typename _Clock, typename _Dur1, typename _Dur2>
-      constexpr bool
-      operator>=(const time_point<_Clock, _Dur1>& __lhs,
-   const time_point<_Clock, _Dur2>& __rhs)
-      { return !(__lhs < __rhs); }
-# 1217 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-inline namespace _V2 {
-
-
-
-
-
-
-
-    struct system_clock
-    {
-      typedef chrono::nanoseconds duration;
-      typedef duration::rep rep;
-      typedef duration::period period;
-      typedef chrono::time_point<system_clock, duration> time_point;
-
-      static_assert(system_clock::duration::min()
-      < system_clock::duration::zero(),
-      "a clock's minimum duration cannot be less than its epoch");
-
-      static constexpr bool is_steady = false;
-
-      static time_point
-      now() noexcept;
-
-
-      static std::time_t
-      to_time_t(const time_point& __t) noexcept
-      {
- return std::time_t(duration_cast<chrono::seconds>
-      (__t.time_since_epoch()).count());
-      }
-
-      static time_point
-      from_time_t(std::time_t __t) noexcept
-      {
- typedef chrono::time_point<system_clock, seconds> __from;
- return time_point_cast<system_clock::duration>
-        (__from(chrono::seconds(__t)));
-      }
-    };
-# 1265 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    struct steady_clock
-    {
-      typedef chrono::nanoseconds duration;
-      typedef duration::rep rep;
-      typedef duration::period period;
-      typedef chrono::time_point<steady_clock, duration> time_point;
-
-      static constexpr bool is_steady = true;
-
-      static time_point
-      now() noexcept;
-    };
-# 1287 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-    using high_resolution_clock = system_clock;
-
-}
-
-
-
-
-    template<typename _Duration>
-      using sys_time = time_point<system_clock, _Duration>;
-    using sys_seconds = sys_time<seconds>;
-    using sys_days = sys_time<days>;
-
-    using file_clock = ::std::filesystem::__file_clock;
-
-    template<typename _Duration>
-      using file_time = time_point<file_clock, _Duration>;
-
-    template<> struct is_clock<system_clock> : true_type { };
-    template<> struct is_clock<steady_clock> : true_type { };
-    template<> struct is_clock<file_clock> : true_type { };
-
-    template<> inline constexpr bool is_clock_v<system_clock> = true;
-    template<> inline constexpr bool is_clock_v<steady_clock> = true;
-    template<> inline constexpr bool is_clock_v<file_clock> = true;
-
-
-  }
-
-
-  inline namespace literals
-  {
-# 1342 "/usr/include/c++/14.2.1/bits/chrono.h" 3
-  inline namespace chrono_literals
-  {
-
-
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wliteral-suffix"
-
-    template<typename _Dur, char... _Digits>
-      constexpr _Dur __check_overflow()
-      {
- using _Val = __parse_int::_Parse_int<_Digits...>;
- constexpr typename _Dur::rep __repval = _Val::value;
- static_assert(__repval >= 0 && __repval == _Val::value,
-        "literal value cannot be represented by duration type");
- return _Dur(__repval);
-      }
-
-
-
-    constexpr chrono::duration<long double, ratio<3600,1>>
-    operator""h(long double __hours)
-    { return chrono::duration<long double, ratio<3600,1>>{__hours}; }
-
-
-    template <char... _Digits>
-      constexpr chrono::hours
-      operator""h()
-      { return __check_overflow<chrono::hours, _Digits...>(); }
-
-
-    constexpr chrono::duration<long double, ratio<60,1>>
-    operator""min(long double __mins)
-    { return chrono::duration<long double, ratio<60,1>>{__mins}; }
-
-
-    template <char... _Digits>
-      constexpr chrono::minutes
-      operator""min()
-      { return __check_overflow<chrono::minutes, _Digits...>(); }
-
-
-    constexpr chrono::duration<long double>
-    operator""s(long double __secs)
-    { return chrono::duration<long double>{__secs}; }
-
-
-    template <char... _Digits>
-      constexpr chrono::seconds
-      operator""s()
-      { return __check_overflow<chrono::seconds, _Digits...>(); }
-
-
-    constexpr chrono::duration<long double, milli>
-    operator""ms(long double __msecs)
-    { return chrono::duration<long double, milli>{__msecs}; }
-
-
-    template <char... _Digits>
-      constexpr chrono::milliseconds
-      operator""ms()
-      { return __check_overflow<chrono::milliseconds, _Digits...>(); }
-
-
-    constexpr chrono::duration<long double, micro>
-    operator""us(long double __usecs)
-    { return chrono::duration<long double, micro>{__usecs}; }
-
-
-    template <char... _Digits>
-      constexpr chrono::microseconds
-      operator""us()
-      { return __check_overflow<chrono::microseconds, _Digits...>(); }
-
-
-    constexpr chrono::duration<long double, nano>
-    operator""ns(long double __nsecs)
-    { return chrono::duration<long double, nano>{__nsecs}; }
-
-
-    template <char... _Digits>
-      constexpr chrono::nanoseconds
-      operator""ns()
-      { return __check_overflow<chrono::nanoseconds, _Digits...>(); }
-
-#pragma GCC diagnostic pop
-
-  }
-  }
-
-  namespace chrono
-  {
-    using namespace literals::chrono_literals;
-  }
-
-
-
-  namespace filesystem
-  {
-    struct __file_clock
-    {
-      using duration = chrono::nanoseconds;
-      using rep = duration::rep;
-      using period = duration::period;
-      using time_point = chrono::time_point<__file_clock>;
-      static constexpr bool is_steady = false;
-
-      static time_point
-      now() noexcept
-      { return _S_from_sys(chrono::system_clock::now()); }
-
-
-      template<typename _Dur>
- static
- chrono::file_time<common_type_t<_Dur, chrono::seconds>>
- from_sys(const chrono::sys_time<_Dur>& __t) noexcept
- { return _S_from_sys(__t); }
-
-
-      template<typename _Dur>
- static
- chrono::sys_time<common_type_t<_Dur, chrono::seconds>>
- to_sys(const chrono::file_time<_Dur>& __t) noexcept
- { return _S_to_sys(__t); }
-
-
-    private:
-      using __sys_clock = chrono::system_clock;
-
-
-
-
-      static constexpr chrono::seconds _S_epoch_diff{6437664000};
-
-    protected:
-
-      template<typename _Dur>
- static
- chrono::time_point<__file_clock, common_type_t<_Dur, chrono::seconds>>
- _S_from_sys(const chrono::time_point<__sys_clock, _Dur>& __t) noexcept
- {
-   using _CDur = common_type_t<_Dur, chrono::seconds>;
-   using __file_time = chrono::time_point<__file_clock, _CDur>;
-   return __file_time{__t.time_since_epoch()} - _S_epoch_diff;
- }
-
-
-      template<typename _Dur>
- static
- chrono::time_point<__sys_clock, common_type_t<_Dur, chrono::seconds>>
- _S_to_sys(const chrono::time_point<__file_clock, _Dur>& __t) noexcept
- {
-   using _CDur = common_type_t<_Dur, chrono::seconds>;
-   using __sys_time = chrono::time_point<__sys_clock, _CDur>;
-   return __sys_time{__t.time_since_epoch()} + _S_epoch_diff;
- }
-    };
-  }
-
-
-
-}
-# 42 "/usr/include/c++/14.2.1/chrono" 2 3
-
-
-
-# 1 "/usr/include/c++/14.2.1/sstream" 1 3
-# 36 "/usr/include/c++/14.2.1/sstream" 3
-       
-# 37 "/usr/include/c++/14.2.1/sstream" 3
-# 55 "/usr/include/c++/14.2.1/sstream" 3
-namespace std __attribute__ ((__visibility__ ("default")))
-{
-
-namespace __cxx11 {
-# 78 "/usr/include/c++/14.2.1/sstream" 3
-  template<typename _CharT, typename _Traits, typename _Alloc>
-    class basic_stringbuf : public basic_streambuf<_CharT, _Traits>
-    {
-      struct __xfer_bufptrs;
-
-
-      using allocator_traits = std::allocator_traits<_Alloc>;
-      using _Noexcept_swap
- = __or_<typename allocator_traits::propagate_on_container_swap,
-  typename allocator_traits::is_always_equal>;
-
-
-    public:
-
-      typedef _CharT char_type;
-      typedef _Traits traits_type;
-
-
-      typedef _Alloc allocator_type;
-      typedef typename traits_type::int_type int_type;
-      typedef typename traits_type::pos_type pos_type;
-      typedef typename traits_type::off_type off_type;
-
-      typedef basic_streambuf<char_type, traits_type> __streambuf_type;
-      typedef basic_string<char_type, _Traits, _Alloc> __string_type;
-      typedef typename __string_type::size_type __size_type;
-
-    protected:
-
-      ios_base::openmode _M_mode;
-
-
-      __string_type _M_string;
-
-    public:
-# 121 "/usr/include/c++/14.2.1/sstream" 3
-      basic_stringbuf()
-      : __streambuf_type(), _M_mode(ios_base::in | ios_base::out), _M_string()
-      { }
-# 132 "/usr/include/c++/14.2.1/sstream" 3
-      explicit
-      basic_stringbuf(ios_base::openmode __mode)
-      : __streambuf_type(), _M_mode(__mode), _M_string()
-      { }
-# 145 "/usr/include/c++/14.2.1/sstream" 3
-      explicit
-      basic_stringbuf(const __string_type& __str,
-        ios_base::openmode __mode = ios_base::in | ios_base::out)
-      : __streambuf_type(), _M_mode(),
- _M_string(__str.data(), __str.size(), __str.get_allocator())
-      { _M_stringbuf_init(__mode); }
-
-
-      basic_stringbuf(const basic_stringbuf&) = delete;
-
-      basic_stringbuf(basic_stringbuf&& __rhs)
-      : basic_stringbuf(std::move(__rhs), __xfer_bufptrs(__rhs, this))
-      { __rhs._M_sync(const_cast<char_type*>(__rhs._M_string.data()), 0, 0); }
-
-
-      explicit
-      basic_stringbuf(const allocator_type& __a)
-      : basic_stringbuf(ios_base::in | std::ios_base::out, __a)
-      { }
-
-      basic_stringbuf(ios_base::openmode __mode,
-        const allocator_type& __a)
-      : __streambuf_type(), _M_mode(__mode), _M_string(__a)
-      { }
-
-      explicit
-      basic_stringbuf(__string_type&& __s,
-        ios_base::openmode __mode = ios_base::in
-        | ios_base::out)
-      : __streambuf_type(), _M_mode(__mode), _M_string(std::move(__s))
-      { _M_stringbuf_init(__mode); }
-
-      template<typename _SAlloc>
- basic_stringbuf(const basic_string<_CharT, _Traits, _SAlloc>& __s,
-   const allocator_type& __a)
- : basic_stringbuf(__s, ios_base::in | std::ios_base::out, __a)
- { }
-
-      template<typename _SAlloc>
- basic_stringbuf(const basic_string<_CharT, _Traits, _SAlloc>& __s,
-   ios_base::openmode __mode,
-   const allocator_type& __a)
- : __streambuf_type(), _M_mode(__mode),
-   _M_string(__s.data(), __s.size(), __a)
- { _M_stringbuf_init(__mode); }
-
-      template<typename _SAlloc>
- explicit
- basic_stringbuf(const basic_string<_CharT, _Traits, _SAlloc>& __s,
-   ios_base::openmode __mode = ios_base::in
-          | ios_base::out)
- : basic_stringbuf(__s, __mode, allocator_type{})
- { }
-
-      basic_stringbuf(basic_stringbuf&& __rhs, const allocator_type& __a)
-      : basic_stringbuf(std::move(__rhs), __a, __xfer_bufptrs(__rhs, this))
-      { __rhs._M_sync(const_cast<char_type*>(__rhs._M_string.data()), 0, 0); }
-
-      allocator_type get_allocator() const noexcept
-      { return _M_string.get_allocator(); }
-
-
-
-
-      basic_stringbuf&
-      operator=(const basic_stringbuf&) = delete;
-
-      basic_stringbuf&
-      operator=(basic_stringbuf&& __rhs)
-      {
- __xfer_bufptrs __st{__rhs, this};
- const __streambuf_type& __base = __rhs;
- __streambuf_type::operator=(__base);
- this->pubimbue(__rhs.getloc());
- _M_mode = __rhs._M_mode;
- _M_string = std::move(__rhs._M_string);
- __rhs._M_sync(const_cast<char_type*>(__rhs._M_string.data()), 0, 0);
- return *this;
-      }
-
-      void
-      swap(basic_stringbuf& __rhs) noexcept(_Noexcept_swap::value)
-      {
- __xfer_bufptrs __l_st{*this, std::__addressof(__rhs)};
- __xfer_bufptrs __r_st{__rhs, this};
- __streambuf_type& __base = __rhs;
- __streambuf_type::swap(__base);
- __rhs.pubimbue(this->pubimbue(__rhs.getloc()));
- std::swap(_M_mode, __rhs._M_mode);
- std::swap(_M_string, __rhs._M_string);
-      }
-# 248 "/usr/include/c++/14.2.1/sstream" 3
-      __string_type
-      str() const &
-      {
- __string_type __ret(_M_string.get_allocator());
- if (char_type* __hi = _M_high_mark())
-   __ret.assign(this->pbase(), __hi);
- else
-   __ret = _M_string;
- return __ret;
-      }
-
-
-
-
-      template<__allocator_like _SAlloc>
- basic_string<_CharT, _Traits, _SAlloc>
- str(const _SAlloc& __sa) const
- {
-   auto __sv = view();
-   return { __sv.data(), __sv.size(), __sa };
- }
-
-
-      __string_type
-      str() &&
-      {
- if (char_type* __hi = _M_high_mark())
-   {
-
-     _M_string._M_set_length(_M_high_mark() - this->pbase());
-   }
- auto __str = std::move(_M_string);
- _M_string.clear();
- _M_sync(_M_string.data(), 0, 0);
- return __str;
-      }
-
-
-     
-      basic_string_view<char_type, traits_type>
-      view() const noexcept
-      {
- if (char_type* __hi = _M_high_mark())
-   return { this->pbase(), __hi };
- else
-   return _M_string;
-      }
-# 304 "/usr/include/c++/14.2.1/sstream" 3
-      void
-      str(const __string_type& __s)
-      {
-
-
- _M_string.assign(__s.data(), __s.size());
- _M_stringbuf_init(_M_mode);
-      }
-
-
-
-      template<__allocator_like _SAlloc>
- requires (!is_same_v<_SAlloc, _Alloc>)
- void
- str(const basic_string<_CharT, _Traits, _SAlloc>& __s)
- {
-   _M_string.assign(__s.data(), __s.size());
-   _M_stringbuf_init(_M_mode);
- }
-
-
-      void
-      str(__string_type&& __s)
-      {
- _M_string = std::move(__s);
- _M_stringbuf_init(_M_mode);
-      }
-
-
-    protected:
-
-      void
-      _M_stringbuf_init(ios_base::openmode __mode)
-      {
- _M_mode = __mode;
- __size_type __len = 0;
- if (_M_mode & (ios_base::ate | ios_base::app))
-   __len = _M_string.size();
- _M_sync(const_cast<char_type*>(_M_string.data()), 0, __len);
-      }
-
-      virtual streamsize
-      showmanyc()
-      {
- streamsize __ret = -1;
- if (_M_mode & ios_base::in)
-   {
-     _M_update_egptr();
-     __ret = this->egptr() - this->gptr();
-   }
- return __ret;
-      }
-
-      virtual int_type
-      underflow();
-
-      virtual int_type
-      pbackfail(int_type __c = traits_type::eof());
-
-      virtual int_type
-      overflow(int_type __c = traits_type::eof());
-# 377 "/usr/include/c++/14.2.1/sstream" 3
-      virtual __streambuf_type*
-      setbuf(char_type* __s, streamsize __n)
-      {
- if (__s && __n >= 0)
-   {
-
-
-
-
-
-
-     _M_string.clear();
-
-
-     _M_sync(__s, __n, 0);
-   }
- return this;
-      }
-
-      virtual pos_type
-      seekoff(off_type __off, ios_base::seekdir __way,
-       ios_base::openmode __mode = ios_base::in | ios_base::out);
-
-      virtual pos_type
-      seekpos(pos_type __sp,
-       ios_base::openmode __mode = ios_base::in | ios_base::out);
-
-
-
-
-      void
-      _M_sync(char_type* __base, __size_type __i, __size_type __o);
-
-
-
-      void
-      _M_update_egptr()
-      {
- if (char_type* __pptr = this->pptr())
-   {
-     char_type* __egptr = this->egptr();
-     if (!__egptr || __pptr > __egptr)
-       {
-  if (_M_mode & ios_base::in)
-    this->setg(this->eback(), this->gptr(), __pptr);
-  else
-    this->setg(__pptr, __pptr, __pptr);
-       }
-   }
-      }
-
-
-
-      void
-      _M_pbump(char_type* __pbeg, char_type* __pend, off_type __off);
-
-    private:
-
-
-
-
-      __attribute__((__always_inline__))
-      char_type*
-      _M_high_mark() const noexcept
-      {
- if (char_type* __pptr = this->pptr())
-   {
-     char_type* __egptr = this->egptr();
-     if (!__egptr || __pptr > __egptr)
-       return __pptr;
-     else
-       return __egptr;
-   }
- return 0;
-      }
-
-
-
-
-
-      struct __xfer_bufptrs
-      {
- __xfer_bufptrs(const basic_stringbuf& __from, basic_stringbuf* __to)
- : _M_to{__to}, _M_goff{-1, -1, -1}, _M_poff{-1, -1, -1}
- {
-   const _CharT* const __str = __from._M_string.data();
-   const _CharT* __end = nullptr;
-   if (__from.eback())
-     {
-       _M_goff[0] = __from.eback() - __str;
-       _M_goff[1] = __from.gptr() - __str;
-       _M_goff[2] = __from.egptr() - __str;
-       __end = __from.egptr();
-     }
-   if (__from.pbase())
-     {
-       _M_poff[0] = __from.pbase() - __str;
-       _M_poff[1] = __from.pptr() - __from.pbase();
-       _M_poff[2] = __from.epptr() - __str;
-       if (!__end || __from.pptr() > __end)
-  __end = __from.pptr();
-     }
-
-
-   if (__end)
-     {
-
-
-       auto& __mut_from = const_cast<basic_stringbuf&>(__from);
-       __mut_from._M_string._M_length(__end - __str);
-     }
- }
-
- ~__xfer_bufptrs()
- {
-   char_type* __str = const_cast<char_type*>(_M_to->_M_string.data());
-   if (_M_goff[0] != -1)
-     _M_to->setg(__str+_M_goff[0], __str+_M_goff[1], __str+_M_goff[2]);
-   if (_M_poff[0] != -1)
-     _M_to->_M_pbump(__str+_M_poff[0], __str+_M_poff[2], _M_poff[1]);
- }
-
- basic_stringbuf* _M_to;
- off_type _M_goff[3];
- off_type _M_poff[3];
-      };
-# 513 "/usr/include/c++/14.2.1/sstream" 3
-      basic_stringbuf(basic_stringbuf&& __rhs, __xfer_bufptrs&&)
-      : __streambuf_type(static_cast<const __streambuf_type&>(__rhs)),
-      _M_mode(__rhs._M_mode), _M_string(std::move(__rhs._M_string))
-      { }
-
-
-
-
-      basic_stringbuf(basic_stringbuf&& __rhs, const allocator_type& __a,
-        __xfer_bufptrs&&)
-      : __streambuf_type(static_cast<const __streambuf_type&>(__rhs)),
-      _M_mode(__rhs._M_mode), _M_string(std::move(__rhs._M_string), __a)
-      { }
-
-
-    };
-# 546 "/usr/include/c++/14.2.1/sstream" 3
-  template<typename _CharT, typename _Traits, typename _Alloc>
-    class basic_istringstream : public basic_istream<_CharT, _Traits>
-    {
-    public:
-
-      typedef _CharT char_type;
-      typedef _Traits traits_type;
-
-
-      typedef _Alloc allocator_type;
-      typedef typename traits_type::int_type int_type;
-      typedef typename traits_type::pos_type pos_type;
-      typedef typename traits_type::off_type off_type;
-
-
-      typedef basic_string<_CharT, _Traits, _Alloc> __string_type;
-      typedef basic_stringbuf<_CharT, _Traits, _Alloc> __stringbuf_type;
-      typedef basic_istream<char_type, traits_type> __istream_type;
-
-    private:
-      __stringbuf_type _M_stringbuf;
-
-    public:
-# 580 "/usr/include/c++/14.2.1/sstream" 3
-      basic_istringstream()
-      : __istream_type(), _M_stringbuf(ios_base::in)
-      { this->init(&_M_stringbuf); }
-# 596 "/usr/include/c++/14.2.1/sstream" 3
-      explicit
-      basic_istringstream(ios_base::openmode __mode)
-      : __istream_type(), _M_stringbuf(__mode | ios_base::in)
-      { this->init(&_M_stringbuf); }
-# 614 "/usr/include/c++/14.2.1/sstream" 3
-      explicit
-      basic_istringstream(const __string_type& __str,
-     ios_base::openmode __mode = ios_base::in)
-      : __istream_type(), _M_stringbuf(__str, __mode | ios_base::in)
-      { this->init(&_M_stringbuf); }
-
-
-
-
-
-
-
-      ~basic_istringstream()
-      { }
-
-
-      basic_istringstream(const basic_istringstream&) = delete;
-
-      basic_istringstream(basic_istringstream&& __rhs)
-      : __istream_type(std::move(__rhs)),
-      _M_stringbuf(std::move(__rhs._M_stringbuf))
-      { __istream_type::set_rdbuf(&_M_stringbuf); }
-
-
-      basic_istringstream(ios_base::openmode __mode, const allocator_type& __a)
-      : __istream_type(), _M_stringbuf(__mode | ios_base::in, __a)
-      { this->init(std::__addressof(_M_stringbuf)); }
-
-      explicit
-      basic_istringstream(__string_type&& __str,
-     ios_base::openmode __mode = ios_base::in)
-      : __istream_type(), _M_stringbuf(std::move(__str), __mode | ios_base::in)
-      { this->init(std::__addressof(_M_stringbuf)); }
-
-      template<typename _SAlloc>
- basic_istringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
-       const allocator_type& __a)
- : basic_istringstream(__str, ios_base::in, __a)
- { }
-
-      template<typename _SAlloc>
- basic_istringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
-       ios_base::openmode __mode,
-       const allocator_type& __a)
- : __istream_type(), _M_stringbuf(__str, __mode | ios_base::in, __a)
- { this->init(std::__addressof(_M_stringbuf)); }
-
-      template<typename _SAlloc>
- explicit
- basic_istringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
-       ios_base::openmode __mode = ios_base::in)
- : basic_istringstream(__str, __mode, allocator_type())
- { }
-
-
-
-
-      basic_istringstream&
-      operator=(const basic_istringstream&) = delete;
-
-      basic_istringstream&
-      operator=(basic_istringstream&& __rhs)
-      {
- __istream_type::operator=(std::move(__rhs));
- _M_stringbuf = std::move(__rhs._M_stringbuf);
- return *this;
-      }
-
-      void
-      swap(basic_istringstream& __rhs)
-      {
- __istream_type::swap(__rhs);
- _M_stringbuf.swap(__rhs._M_stringbuf);
-      }
-# 697 "/usr/include/c++/14.2.1/sstream" 3
-      __stringbuf_type*
-      rdbuf() const
-      { return const_cast<__stringbuf_type*>(&_M_stringbuf); }
-
-
-
-
-
-      __string_type
-      str() const &
-      { return _M_stringbuf.str(); }
-
-
-
-
-      template<__allocator_like _SAlloc>
- basic_string<_CharT, _Traits, _SAlloc>
- str(const _SAlloc& __sa) const
- { return _M_stringbuf.str(__sa); }
-
-
-      __string_type
-      str() &&
-      { return std::move(_M_stringbuf).str(); }
-
-
-     
-      basic_string_view<char_type, traits_type>
-      view() const noexcept
-      { return _M_stringbuf.view(); }
-# 735 "/usr/include/c++/14.2.1/sstream" 3
-      void
-      str(const __string_type& __s)
-      { _M_stringbuf.str(__s); }
-
-
-
-      template<__allocator_like _SAlloc>
- requires (!is_same_v<_SAlloc, _Alloc>)
- void
- str(const basic_string<_CharT, _Traits, _SAlloc>& __s)
- { _M_stringbuf.str(__s); }
-
-
-      void
-      str(__string_type&& __s)
-      { _M_stringbuf.str(std::move(__s)); }
-
-    };
-# 770 "/usr/include/c++/14.2.1/sstream" 3
-  template <typename _CharT, typename _Traits, typename _Alloc>
-    class basic_ostringstream : public basic_ostream<_CharT, _Traits>
-    {
-    public:
-
-      typedef _CharT char_type;
-      typedef _Traits traits_type;
-
-
-      typedef _Alloc allocator_type;
-      typedef typename traits_type::int_type int_type;
-      typedef typename traits_type::pos_type pos_type;
-      typedef typename traits_type::off_type off_type;
-
-
-      typedef basic_string<_CharT, _Traits, _Alloc> __string_type;
-      typedef basic_stringbuf<_CharT, _Traits, _Alloc> __stringbuf_type;
-      typedef basic_ostream<char_type, traits_type> __ostream_type;
-
-    private:
-      __stringbuf_type _M_stringbuf;
-
-    public:
-# 804 "/usr/include/c++/14.2.1/sstream" 3
-      basic_ostringstream()
-      : __ostream_type(), _M_stringbuf(ios_base::out)
-      { this->init(&_M_stringbuf); }
-# 820 "/usr/include/c++/14.2.1/sstream" 3
-      explicit
-      basic_ostringstream(ios_base::openmode __mode)
-      : __ostream_type(), _M_stringbuf(__mode | ios_base::out)
-      { this->init(&_M_stringbuf); }
-# 838 "/usr/include/c++/14.2.1/sstream" 3
-      explicit
-      basic_ostringstream(const __string_type& __str,
-     ios_base::openmode __mode = ios_base::out)
-      : __ostream_type(), _M_stringbuf(__str, __mode | ios_base::out)
-      { this->init(&_M_stringbuf); }
-
-
-
-
-
-
-
-      ~basic_ostringstream()
-      { }
-
-
-      basic_ostringstream(const basic_ostringstream&) = delete;
-
-      basic_ostringstream(basic_ostringstream&& __rhs)
-      : __ostream_type(std::move(__rhs)),
-      _M_stringbuf(std::move(__rhs._M_stringbuf))
-      { __ostream_type::set_rdbuf(&_M_stringbuf); }
-
-
-      basic_ostringstream(ios_base::openmode __mode, const allocator_type& __a)
-      : __ostream_type(), _M_stringbuf(__mode | ios_base::out, __a)
-      { this->init(std::__addressof(_M_stringbuf)); }
-
-      explicit
-      basic_ostringstream(__string_type&& __str,
-     ios_base::openmode __mode = ios_base::out)
-      : __ostream_type(), _M_stringbuf(std::move(__str), __mode | ios_base::out)
-      { this->init(std::__addressof(_M_stringbuf)); }
-
-      template<typename _SAlloc>
- basic_ostringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
-       const allocator_type& __a)
- : basic_ostringstream(__str, ios_base::out, __a)
- { }
-
-      template<typename _SAlloc>
- basic_ostringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
-       ios_base::openmode __mode,
-       const allocator_type& __a)
- : __ostream_type(), _M_stringbuf(__str, __mode | ios_base::out, __a)
- { this->init(std::__addressof(_M_stringbuf)); }
-
-      template<typename _SAlloc>
- explicit
- basic_ostringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
-       ios_base::openmode __mode = ios_base::out)
- : basic_ostringstream(__str, __mode, allocator_type())
- { }
-
-
-
-
-      basic_ostringstream&
-      operator=(const basic_ostringstream&) = delete;
-
-      basic_ostringstream&
-      operator=(basic_ostringstream&& __rhs)
-      {
- __ostream_type::operator=(std::move(__rhs));
- _M_stringbuf = std::move(__rhs._M_stringbuf);
- return *this;
-      }
-
-      void
-      swap(basic_ostringstream& __rhs)
-      {
- __ostream_type::swap(__rhs);
- _M_stringbuf.swap(__rhs._M_stringbuf);
-      }
-# 921 "/usr/include/c++/14.2.1/sstream" 3
-      __stringbuf_type*
-      rdbuf() const
-      { return const_cast<__stringbuf_type*>(&_M_stringbuf); }
-
-
-
-
-
-      __string_type
-      str() const &
-      { return _M_stringbuf.str(); }
-
-
-
-
-      template<__allocator_like _SAlloc>
- basic_string<_CharT, _Traits, _SAlloc>
- str(const _SAlloc& __sa) const
- { return _M_stringbuf.str(__sa); }
-
-
-      __string_type
-      str() &&
-      { return std::move(_M_stringbuf).str(); }
-
-
-     
-      basic_string_view<char_type, traits_type>
-      view() const noexcept
-      { return _M_stringbuf.view(); }
-# 959 "/usr/include/c++/14.2.1/sstream" 3
-      void
-      str(const __string_type& __s)
-      { _M_stringbuf.str(__s); }
-
-
-
-      template<__allocator_like _SAlloc>
- requires (!is_same_v<_SAlloc, _Alloc>)
- void
- str(const basic_string<_CharT, _Traits, _SAlloc>& __s)
- { _M_stringbuf.str(__s); }
-
-
-      void
-      str(__string_type&& __s)
-      { _M_stringbuf.str(std::move(__s)); }
-
-    };
-# 994 "/usr/include/c++/14.2.1/sstream" 3
-  template <typename _CharT, typename _Traits, typename _Alloc>
-    class basic_stringstream : public basic_iostream<_CharT, _Traits>
-    {
-    public:
-
-      typedef _CharT char_type;
-      typedef _Traits traits_type;
-
-
-      typedef _Alloc allocator_type;
-      typedef typename traits_type::int_type int_type;
-      typedef typename traits_type::pos_type pos_type;
-      typedef typename traits_type::off_type off_type;
-
-
-      typedef basic_string<_CharT, _Traits, _Alloc> __string_type;
-      typedef basic_stringbuf<_CharT, _Traits, _Alloc> __stringbuf_type;
-      typedef basic_iostream<char_type, traits_type> __iostream_type;
-
-    private:
-      __stringbuf_type _M_stringbuf;
-
-    public:
-# 1028 "/usr/include/c++/14.2.1/sstream" 3
-      basic_stringstream()
-      : __iostream_type(), _M_stringbuf(ios_base::out | ios_base::in)
-      { this->init(&_M_stringbuf); }
-# 1042 "/usr/include/c++/14.2.1/sstream" 3
-      explicit
-      basic_stringstream(ios_base::openmode __m)
-      : __iostream_type(), _M_stringbuf(__m)
-      { this->init(&_M_stringbuf); }
-# 1058 "/usr/include/c++/14.2.1/sstream" 3
-      explicit
-      basic_stringstream(const __string_type& __str,
-    ios_base::openmode __m = ios_base::out | ios_base::in)
-      : __iostream_type(), _M_stringbuf(__str, __m)
-      { this->init(&_M_stringbuf); }
-
-
-
-
-
-
-
-      ~basic_stringstream()
-      { }
-
-
-      basic_stringstream(const basic_stringstream&) = delete;
-
-      basic_stringstream(basic_stringstream&& __rhs)
-      : __iostream_type(std::move(__rhs)),
-      _M_stringbuf(std::move(__rhs._M_stringbuf))
-      { __iostream_type::set_rdbuf(&_M_stringbuf); }
-
-
-      basic_stringstream(ios_base::openmode __mode, const allocator_type& __a)
-      : __iostream_type(), _M_stringbuf(__mode, __a)
-      { this->init(&_M_stringbuf); }
-
-      explicit
-      basic_stringstream(__string_type&& __str,
-    ios_base::openmode __mode = ios_base::in
-           | ios_base::out)
-      : __iostream_type(), _M_stringbuf(std::move(__str), __mode)
-      { this->init(std::__addressof(_M_stringbuf)); }
-
-      template<typename _SAlloc>
- basic_stringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
-      const allocator_type& __a)
- : basic_stringstream(__str, ios_base::in | ios_base::out, __a)
- { }
-
-      template<typename _SAlloc>
- basic_stringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
-      ios_base::openmode __mode,
-      const allocator_type& __a)
- : __iostream_type(), _M_stringbuf(__str, __mode, __a)
- { this->init(std::__addressof(_M_stringbuf)); }
-
-      template<typename _SAlloc>
- explicit
- basic_stringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
-      ios_base::openmode __mode = ios_base::in
-             | ios_base::out)
- : basic_stringstream(__str, __mode, allocator_type())
- { }
-
-
-
-
-      basic_stringstream&
-      operator=(const basic_stringstream&) = delete;
-
-      basic_stringstream&
-      operator=(basic_stringstream&& __rhs)
-      {
- __iostream_type::operator=(std::move(__rhs));
- _M_stringbuf = std::move(__rhs._M_stringbuf);
- return *this;
-      }
-
-      void
-      swap(basic_stringstream& __rhs)
-      {
- __iostream_type::swap(__rhs);
- _M_stringbuf.swap(__rhs._M_stringbuf);
-      }
-# 1143 "/usr/include/c++/14.2.1/sstream" 3
-      __stringbuf_type*
-      rdbuf() const
-      { return const_cast<__stringbuf_type*>(&_M_stringbuf); }
-
-
-
-
-
-      __string_type
-      str() const &
-      { return _M_stringbuf.str(); }
-
-
-
-
-      template<__allocator_like _SAlloc>
- basic_string<_CharT, _Traits, _SAlloc>
- str(const _SAlloc& __sa) const
- { return _M_stringbuf.str(__sa); }
-
-
-      __string_type
-      str() &&
-      { return std::move(_M_stringbuf).str(); }
-
-
-     
-      basic_string_view<char_type, traits_type>
-      view() const noexcept
-      { return _M_stringbuf.view(); }
-# 1181 "/usr/include/c++/14.2.1/sstream" 3
-      void
-      str(const __string_type& __s)
-      { _M_stringbuf.str(__s); }
-
-
-
-      template<__allocator_like _SAlloc>
- requires (!is_same_v<_SAlloc, _Alloc>)
- void
- str(const basic_string<_CharT, _Traits, _SAlloc>& __s)
- { _M_stringbuf.str(__s); }
-
-
-      void
-      str(__string_type&& __s)
-      { _M_stringbuf.str(std::move(__s)); }
-
-    };
-
-
-
-  template <class _CharT, class _Traits, class _Allocator>
-    inline void
-    swap(basic_stringbuf<_CharT, _Traits, _Allocator>& __x,
-  basic_stringbuf<_CharT, _Traits, _Allocator>& __y)
-    noexcept(noexcept(__x.swap(__y)))
-    { __x.swap(__y); }
-
-
-  template <class _CharT, class _Traits, class _Allocator>
-    inline void
-    swap(basic_istringstream<_CharT, _Traits, _Allocator>& __x,
-  basic_istringstream<_CharT, _Traits, _Allocator>& __y)
-    { __x.swap(__y); }
-
-
-  template <class _CharT, class _Traits, class _Allocator>
-    inline void
-    swap(basic_ostringstream<_CharT, _Traits, _Allocator>& __x,
-  basic_ostringstream<_CharT, _Traits, _Allocator>& __y)
-    { __x.swap(__y); }
-
-
-  template <class _CharT, class _Traits, class _Allocator>
-    inline void
-    swap(basic_stringstream<_CharT, _Traits, _Allocator>& __x,
-  basic_stringstream<_CharT, _Traits, _Allocator>& __y)
-    { __x.swap(__y); }
-
-
-}
-
-}
-
-
-
-
-# 1 "/usr/include/c++/14.2.1/bits/sstream.tcc" 1 3
-# 37 "/usr/include/c++/14.2.1/bits/sstream.tcc" 3
-       
-# 38 "/usr/include/c++/14.2.1/bits/sstream.tcc" 3
-
-namespace std __attribute__ ((__visibility__ ("default")))
-{
-
-
-  template <class _CharT, class _Traits, class _Alloc>
-    typename basic_stringbuf<_CharT, _Traits, _Alloc>::int_type
-    basic_stringbuf<_CharT, _Traits, _Alloc>::
-    pbackfail(int_type __c)
-    {
-      int_type __ret = traits_type::eof();
-      if (this->eback() < this->gptr())
- {
-
-
-   const bool __testeof = traits_type::eq_int_type(__c, __ret);
-   if (!__testeof)
-     {
-       const bool __testeq = traits_type::eq(traits_type::
-          to_char_type(__c),
-          this->gptr()[-1]);
-       const bool __testout = this->_M_mode & ios_base::out;
-       if (__testeq || __testout)
-  {
-    this->gbump(-1);
-    if (!__testeq)
-      *this->gptr() = traits_type::to_char_type(__c);
-    __ret = __c;
-  }
-     }
-   else
-     {
-       this->gbump(-1);
-       __ret = traits_type::not_eof(__c);
-     }
- }
-      return __ret;
-    }
-
-  template <class _CharT, class _Traits, class _Alloc>
-    typename basic_stringbuf<_CharT, _Traits, _Alloc>::int_type
-    basic_stringbuf<_CharT, _Traits, _Alloc>::
-    overflow(int_type __c)
-    {
-      const bool __testout = this->_M_mode & ios_base::out;
-      if (__builtin_expect(!__testout, false))
- return traits_type::eof();
-
-      const bool __testeof = traits_type::eq_int_type(__c, traits_type::eof());
-      if (__builtin_expect(__testeof, false))
- return traits_type::not_eof(__c);
-
-      const __size_type __capacity = _M_string.capacity();
-
-
-      if (size_t(this->epptr() - this->pbase()) < __capacity)
- {
-
-   char_type* __base = const_cast<char_type*>(_M_string.data());
-   _M_pbump(__base, __base + __capacity, this->pptr() - this->pbase());
-   if (_M_mode & ios_base::in)
-     {
-       const __size_type __nget = this->gptr() - this->eback();
-       const __size_type __eget = this->egptr() - this->eback();
-       this->setg(__base, __base + __nget, __base + __eget + 1);
-     }
-   *this->pptr() = traits_type::to_char_type(__c);
-   this->pbump(1);
-   return __c;
- }
-
-
-      const __size_type __max_size = _M_string.max_size();
-      const bool __testput = this->pptr() < this->epptr();
-      if (__builtin_expect(!__testput && __capacity == __max_size, false))
- return traits_type::eof();
-
-
-
-      const char_type __conv = traits_type::to_char_type(__c);
-      if (!__testput)
- {
-# 129 "/usr/include/c++/14.2.1/bits/sstream.tcc" 3
-   const __size_type __opt_len = std::max(__size_type(2 * __capacity),
-       __size_type(512));
-   const __size_type __len = std::min(__opt_len, __max_size);
-   __string_type __tmp(_M_string.get_allocator());
-   __tmp.reserve(__len);
-   if (this->pbase())
-     __tmp.assign(this->pbase(), this->epptr() - this->pbase());
-   __tmp.push_back(__conv);
-   _M_string.swap(__tmp);
-   _M_sync(const_cast<char_type*>(_M_string.data()),
-    this->gptr() - this->eback(), this->pptr() - this->pbase());
- }
-      else
- *this->pptr() = __conv;
-      this->pbump(1);
-      return __c;
-    }
-
-  template <class _CharT, class _Traits, class _Alloc>
-    typename basic_stringbuf<_CharT, _Traits, _Alloc>::int_type
-    basic_stringbuf<_CharT, _Traits, _Alloc>::
-    underflow()
-    {
-      int_type __ret = traits_type::eof();
-      const bool __testin = this->_M_mode & ios_base::in;
-      if (__testin)
- {
-
-   _M_update_egptr();
-
-   if (this->gptr() < this->egptr())
-     __ret = traits_type::to_int_type(*this->gptr());
- }
-      return __ret;
-    }
-
-  template <class _CharT, class _Traits, class _Alloc>
-    typename basic_stringbuf<_CharT, _Traits, _Alloc>::pos_type
-    basic_stringbuf<_CharT, _Traits, _Alloc>::
-    seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode __mode)
-    {
-      pos_type __ret = pos_type(off_type(-1));
-      bool __testin = (ios_base::in & this->_M_mode & __mode) != 0;
-      bool __testout = (ios_base::out & this->_M_mode & __mode) != 0;
-      const bool __testboth = __testin && __testout && __way != ios_base::cur;
-      __testin &= !(__mode & ios_base::out);
-      __testout &= !(__mode & ios_base::in);
-
-
-
-      const char_type* __beg = __testin ? this->eback() : this->pbase();
-      if ((__beg || !__off) && (__testin || __testout || __testboth))
- {
-   _M_update_egptr();
-
-   off_type __newoffi = __off;
-   off_type __newoffo = __newoffi;
-   if (__way == ios_base::cur)
-     {
-       __newoffi += this->gptr() - __beg;
-       __newoffo += this->pptr() - __beg;
-     }
-   else if (__way == ios_base::end)
-     __newoffo = __newoffi += this->egptr() - __beg;
-
-   if ((__testin || __testboth)
-       && __newoffi >= 0
-       && this->egptr() - __beg >= __newoffi)
-     {
-       this->setg(this->eback(), this->eback() + __newoffi,
-    this->egptr());
-       __ret = pos_type(__newoffi);
-     }
-   if ((__testout || __testboth)
-       && __newoffo >= 0
-       && this->egptr() - __beg >= __newoffo)
-     {
-       _M_pbump(this->pbase(), this->epptr(), __newoffo);
-       __ret = pos_type(__newoffo);
-     }
- }
-      return __ret;
-    }
-
-  template <class _CharT, class _Traits, class _Alloc>
-    typename basic_stringbuf<_CharT, _Traits, _Alloc>::pos_type
-    basic_stringbuf<_CharT, _Traits, _Alloc>::
-    seekpos(pos_type __sp, ios_base::openmode __mode)
-    {
-      pos_type __ret = pos_type(off_type(-1));
-      const bool __testin = (ios_base::in & this->_M_mode & __mode) != 0;
-      const bool __testout = (ios_base::out & this->_M_mode & __mode) != 0;
-
-      const char_type* __beg = __testin ? this->eback() : this->pbase();
-      if ((__beg || !off_type(__sp)) && (__testin || __testout))
- {
-   _M_update_egptr();
-
-   const off_type __pos(__sp);
-   const bool __testpos = (0 <= __pos
-      && __pos <= this->egptr() - __beg);
-   if (__testpos)
-     {
-       if (__testin)
-  this->setg(this->eback(), this->eback() + __pos,
-      this->egptr());
-       if (__testout)
-  _M_pbump(this->pbase(), this->epptr(), __pos);
-       __ret = __sp;
-     }
- }
-      return __ret;
-    }
-
-  template <class _CharT, class _Traits, class _Alloc>
-    void
-    basic_stringbuf<_CharT, _Traits, _Alloc>::
-    _M_sync(char_type* __base, __size_type __i, __size_type __o)
-    {
-      const bool __testin = _M_mode & ios_base::in;
-      const bool __testout = _M_mode & ios_base::out;
-      char_type* __endg = __base + _M_string.size();
-      char_type* __endp = __base + _M_string.capacity();
-
-      if (__base != _M_string.data())
- {
-
-   __endg += __i;
-   __i = 0;
-   __endp = __endg;
- }
-
-      if (__testin)
- this->setg(__base, __base + __i, __endg);
-      if (__testout)
- {
-   _M_pbump(__base, __endp, __o);
-
-
-
-   if (!__testin)
-     this->setg(__endg, __endg, __endg);
- }
-    }
-
-  template <class _CharT, class _Traits, class _Alloc>
-    void
-    basic_stringbuf<_CharT, _Traits, _Alloc>::
-    _M_pbump(char_type* __pbeg, char_type* __pend, off_type __off)
-    {
-      this->setp(__pbeg, __pend);
-      while (__off > __gnu_cxx::__numeric_traits<int>::__max)
- {
-   this->pbump(__gnu_cxx::__numeric_traits<int>::__max);
-   __off -= __gnu_cxx::__numeric_traits<int>::__max;
- }
-      this->pbump(__off);
-    }
-
-
-
-
-  extern template class basic_stringbuf<char>;
-  extern template class basic_istringstream<char>;
-  extern template class basic_ostringstream<char>;
-  extern template class basic_stringstream<char>;
-
-
-  extern template class basic_stringbuf<wchar_t>;
-  extern template class basic_istringstream<wchar_t>;
-  extern template class basic_ostringstream<wchar_t>;
-  extern template class basic_stringstream<wchar_t>;
-
-
-
-
-}
-# 1239 "/usr/include/c++/14.2.1/sstream" 2 3
-# 46 "/usr/include/c++/14.2.1/chrono" 2 3
+# 59 "/usr/include/c++/14.2.1/algorithm" 3
 
 
 # 1 "/usr/include/c++/14.2.1/bits/stl_algo.h" 1 3
@@ -80523,7 +76997,8198 @@ inline namespace _V2 {
 
 
 }
-# 49 "/usr/include/c++/14.2.1/chrono" 2 3
+# 62 "/usr/include/c++/14.2.1/algorithm" 2 3
+
+# 1 "/usr/include/c++/14.2.1/bits/ranges_algo.h" 1 3
+# 38 "/usr/include/c++/14.2.1/bits/ranges_algo.h" 3
+# 1 "/usr/include/c++/14.2.1/bits/ranges_algobase.h" 1 3
+# 43 "/usr/include/c++/14.2.1/bits/ranges_algobase.h" 3
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+namespace ranges
+{
+  namespace __detail
+  {
+    template<typename _Tp>
+      constexpr inline bool __is_normal_iterator = false;
+
+    template<typename _Iterator, typename _Container>
+      constexpr inline bool
+ __is_normal_iterator<__gnu_cxx::__normal_iterator<_Iterator,
+         _Container>> = true;
+
+    template<typename _Tp>
+      constexpr inline bool __is_reverse_iterator = false;
+
+    template<typename _Iterator>
+      constexpr inline bool
+ __is_reverse_iterator<reverse_iterator<_Iterator>> = true;
+
+    template<typename _Tp>
+      constexpr inline bool __is_move_iterator = false;
+
+    template<typename _Iterator>
+      constexpr inline bool
+ __is_move_iterator<move_iterator<_Iterator>> = true;
+  }
+
+  struct __equal_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      typename _Pred = ranges::equal_to,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires indirectly_comparable<_Iter1, _Iter2, _Pred, _Proj1, _Proj2>
+      constexpr bool
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2, _Pred __pred = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+
+
+ if constexpr (__detail::__is_normal_iterator<_Iter1>
+        && same_as<_Iter1, _Sent1>)
+   return (*this)(__first1.base(), __last1.base(),
+    std::move(__first2), std::move(__last2),
+    std::move(__pred),
+    std::move(__proj1), std::move(__proj2));
+ else if constexpr (__detail::__is_normal_iterator<_Iter2>
+      && same_as<_Iter2, _Sent2>)
+   return (*this)(std::move(__first1), std::move(__last1),
+    __first2.base(), __last2.base(),
+    std::move(__pred),
+    std::move(__proj1), std::move(__proj2));
+ else if constexpr (sized_sentinel_for<_Sent1, _Iter1>
+      && sized_sentinel_for<_Sent2, _Iter2>)
+   {
+     auto __d1 = ranges::distance(__first1, __last1);
+     auto __d2 = ranges::distance(__first2, __last2);
+     if (__d1 != __d2)
+       return false;
+
+     using _ValueType1 = iter_value_t<_Iter1>;
+     constexpr bool __use_memcmp
+       = ((is_integral_v<_ValueType1> || is_pointer_v<_ValueType1>)
+   && __memcmpable<_Iter1, _Iter2>::__value
+   && is_same_v<_Pred, ranges::equal_to>
+   && is_same_v<_Proj1, identity>
+   && is_same_v<_Proj2, identity>);
+     if constexpr (__use_memcmp)
+       {
+  if (const size_t __len = (__last1 - __first1))
+    return !std::__memcmp(__first1, __first2, __len);
+  return true;
+       }
+     else
+       {
+  for (; __first1 != __last1; ++__first1, (void)++__first2)
+    if (!(bool)std::__invoke(__pred,
+        std::__invoke(__proj1, *__first1),
+        std::__invoke(__proj2, *__first2)))
+      return false;
+  return true;
+       }
+   }
+ else
+   {
+     for (; __first1 != __last1 && __first2 != __last2;
+   ++__first1, (void)++__first2)
+       if (!(bool)std::__invoke(__pred,
+           std::__invoke(__proj1, *__first1),
+           std::__invoke(__proj2, *__first2)))
+  return false;
+     return __first1 == __last1 && __first2 == __last2;
+   }
+      }
+
+    template<input_range _Range1, input_range _Range2,
+      typename _Pred = ranges::equal_to,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires indirectly_comparable<iterator_t<_Range1>, iterator_t<_Range2>,
+         _Pred, _Proj1, _Proj2>
+      constexpr bool
+      operator()(_Range1&& __r1, _Range2&& __r2, _Pred __pred = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+
+
+ if constexpr (sized_range<_Range1>)
+   if constexpr (sized_range<_Range2>)
+     if (ranges::distance(__r1) != ranges::distance(__r2))
+       return false;
+
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__pred),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __equal_fn equal{};
+
+  template<typename _Iter, typename _Out>
+    struct in_out_result
+    {
+      [[no_unique_address]] _Iter in;
+      [[no_unique_address]] _Out out;
+
+      template<typename _Iter2, typename _Out2>
+ requires convertible_to<const _Iter&, _Iter2>
+   && convertible_to<const _Out&, _Out2>
+ constexpr
+ operator in_out_result<_Iter2, _Out2>() const &
+ { return {in, out}; }
+
+      template<typename _Iter2, typename _Out2>
+ requires convertible_to<_Iter, _Iter2>
+   && convertible_to<_Out, _Out2>
+ constexpr
+ operator in_out_result<_Iter2, _Out2>() &&
+ { return {std::move(in), std::move(out)}; }
+    };
+
+  template<typename _Iter, typename _Out>
+    using copy_result = in_out_result<_Iter, _Out>;
+
+  template<typename _Iter, typename _Out>
+    using move_result = in_out_result<_Iter, _Out>;
+
+  template<typename _Iter1, typename _Iter2>
+    using move_backward_result = in_out_result<_Iter1, _Iter2>;
+
+  template<typename _Iter1, typename _Iter2>
+    using copy_backward_result = in_out_result<_Iter1, _Iter2>;
+
+  template<bool _IsMove,
+    bidirectional_iterator _Iter, sentinel_for<_Iter> _Sent,
+    bidirectional_iterator _Out>
+    requires (_IsMove
+       ? indirectly_movable<_Iter, _Out>
+       : indirectly_copyable<_Iter, _Out>)
+    constexpr __conditional_t<_IsMove,
+         move_backward_result<_Iter, _Out>,
+         copy_backward_result<_Iter, _Out>>
+    __copy_or_move_backward(_Iter __first, _Sent __last, _Out __result);
+
+  template<bool _IsMove,
+    input_iterator _Iter, sentinel_for<_Iter> _Sent,
+    weakly_incrementable _Out>
+    requires (_IsMove
+       ? indirectly_movable<_Iter, _Out>
+       : indirectly_copyable<_Iter, _Out>)
+    constexpr __conditional_t<_IsMove,
+         move_result<_Iter, _Out>,
+         copy_result<_Iter, _Out>>
+    __copy_or_move(_Iter __first, _Sent __last, _Out __result)
+    {
+
+
+      using __detail::__is_move_iterator;
+      using __detail::__is_reverse_iterator;
+      using __detail::__is_normal_iterator;
+      if constexpr (__is_move_iterator<_Iter> && same_as<_Iter, _Sent>)
+ {
+   auto [__in, __out]
+     = ranges::__copy_or_move<true>(std::move(__first).base(),
+        std::move(__last).base(),
+        std::move(__result));
+   return {move_iterator{std::move(__in)}, std::move(__out)};
+ }
+      else if constexpr (__is_reverse_iterator<_Iter> && same_as<_Iter, _Sent>
+    && __is_reverse_iterator<_Out>)
+ {
+   auto [__in,__out]
+     = ranges::__copy_or_move_backward<_IsMove>(std::move(__last).base(),
+             std::move(__first).base(),
+             std::move(__result).base());
+   return {reverse_iterator{std::move(__in)},
+    reverse_iterator{std::move(__out)}};
+ }
+      else if constexpr (__is_normal_iterator<_Iter> && same_as<_Iter, _Sent>)
+ {
+   auto [__in,__out]
+     = ranges::__copy_or_move<_IsMove>(__first.base(), __last.base(),
+           std::move(__result));
+   return {decltype(__first){__in}, std::move(__out)};
+ }
+      else if constexpr (__is_normal_iterator<_Out>)
+ {
+   auto [__in,__out]
+     = ranges::__copy_or_move<_IsMove>(std::move(__first), __last, __result.base());
+   return {std::move(__in), decltype(__result){__out}};
+ }
+      else if constexpr (sized_sentinel_for<_Sent, _Iter>)
+ {
+   if (!std::__is_constant_evaluated())
+     {
+       if constexpr (__memcpyable<_Out, _Iter>::__value)
+  {
+    using _ValueTypeI = iter_value_t<_Iter>;
+    static_assert(_IsMove
+        ? is_move_assignable_v<_ValueTypeI>
+        : is_copy_assignable_v<_ValueTypeI>);
+    auto __num = __last - __first;
+    if (__num)
+      __builtin_memmove(__result, __first,
+   sizeof(_ValueTypeI) * __num);
+    return {__first + __num, __result + __num};
+  }
+     }
+
+   for (auto __n = __last - __first; __n > 0; --__n)
+     {
+       if constexpr (_IsMove)
+  *__result = std::move(*__first);
+       else
+  *__result = *__first;
+       ++__first;
+       ++__result;
+     }
+   return {std::move(__first), std::move(__result)};
+ }
+      else
+ {
+   while (__first != __last)
+     {
+       if constexpr (_IsMove)
+  *__result = std::move(*__first);
+       else
+  *__result = *__first;
+       ++__first;
+       ++__result;
+     }
+   return {std::move(__first), std::move(__result)};
+ }
+    }
+
+  struct __copy_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out>
+      requires indirectly_copyable<_Iter, _Out>
+      constexpr copy_result<_Iter, _Out>
+      operator()(_Iter __first, _Sent __last, _Out __result) const
+      {
+ return ranges::__copy_or_move<false>(std::move(__first),
+          std::move(__last),
+          std::move(__result));
+      }
+
+    template<input_range _Range, weakly_incrementable _Out>
+      requires indirectly_copyable<iterator_t<_Range>, _Out>
+      constexpr copy_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, _Out __result) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result));
+      }
+  };
+
+  inline constexpr __copy_fn copy{};
+
+  struct __move_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out>
+      requires indirectly_movable<_Iter, _Out>
+      constexpr move_result<_Iter, _Out>
+      operator()(_Iter __first, _Sent __last, _Out __result) const
+      {
+ return ranges::__copy_or_move<true>(std::move(__first),
+         std::move(__last),
+         std::move(__result));
+      }
+
+    template<input_range _Range, weakly_incrementable _Out>
+      requires indirectly_movable<iterator_t<_Range>, _Out>
+      constexpr move_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, _Out __result) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result));
+      }
+  };
+
+  inline constexpr __move_fn move{};
+
+  template<bool _IsMove,
+    bidirectional_iterator _Iter, sentinel_for<_Iter> _Sent,
+    bidirectional_iterator _Out>
+    requires (_IsMove
+       ? indirectly_movable<_Iter, _Out>
+       : indirectly_copyable<_Iter, _Out>)
+    constexpr __conditional_t<_IsMove,
+         move_backward_result<_Iter, _Out>,
+         copy_backward_result<_Iter, _Out>>
+    __copy_or_move_backward(_Iter __first, _Sent __last, _Out __result)
+    {
+
+
+      using __detail::__is_reverse_iterator;
+      using __detail::__is_normal_iterator;
+      if constexpr (__is_reverse_iterator<_Iter> && same_as<_Iter, _Sent>
+      && __is_reverse_iterator<_Out>)
+ {
+   auto [__in,__out]
+     = ranges::__copy_or_move<_IsMove>(std::move(__last).base(),
+           std::move(__first).base(),
+           std::move(__result).base());
+   return {reverse_iterator{std::move(__in)},
+    reverse_iterator{std::move(__out)}};
+ }
+      else if constexpr (__is_normal_iterator<_Iter> && same_as<_Iter, _Sent>)
+ {
+   auto [__in,__out]
+     = ranges::__copy_or_move_backward<_IsMove>(__first.base(),
+             __last.base(),
+             std::move(__result));
+   return {decltype(__first){__in}, std::move(__out)};
+ }
+      else if constexpr (__is_normal_iterator<_Out>)
+ {
+   auto [__in,__out]
+     = ranges::__copy_or_move_backward<_IsMove>(std::move(__first),
+             std::move(__last),
+             __result.base());
+   return {std::move(__in), decltype(__result){__out}};
+ }
+      else if constexpr (sized_sentinel_for<_Sent, _Iter>)
+ {
+   if (!std::__is_constant_evaluated())
+     {
+       if constexpr (__memcpyable<_Out, _Iter>::__value)
+  {
+    using _ValueTypeI = iter_value_t<_Iter>;
+    static_assert(_IsMove
+        ? is_move_assignable_v<_ValueTypeI>
+        : is_copy_assignable_v<_ValueTypeI>);
+    auto __num = __last - __first;
+    if (__num)
+      __builtin_memmove(__result - __num, __first,
+          sizeof(_ValueTypeI) * __num);
+    return {__first + __num, __result - __num};
+  }
+     }
+
+   auto __lasti = ranges::next(__first, __last);
+   auto __tail = __lasti;
+
+   for (auto __n = __last - __first; __n > 0; --__n)
+     {
+       --__tail;
+       --__result;
+       if constexpr (_IsMove)
+  *__result = std::move(*__tail);
+       else
+  *__result = *__tail;
+     }
+   return {std::move(__lasti), std::move(__result)};
+ }
+      else
+ {
+   auto __lasti = ranges::next(__first, __last);
+   auto __tail = __lasti;
+
+   while (__first != __tail)
+     {
+       --__tail;
+       --__result;
+       if constexpr (_IsMove)
+  *__result = std::move(*__tail);
+       else
+  *__result = *__tail;
+     }
+   return {std::move(__lasti), std::move(__result)};
+ }
+    }
+
+  struct __copy_backward_fn
+  {
+    template<bidirectional_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      bidirectional_iterator _Iter2>
+      requires indirectly_copyable<_Iter1, _Iter2>
+      constexpr copy_backward_result<_Iter1, _Iter2>
+      operator()(_Iter1 __first, _Sent1 __last, _Iter2 __result) const
+      {
+ return ranges::__copy_or_move_backward<false>(std::move(__first),
+            std::move(__last),
+            std::move(__result));
+      }
+
+    template<bidirectional_range _Range, bidirectional_iterator _Iter>
+      requires indirectly_copyable<iterator_t<_Range>, _Iter>
+      constexpr copy_backward_result<borrowed_iterator_t<_Range>, _Iter>
+      operator()(_Range&& __r, _Iter __result) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result));
+      }
+  };
+
+  inline constexpr __copy_backward_fn copy_backward{};
+
+  struct __move_backward_fn
+  {
+    template<bidirectional_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      bidirectional_iterator _Iter2>
+      requires indirectly_movable<_Iter1, _Iter2>
+      constexpr move_backward_result<_Iter1, _Iter2>
+      operator()(_Iter1 __first, _Sent1 __last, _Iter2 __result) const
+      {
+ return ranges::__copy_or_move_backward<true>(std::move(__first),
+           std::move(__last),
+           std::move(__result));
+      }
+
+    template<bidirectional_range _Range, bidirectional_iterator _Iter>
+      requires indirectly_movable<iterator_t<_Range>, _Iter>
+      constexpr move_backward_result<borrowed_iterator_t<_Range>, _Iter>
+      operator()(_Range&& __r, _Iter __result) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result));
+      }
+  };
+
+  inline constexpr __move_backward_fn move_backward{};
+
+  template<typename _Iter, typename _Out>
+    using copy_n_result = in_out_result<_Iter, _Out>;
+
+  struct __copy_n_fn
+  {
+    template<input_iterator _Iter, weakly_incrementable _Out>
+      requires indirectly_copyable<_Iter, _Out>
+      constexpr copy_n_result<_Iter, _Out>
+      operator()(_Iter __first, iter_difference_t<_Iter> __n,
+   _Out __result) const
+      {
+ if constexpr (random_access_iterator<_Iter>)
+   {
+     if (__n > 0)
+       return ranges::copy(__first, __first + __n, std::move(__result));
+   }
+ else
+   {
+     for (; __n > 0; --__n, (void)++__result, (void)++__first)
+       *__result = *__first;
+   }
+ return {std::move(__first), std::move(__result)};
+      }
+  };
+
+  inline constexpr __copy_n_fn copy_n{};
+
+  struct __fill_n_fn
+  {
+    template<typename _Tp, output_iterator<const _Tp&> _Out>
+      constexpr _Out
+      operator()(_Out __first, iter_difference_t<_Out> __n,
+   const _Tp& __value) const
+      {
+
+
+ if (__n <= 0)
+   return __first;
+
+ if constexpr (is_scalar_v<_Tp>)
+   {
+
+     if constexpr (is_pointer_v<_Out>
+
+     && __is_byte<remove_pointer_t<_Out>>::__value
+     && integral<_Tp>)
+       {
+  if (!std::__is_constant_evaluated())
+    {
+      __builtin_memset(__first,
+         static_cast<unsigned char>(__value),
+         __n);
+      return __first + __n;
+    }
+       }
+
+     const auto __tmp = __value;
+     for (; __n > 0; --__n, (void)++__first)
+       *__first = __tmp;
+     return __first;
+   }
+ else
+   {
+     for (; __n > 0; --__n, (void)++__first)
+       *__first = __value;
+     return __first;
+   }
+      }
+  };
+
+  inline constexpr __fill_n_fn fill_n{};
+
+  struct __fill_fn
+  {
+    template<typename _Tp,
+      output_iterator<const _Tp&> _Out, sentinel_for<_Out> _Sent>
+      constexpr _Out
+      operator()(_Out __first, _Sent __last, const _Tp& __value) const
+      {
+
+
+ if constexpr (sized_sentinel_for<_Sent, _Out>)
+   {
+     const auto __len = __last - __first;
+     return ranges::fill_n(std::move(__first), __len, __value);
+   }
+ else if constexpr (is_scalar_v<_Tp>)
+   {
+     const auto __tmp = __value;
+     for (; __first != __last; ++__first)
+       *__first = __tmp;
+     return __first;
+   }
+ else
+   {
+     for (; __first != __last; ++__first)
+       *__first = __value;
+     return __first;
+   }
+      }
+
+    template<typename _Tp, output_range<const _Tp&> _Range>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, const _Tp& __value) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r), __value);
+      }
+  };
+
+  inline constexpr __fill_fn fill{};
+}
+
+}
+# 39 "/usr/include/c++/14.2.1/bits/ranges_algo.h" 2 3
+
+
+
+
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+namespace ranges
+{
+  namespace __detail
+  {
+    template<typename _Comp, typename _Proj>
+      constexpr auto
+      __make_comp_proj(_Comp& __comp, _Proj& __proj)
+      {
+ return [&] (auto&& __lhs, auto&& __rhs) -> bool {
+   using _TL = decltype(__lhs);
+   using _TR = decltype(__rhs);
+   return std::__invoke(__comp,
+          std::__invoke(__proj, std::forward<_TL>(__lhs)),
+          std::__invoke(__proj, std::forward<_TR>(__rhs)));
+ };
+      }
+
+    template<typename _Pred, typename _Proj>
+      constexpr auto
+      __make_pred_proj(_Pred& __pred, _Proj& __proj)
+      {
+ return [&] <typename _Tp> (_Tp&& __arg) -> bool {
+   return std::__invoke(__pred,
+          std::__invoke(__proj, std::forward<_Tp>(__arg)));
+ };
+      }
+  }
+
+  struct __all_of_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      constexpr bool
+      operator()(_Iter __first, _Sent __last,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first)
+   if (!(bool)std::__invoke(__pred, std::__invoke(__proj, *__first)))
+     return false;
+ return true;
+      }
+
+    template<input_range _Range, typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      constexpr bool
+      operator()(_Range&& __r, _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __all_of_fn all_of{};
+
+  struct __any_of_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      constexpr bool
+      operator()(_Iter __first, _Sent __last,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first)
+   if (std::__invoke(__pred, std::__invoke(__proj, *__first)))
+     return true;
+ return false;
+      }
+
+    template<input_range _Range, typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      constexpr bool
+      operator()(_Range&& __r, _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __any_of_fn any_of{};
+
+  struct __none_of_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      constexpr bool
+      operator()(_Iter __first, _Sent __last,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first)
+   if (std::__invoke(__pred, std::__invoke(__proj, *__first)))
+     return false;
+ return true;
+      }
+
+    template<input_range _Range, typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      constexpr bool
+      operator()(_Range&& __r, _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __none_of_fn none_of{};
+
+  template<typename _Iter, typename _Fp>
+    struct in_fun_result
+    {
+      [[no_unique_address]] _Iter in;
+      [[no_unique_address]] _Fp fun;
+
+      template<typename _Iter2, typename _F2p>
+ requires convertible_to<const _Iter&, _Iter2>
+   && convertible_to<const _Fp&, _F2p>
+ constexpr
+ operator in_fun_result<_Iter2, _F2p>() const &
+ { return {in, fun}; }
+
+      template<typename _Iter2, typename _F2p>
+ requires convertible_to<_Iter, _Iter2> && convertible_to<_Fp, _F2p>
+ constexpr
+ operator in_fun_result<_Iter2, _F2p>() &&
+ { return {std::move(in), std::move(fun)}; }
+    };
+
+  template<typename _Iter, typename _Fp>
+    using for_each_result = in_fun_result<_Iter, _Fp>;
+
+  struct __for_each_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirectly_unary_invocable<projected<_Iter, _Proj>> _Fun>
+      constexpr for_each_result<_Iter, _Fun>
+      operator()(_Iter __first, _Sent __last, _Fun __f, _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first)
+   std::__invoke(__f, std::__invoke(__proj, *__first));
+ return { std::move(__first), std::move(__f) };
+      }
+
+    template<input_range _Range, typename _Proj = identity,
+      indirectly_unary_invocable<projected<iterator_t<_Range>, _Proj>>
+        _Fun>
+      constexpr for_each_result<borrowed_iterator_t<_Range>, _Fun>
+      operator()(_Range&& __r, _Fun __f, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__f), std::move(__proj));
+      }
+  };
+
+  inline constexpr __for_each_fn for_each{};
+
+  template<typename _Iter, typename _Fp>
+    using for_each_n_result = in_fun_result<_Iter, _Fp>;
+
+  struct __for_each_n_fn
+  {
+    template<input_iterator _Iter, typename _Proj = identity,
+      indirectly_unary_invocable<projected<_Iter, _Proj>> _Fun>
+      constexpr for_each_n_result<_Iter, _Fun>
+      operator()(_Iter __first, iter_difference_t<_Iter> __n,
+   _Fun __f, _Proj __proj = {}) const
+      {
+ if constexpr (random_access_iterator<_Iter>)
+   {
+     if (__n <= 0)
+       return {std::move(__first), std::move(__f)};
+     auto __last = __first + __n;
+     return ranges::for_each(std::move(__first), std::move(__last),
+        std::move(__f), std::move(__proj));
+   }
+ else
+   {
+     while (__n-- > 0)
+       {
+  std::__invoke(__f, std::__invoke(__proj, *__first));
+  ++__first;
+       }
+     return {std::move(__first), std::move(__f)};
+   }
+      }
+  };
+
+  inline constexpr __for_each_n_fn for_each_n{};
+
+
+
+  struct __find_first_of_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      forward_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      typename _Pred = ranges::equal_to,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires indirectly_comparable<_Iter1, _Iter2, _Pred, _Proj1, _Proj2>
+      constexpr _Iter1
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2, _Pred __pred = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ for (; __first1 != __last1; ++__first1)
+   for (auto __iter = __first2; __iter != __last2; ++__iter)
+     if (std::__invoke(__pred,
+         std::__invoke(__proj1, *__first1),
+         std::__invoke(__proj2, *__iter)))
+       return __first1;
+ return __first1;
+      }
+
+    template<input_range _Range1, forward_range _Range2,
+      typename _Pred = ranges::equal_to,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires indirectly_comparable<iterator_t<_Range1>, iterator_t<_Range2>,
+         _Pred, _Proj1, _Proj2>
+      constexpr borrowed_iterator_t<_Range1>
+      operator()(_Range1&& __r1, _Range2&& __r2, _Pred __pred = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__pred),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __find_first_of_fn find_first_of{};
+
+  struct __count_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Tp, typename _Proj = identity>
+      requires indirect_binary_predicate<ranges::equal_to,
+      projected<_Iter, _Proj>,
+      const _Tp*>
+      constexpr iter_difference_t<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   const _Tp& __value, _Proj __proj = {}) const
+      {
+ iter_difference_t<_Iter> __n = 0;
+ for (; __first != __last; ++__first)
+   if (std::__invoke(__proj, *__first) == __value)
+     ++__n;
+ return __n;
+      }
+
+    template<input_range _Range, typename _Tp, typename _Proj = identity>
+      requires indirect_binary_predicate<ranges::equal_to,
+      projected<iterator_t<_Range>, _Proj>,
+      const _Tp*>
+      constexpr range_difference_t<_Range>
+      operator()(_Range&& __r, const _Tp& __value, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         __value, std::move(__proj));
+      }
+  };
+
+  inline constexpr __count_fn count{};
+
+  struct __count_if_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      constexpr iter_difference_t<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ iter_difference_t<_Iter> __n = 0;
+ for (; __first != __last; ++__first)
+   if (std::__invoke(__pred, std::__invoke(__proj, *__first)))
+     ++__n;
+ return __n;
+      }
+
+    template<input_range _Range,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      constexpr range_difference_t<_Range>
+      operator()(_Range&& __r, _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __count_if_fn count_if{};
+
+
+
+  struct __search_n_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent, typename _Tp,
+      typename _Pred = ranges::equal_to, typename _Proj = identity>
+      requires indirectly_comparable<_Iter, const _Tp*, _Pred, _Proj>
+      constexpr subrange<_Iter>
+      operator()(_Iter __first, _Sent __last, iter_difference_t<_Iter> __count,
+   const _Tp& __value, _Pred __pred = {}, _Proj __proj = {}) const
+      {
+ if (__count <= 0)
+   return {__first, __first};
+
+ auto __value_comp = [&] <typename _Rp> (_Rp&& __arg) -> bool {
+     return std::__invoke(__pred, std::forward<_Rp>(__arg), __value);
+ };
+ if (__count == 1)
+   {
+     __first = ranges::find_if(std::move(__first), __last,
+          std::move(__value_comp),
+          std::move(__proj));
+     if (__first == __last)
+       return {__first, __first};
+     else
+       {
+  auto __end = __first;
+  return {__first, ++__end};
+       }
+   }
+
+ if constexpr (sized_sentinel_for<_Sent, _Iter>
+        && random_access_iterator<_Iter>)
+   {
+     auto __tail_size = __last - __first;
+     auto __remainder = __count;
+
+     while (__remainder <= __tail_size)
+       {
+  __first += __remainder;
+  __tail_size -= __remainder;
+  auto __backtrack = __first;
+  while (__value_comp(std::__invoke(__proj, *--__backtrack)))
+    {
+      if (--__remainder == 0)
+        return {__first - __count, __first};
+    }
+  __remainder = __count + 1 - (__first - __backtrack);
+       }
+     auto __i = __first + __tail_size;
+     return {__i, __i};
+   }
+ else
+   {
+     __first = ranges::find_if(__first, __last, __value_comp, __proj);
+     while (__first != __last)
+       {
+  auto __n = __count;
+  auto __i = __first;
+  ++__i;
+  while (__i != __last && __n != 1
+         && __value_comp(std::__invoke(__proj, *__i)))
+    {
+      ++__i;
+      --__n;
+    }
+  if (__n == 1)
+    return {__first, __i};
+  if (__i == __last)
+    return {__i, __i};
+  __first = ranges::find_if(++__i, __last, __value_comp, __proj);
+       }
+     return {__first, __first};
+   }
+      }
+
+    template<forward_range _Range, typename _Tp,
+      typename _Pred = ranges::equal_to, typename _Proj = identity>
+      requires indirectly_comparable<iterator_t<_Range>, const _Tp*,
+         _Pred, _Proj>
+      constexpr borrowed_subrange_t<_Range>
+      operator()(_Range&& __r, range_difference_t<_Range> __count,
+        const _Tp& __value, _Pred __pred = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__count), __value,
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __search_n_fn search_n{};
+
+  struct __find_end_fn
+  {
+    template<forward_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      forward_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      typename _Pred = ranges::equal_to,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires indirectly_comparable<_Iter1, _Iter2, _Pred, _Proj1, _Proj2>
+      constexpr subrange<_Iter1>
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2, _Pred __pred = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ if constexpr (bidirectional_iterator<_Iter1>
+        && bidirectional_iterator<_Iter2>)
+   {
+     auto __i1 = ranges::next(__first1, __last1);
+     auto __i2 = ranges::next(__first2, __last2);
+     auto __rresult
+       = ranges::search(reverse_iterator<_Iter1>{__i1},
+          reverse_iterator<_Iter1>{__first1},
+          reverse_iterator<_Iter2>{__i2},
+          reverse_iterator<_Iter2>{__first2},
+          std::move(__pred),
+          std::move(__proj1), std::move(__proj2));
+     auto __result_first = ranges::end(__rresult).base();
+     auto __result_last = ranges::begin(__rresult).base();
+     if (__result_last == __first1)
+       return {__i1, __i1};
+     else
+       return {__result_first, __result_last};
+   }
+ else
+   {
+     auto __i = ranges::next(__first1, __last1);
+     if (__first2 == __last2)
+       return {__i, __i};
+
+     auto __result_begin = __i;
+     auto __result_end = __i;
+     for (;;)
+       {
+  auto __new_range = ranges::search(__first1, __last1,
+        __first2, __last2,
+        __pred, __proj1, __proj2);
+  auto __new_result_begin = ranges::begin(__new_range);
+  auto __new_result_end = ranges::end(__new_range);
+  if (__new_result_begin == __last1)
+    return {__result_begin, __result_end};
+  else
+    {
+      __result_begin = __new_result_begin;
+      __result_end = __new_result_end;
+      __first1 = __result_begin;
+      ++__first1;
+    }
+       }
+   }
+      }
+
+    template<forward_range _Range1, forward_range _Range2,
+      typename _Pred = ranges::equal_to,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires indirectly_comparable<iterator_t<_Range1>, iterator_t<_Range2>,
+         _Pred, _Proj1, _Proj2>
+      constexpr borrowed_subrange_t<_Range1>
+      operator()(_Range1&& __r1, _Range2&& __r2, _Pred __pred = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__pred),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __find_end_fn find_end{};
+
+
+
+  struct __is_permutation_fn
+  {
+    template<forward_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      forward_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      typename _Proj1 = identity, typename _Proj2 = identity,
+      indirect_equivalence_relation<projected<_Iter1, _Proj1>,
+        projected<_Iter2, _Proj2>> _Pred
+        = ranges::equal_to>
+      constexpr bool
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2, _Pred __pred = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ constexpr bool __sized_iters
+   = (sized_sentinel_for<_Sent1, _Iter1>
+      && sized_sentinel_for<_Sent2, _Iter2>);
+ if constexpr (__sized_iters)
+   {
+     auto __d1 = ranges::distance(__first1, __last1);
+     auto __d2 = ranges::distance(__first2, __last2);
+     if (__d1 != __d2)
+       return false;
+   }
+
+
+
+ for (; __first1 != __last1 && __first2 != __last2;
+      ++__first1, (void)++__first2)
+   if (!(bool)std::__invoke(__pred,
+       std::__invoke(__proj1, *__first1),
+       std::__invoke(__proj2, *__first2)))
+       break;
+
+ if constexpr (__sized_iters)
+   {
+     if (__first1 == __last1)
+       return true;
+   }
+ else
+   {
+     auto __d1 = ranges::distance(__first1, __last1);
+     auto __d2 = ranges::distance(__first2, __last2);
+     if (__d1 == 0 && __d2 == 0)
+       return true;
+     if (__d1 != __d2)
+       return false;
+   }
+
+ for (auto __scan = __first1; __scan != __last1; ++__scan)
+   {
+     auto&& __proj_scan = std::__invoke(__proj1, *__scan);
+     auto __comp_scan = [&] <typename _Tp> (_Tp&& __arg) -> bool {
+       return std::__invoke(__pred, __proj_scan,
+       std::forward<_Tp>(__arg));
+     };
+     if (__scan != ranges::find_if(__first1, __scan,
+       __comp_scan, __proj1))
+       continue;
+
+     auto __matches = ranges::count_if(__first2, __last2,
+           __comp_scan, __proj2);
+     if (__matches == 0
+  || ranges::count_if(__scan, __last1,
+        __comp_scan, __proj1) != __matches)
+       return false;
+   }
+ return true;
+      }
+
+    template<forward_range _Range1, forward_range _Range2,
+      typename _Proj1 = identity, typename _Proj2 = identity,
+      indirect_equivalence_relation<
+        projected<iterator_t<_Range1>, _Proj1>,
+        projected<iterator_t<_Range2>, _Proj2>> _Pred = ranges::equal_to>
+      constexpr bool
+      operator()(_Range1&& __r1, _Range2&& __r2, _Pred __pred = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+
+
+ if constexpr (sized_range<_Range1>)
+   if constexpr (sized_range<_Range2>)
+     if (ranges::distance(__r1) != ranges::distance(__r2))
+       return false;
+
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__pred),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __is_permutation_fn is_permutation{};
+
+  template<typename _Iter, typename _Out>
+    using copy_if_result = in_out_result<_Iter, _Out>;
+
+  struct __copy_if_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out, typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      requires indirectly_copyable<_Iter, _Out>
+      constexpr copy_if_result<_Iter, _Out>
+      operator()(_Iter __first, _Sent __last, _Out __result,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first)
+   if (std::__invoke(__pred, std::__invoke(__proj, *__first)))
+     {
+       *__result = *__first;
+       ++__result;
+     }
+ return {std::move(__first), std::move(__result)};
+      }
+
+    template<input_range _Range, weakly_incrementable _Out,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      requires indirectly_copyable<iterator_t<_Range>, _Out>
+      constexpr copy_if_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, _Out __result,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __copy_if_fn copy_if{};
+
+  template<typename _Iter1, typename _Iter2>
+    using swap_ranges_result = in_in_result<_Iter1, _Iter2>;
+
+  struct __swap_ranges_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2>
+      requires indirectly_swappable<_Iter1, _Iter2>
+      constexpr swap_ranges_result<_Iter1, _Iter2>
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2) const
+      {
+ for (; __first1 != __last1 && __first2 != __last2;
+      ++__first1, (void)++__first2)
+   ranges::iter_swap(__first1, __first2);
+ return {std::move(__first1), std::move(__first2)};
+      }
+
+    template<input_range _Range1, input_range _Range2>
+      requires indirectly_swappable<iterator_t<_Range1>, iterator_t<_Range2>>
+      constexpr swap_ranges_result<borrowed_iterator_t<_Range1>,
+       borrowed_iterator_t<_Range2>>
+      operator()(_Range1&& __r1, _Range2&& __r2) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2));
+      }
+  };
+
+  inline constexpr __swap_ranges_fn swap_ranges{};
+
+  template<typename _Iter, typename _Out>
+    using unary_transform_result = in_out_result<_Iter, _Out>;
+
+  template<typename _Iter1, typename _Iter2, typename _Out>
+    struct in_in_out_result
+    {
+      [[no_unique_address]] _Iter1 in1;
+      [[no_unique_address]] _Iter2 in2;
+      [[no_unique_address]] _Out out;
+
+      template<typename _IIter1, typename _IIter2, typename _OOut>
+ requires convertible_to<const _Iter1&, _IIter1>
+   && convertible_to<const _Iter2&, _IIter2>
+   && convertible_to<const _Out&, _OOut>
+ constexpr
+ operator in_in_out_result<_IIter1, _IIter2, _OOut>() const &
+ { return {in1, in2, out}; }
+
+      template<typename _IIter1, typename _IIter2, typename _OOut>
+ requires convertible_to<_Iter1, _IIter1>
+   && convertible_to<_Iter2, _IIter2>
+   && convertible_to<_Out, _OOut>
+ constexpr
+ operator in_in_out_result<_IIter1, _IIter2, _OOut>() &&
+ { return {std::move(in1), std::move(in2), std::move(out)}; }
+    };
+
+  template<typename _Iter1, typename _Iter2, typename _Out>
+    using binary_transform_result = in_in_out_result<_Iter1, _Iter2, _Out>;
+
+  struct __transform_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out,
+      copy_constructible _Fp, typename _Proj = identity>
+      requires indirectly_writable<_Out,
+       indirect_result_t<_Fp&,
+         projected<_Iter, _Proj>>>
+      constexpr unary_transform_result<_Iter, _Out>
+      operator()(_Iter __first1, _Sent __last1, _Out __result,
+   _Fp __op, _Proj __proj = {}) const
+      {
+ for (; __first1 != __last1; ++__first1, (void)++__result)
+   *__result = std::__invoke(__op, std::__invoke(__proj, *__first1));
+ return {std::move(__first1), std::move(__result)};
+      }
+
+    template<input_range _Range, weakly_incrementable _Out,
+      copy_constructible _Fp, typename _Proj = identity>
+      requires indirectly_writable<_Out,
+       indirect_result_t<_Fp&,
+         projected<iterator_t<_Range>, _Proj>>>
+      constexpr unary_transform_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, _Out __result, _Fp __op, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result),
+         std::move(__op), std::move(__proj));
+      }
+
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      weakly_incrementable _Out, copy_constructible _Fp,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires indirectly_writable<_Out,
+       indirect_result_t<_Fp&,
+         projected<_Iter1, _Proj1>,
+         projected<_Iter2, _Proj2>>>
+      constexpr binary_transform_result<_Iter1, _Iter2, _Out>
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2,
+   _Out __result, _Fp __binary_op,
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ for (; __first1 != __last1 && __first2 != __last2;
+      ++__first1, (void)++__first2, ++__result)
+   *__result = std::__invoke(__binary_op,
+        std::__invoke(__proj1, *__first1),
+        std::__invoke(__proj2, *__first2));
+ return {std::move(__first1), std::move(__first2), std::move(__result)};
+      }
+
+    template<input_range _Range1, input_range _Range2,
+      weakly_incrementable _Out, copy_constructible _Fp,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires indirectly_writable<_Out,
+       indirect_result_t<_Fp&,
+         projected<iterator_t<_Range1>, _Proj1>,
+         projected<iterator_t<_Range2>, _Proj2>>>
+      constexpr binary_transform_result<borrowed_iterator_t<_Range1>,
+     borrowed_iterator_t<_Range2>, _Out>
+      operator()(_Range1&& __r1, _Range2&& __r2, _Out __result, _Fp __binary_op,
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__result), std::move(__binary_op),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __transform_fn transform{};
+
+  struct __replace_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Tp1, typename _Tp2, typename _Proj = identity>
+      requires indirectly_writable<_Iter, const _Tp2&>
+ && indirect_binary_predicate<ranges::equal_to, projected<_Iter, _Proj>,
+         const _Tp1*>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   const _Tp1& __old_value, const _Tp2& __new_value,
+   _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first)
+   if (std::__invoke(__proj, *__first) == __old_value)
+     *__first = __new_value;
+ return __first;
+      }
+
+    template<input_range _Range,
+      typename _Tp1, typename _Tp2, typename _Proj = identity>
+      requires indirectly_writable<iterator_t<_Range>, const _Tp2&>
+ && indirect_binary_predicate<ranges::equal_to,
+         projected<iterator_t<_Range>, _Proj>,
+         const _Tp1*>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r,
+   const _Tp1& __old_value, const _Tp2& __new_value,
+   _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         __old_value, __new_value, std::move(__proj));
+      }
+  };
+
+  inline constexpr __replace_fn replace{};
+
+  struct __replace_if_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Tp, typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      requires indirectly_writable<_Iter, const _Tp&>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Pred __pred, const _Tp& __new_value, _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first)
+   if (std::__invoke(__pred, std::__invoke(__proj, *__first)))
+     *__first = __new_value;
+ return std::move(__first);
+      }
+
+    template<input_range _Range, typename _Tp, typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      requires indirectly_writable<iterator_t<_Range>, const _Tp&>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r,
+   _Pred __pred, const _Tp& __new_value, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__pred), __new_value, std::move(__proj));
+      }
+  };
+
+  inline constexpr __replace_if_fn replace_if{};
+
+  template<typename _Iter, typename _Out>
+    using replace_copy_result = in_out_result<_Iter, _Out>;
+
+  struct __replace_copy_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Tp1, typename _Tp2, output_iterator<const _Tp2&> _Out,
+      typename _Proj = identity>
+      requires indirectly_copyable<_Iter, _Out>
+ && indirect_binary_predicate<ranges::equal_to,
+         projected<_Iter, _Proj>, const _Tp1*>
+      constexpr replace_copy_result<_Iter, _Out>
+      operator()(_Iter __first, _Sent __last, _Out __result,
+   const _Tp1& __old_value, const _Tp2& __new_value,
+   _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first, (void)++__result)
+   if (std::__invoke(__proj, *__first) == __old_value)
+     *__result = __new_value;
+   else
+     *__result = *__first;
+ return {std::move(__first), std::move(__result)};
+      }
+
+    template<input_range _Range, typename _Tp1, typename _Tp2,
+      output_iterator<const _Tp2&> _Out, typename _Proj = identity>
+      requires indirectly_copyable<iterator_t<_Range>, _Out>
+ && indirect_binary_predicate<ranges::equal_to,
+         projected<iterator_t<_Range>, _Proj>,
+         const _Tp1*>
+      constexpr replace_copy_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, _Out __result,
+   const _Tp1& __old_value, const _Tp2& __new_value,
+   _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result), __old_value,
+         __new_value, std::move(__proj));
+      }
+  };
+
+  inline constexpr __replace_copy_fn replace_copy{};
+
+  template<typename _Iter, typename _Out>
+    using replace_copy_if_result = in_out_result<_Iter, _Out>;
+
+  struct __replace_copy_if_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Tp, output_iterator<const _Tp&> _Out,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      requires indirectly_copyable<_Iter, _Out>
+      constexpr replace_copy_if_result<_Iter, _Out>
+      operator()(_Iter __first, _Sent __last, _Out __result,
+   _Pred __pred, const _Tp& __new_value, _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first, (void)++__result)
+   if (std::__invoke(__pred, std::__invoke(__proj, *__first)))
+     *__result = __new_value;
+   else
+     *__result = *__first;
+ return {std::move(__first), std::move(__result)};
+      }
+
+    template<input_range _Range,
+      typename _Tp, output_iterator<const _Tp&> _Out,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      requires indirectly_copyable<iterator_t<_Range>, _Out>
+      constexpr replace_copy_if_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, _Out __result,
+   _Pred __pred, const _Tp& __new_value, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result), std::move(__pred),
+         __new_value, std::move(__proj));
+      }
+  };
+
+  inline constexpr __replace_copy_if_fn replace_copy_if{};
+
+  struct __generate_n_fn
+  {
+    template<input_or_output_iterator _Out, copy_constructible _Fp>
+      requires invocable<_Fp&>
+ && indirectly_writable<_Out, invoke_result_t<_Fp&>>
+      constexpr _Out
+      operator()(_Out __first, iter_difference_t<_Out> __n, _Fp __gen) const
+      {
+ for (; __n > 0; --__n, (void)++__first)
+   *__first = std::__invoke(__gen);
+ return __first;
+      }
+  };
+
+  inline constexpr __generate_n_fn generate_n{};
+
+  struct __generate_fn
+  {
+    template<input_or_output_iterator _Out, sentinel_for<_Out> _Sent,
+      copy_constructible _Fp>
+      requires invocable<_Fp&>
+ && indirectly_writable<_Out, invoke_result_t<_Fp&>>
+      constexpr _Out
+      operator()(_Out __first, _Sent __last, _Fp __gen) const
+      {
+ for (; __first != __last; ++__first)
+   *__first = std::__invoke(__gen);
+ return __first;
+      }
+
+    template<typename _Range, copy_constructible _Fp>
+      requires invocable<_Fp&> && output_range<_Range, invoke_result_t<_Fp&>>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Fp __gen) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r), std::move(__gen));
+      }
+  };
+
+  inline constexpr __generate_fn generate{};
+
+  struct __remove_if_fn
+  {
+    template<permutable _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      constexpr subrange<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ __first = ranges::find_if(__first, __last, __pred, __proj);
+ if (__first == __last)
+   return {__first, __first};
+
+ auto __result = __first;
+ ++__first;
+ for (; __first != __last; ++__first)
+   if (!std::__invoke(__pred, std::__invoke(__proj, *__first)))
+     {
+       *__result = std::move(*__first);
+       ++__result;
+     }
+
+ return {__result, __first};
+      }
+
+    template<forward_range _Range, typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      requires permutable<iterator_t<_Range>>
+      constexpr borrowed_subrange_t<_Range>
+      operator()(_Range&& __r, _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __remove_if_fn remove_if{};
+
+  struct __remove_fn
+  {
+    template<permutable _Iter, sentinel_for<_Iter> _Sent,
+      typename _Tp, typename _Proj = identity>
+      requires indirect_binary_predicate<ranges::equal_to,
+      projected<_Iter, _Proj>,
+      const _Tp*>
+      constexpr subrange<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   const _Tp& __value, _Proj __proj = {}) const
+      {
+ auto __pred = [&] (auto&& __arg) -> bool {
+   return std::forward<decltype(__arg)>(__arg) == __value;
+ };
+ return ranges::remove_if(__first, __last,
+     std::move(__pred), std::move(__proj));
+      }
+
+    template<forward_range _Range, typename _Tp, typename _Proj = identity>
+      requires permutable<iterator_t<_Range>>
+ && indirect_binary_predicate<ranges::equal_to,
+         projected<iterator_t<_Range>, _Proj>,
+         const _Tp*>
+      constexpr borrowed_subrange_t<_Range>
+      operator()(_Range&& __r, const _Tp& __value, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         __value, std::move(__proj));
+      }
+  };
+
+  inline constexpr __remove_fn remove{};
+
+  template<typename _Iter, typename _Out>
+    using remove_copy_if_result = in_out_result<_Iter, _Out>;
+
+  struct __remove_copy_if_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out, typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      requires indirectly_copyable<_Iter, _Out>
+      constexpr remove_copy_if_result<_Iter, _Out>
+      operator()(_Iter __first, _Sent __last, _Out __result,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first)
+   if (!std::__invoke(__pred, std::__invoke(__proj, *__first)))
+     {
+       *__result = *__first;
+       ++__result;
+     }
+ return {std::move(__first), std::move(__result)};
+      }
+
+    template<input_range _Range, weakly_incrementable _Out,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      requires indirectly_copyable<iterator_t<_Range>, _Out>
+      constexpr remove_copy_if_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, _Out __result,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __remove_copy_if_fn remove_copy_if{};
+
+  template<typename _Iter, typename _Out>
+    using remove_copy_result = in_out_result<_Iter, _Out>;
+
+  struct __remove_copy_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out, typename _Tp, typename _Proj = identity>
+      requires indirectly_copyable<_Iter, _Out>
+ && indirect_binary_predicate<ranges::equal_to,
+         projected<_Iter, _Proj>,
+         const _Tp*>
+      constexpr remove_copy_result<_Iter, _Out>
+      operator()(_Iter __first, _Sent __last, _Out __result,
+   const _Tp& __value, _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first)
+   if (!(std::__invoke(__proj, *__first) == __value))
+     {
+       *__result = *__first;
+       ++__result;
+     }
+ return {std::move(__first), std::move(__result)};
+      }
+
+    template<input_range _Range, weakly_incrementable _Out,
+      typename _Tp, typename _Proj = identity>
+      requires indirectly_copyable<iterator_t<_Range>, _Out>
+ && indirect_binary_predicate<ranges::equal_to,
+         projected<iterator_t<_Range>, _Proj>,
+         const _Tp*>
+      constexpr remove_copy_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, _Out __result,
+   const _Tp& __value, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result), __value, std::move(__proj));
+      }
+  };
+
+  inline constexpr __remove_copy_fn remove_copy{};
+
+  struct __unique_fn
+  {
+    template<permutable _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_equivalence_relation<
+        projected<_Iter, _Proj>> _Comp = ranges::equal_to>
+      constexpr subrange<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ __first = ranges::adjacent_find(__first, __last, __comp, __proj);
+ if (__first == __last)
+   return {__first, __first};
+
+ auto __dest = __first;
+ ++__first;
+ while (++__first != __last)
+   if (!std::__invoke(__comp,
+        std::__invoke(__proj, *__dest),
+        std::__invoke(__proj, *__first)))
+     *++__dest = std::move(*__first);
+ return {++__dest, __first};
+      }
+
+    template<forward_range _Range, typename _Proj = identity,
+      indirect_equivalence_relation<
+        projected<iterator_t<_Range>, _Proj>> _Comp = ranges::equal_to>
+      requires permutable<iterator_t<_Range>>
+      constexpr borrowed_subrange_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __unique_fn unique{};
+
+  namespace __detail
+  {
+    template<typename _Out, typename _Tp>
+      concept __can_reread_output = input_iterator<_Out>
+ && same_as<_Tp, iter_value_t<_Out>>;
+  }
+
+  template<typename _Iter, typename _Out>
+    using unique_copy_result = in_out_result<_Iter, _Out>;
+
+  struct __unique_copy_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out, typename _Proj = identity,
+      indirect_equivalence_relation<
+        projected<_Iter, _Proj>> _Comp = ranges::equal_to>
+      requires indirectly_copyable<_Iter, _Out>
+ && (forward_iterator<_Iter>
+     || __detail::__can_reread_output<_Out, iter_value_t<_Iter>>
+     || indirectly_copyable_storable<_Iter, _Out>)
+      constexpr unique_copy_result<_Iter, _Out>
+      operator()(_Iter __first, _Sent __last, _Out __result,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ if (__first == __last)
+   return {std::move(__first), std::move(__result)};
+
+
+ if constexpr (forward_iterator<_Iter>)
+   {
+     auto __next = __first;
+     *__result = *__next;
+     while (++__next != __last)
+       if (!std::__invoke(__comp,
+     std::__invoke(__proj, *__first),
+     std::__invoke(__proj, *__next)))
+  {
+    __first = __next;
+    *++__result = *__first;
+  }
+     return {__next, std::move(++__result)};
+   }
+ else if constexpr (__detail::__can_reread_output<_Out, iter_value_t<_Iter>>)
+   {
+     *__result = *__first;
+     while (++__first != __last)
+       if (!std::__invoke(__comp,
+     std::__invoke(__proj, *__result),
+     std::__invoke(__proj, *__first)))
+    *++__result = *__first;
+     return {std::move(__first), std::move(++__result)};
+   }
+ else
+   {
+     auto __value = *__first;
+     *__result = __value;
+     while (++__first != __last)
+       {
+  if (!(bool)std::__invoke(__comp,
+      std::__invoke(__proj, *__first),
+      std::__invoke(__proj, __value)))
+    {
+      __value = *__first;
+      *++__result = __value;
+    }
+       }
+     return {std::move(__first), std::move(++__result)};
+   }
+      }
+
+    template<input_range _Range,
+      weakly_incrementable _Out, typename _Proj = identity,
+      indirect_equivalence_relation<
+        projected<iterator_t<_Range>, _Proj>> _Comp = ranges::equal_to>
+      requires indirectly_copyable<iterator_t<_Range>, _Out>
+ && (forward_iterator<iterator_t<_Range>>
+     || __detail::__can_reread_output<_Out, range_value_t<_Range>>
+     || indirectly_copyable_storable<iterator_t<_Range>, _Out>)
+      constexpr unique_copy_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, _Out __result,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __unique_copy_fn unique_copy{};
+
+  struct __reverse_fn
+  {
+    template<bidirectional_iterator _Iter, sentinel_for<_Iter> _Sent>
+      requires permutable<_Iter>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last) const
+      {
+ auto __i = ranges::next(__first, __last);
+ auto __tail = __i;
+
+ if constexpr (random_access_iterator<_Iter>)
+   {
+     if (__first != __last)
+       {
+  --__tail;
+  while (__first < __tail)
+    {
+      ranges::iter_swap(__first, __tail);
+      ++__first;
+      --__tail;
+    }
+       }
+     return __i;
+   }
+ else
+   {
+     for (;;)
+       if (__first == __tail || __first == --__tail)
+  break;
+       else
+  {
+    ranges::iter_swap(__first, __tail);
+    ++__first;
+  }
+     return __i;
+   }
+      }
+
+    template<bidirectional_range _Range>
+      requires permutable<iterator_t<_Range>>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r));
+      }
+  };
+
+  inline constexpr __reverse_fn reverse{};
+
+  template<typename _Iter, typename _Out>
+    using reverse_copy_result = in_out_result<_Iter, _Out>;
+
+  struct __reverse_copy_fn
+  {
+    template<bidirectional_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out>
+      requires indirectly_copyable<_Iter, _Out>
+      constexpr reverse_copy_result<_Iter, _Out>
+      operator()(_Iter __first, _Sent __last, _Out __result) const
+      {
+ auto __i = ranges::next(__first, __last);
+ auto __tail = __i;
+ while (__first != __tail)
+   {
+     --__tail;
+     *__result = *__tail;
+     ++__result;
+   }
+ return {__i, std::move(__result)};
+      }
+
+    template<bidirectional_range _Range, weakly_incrementable _Out>
+      requires indirectly_copyable<iterator_t<_Range>, _Out>
+      constexpr reverse_copy_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, _Out __result) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__result));
+      }
+  };
+
+  inline constexpr __reverse_copy_fn reverse_copy{};
+
+  struct __rotate_fn
+  {
+    template<permutable _Iter, sentinel_for<_Iter> _Sent>
+      constexpr subrange<_Iter>
+      operator()(_Iter __first, _Iter __middle, _Sent __last) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ if (__first == __middle)
+   return {__lasti, __lasti};
+ if (__last == __middle)
+   return {std::move(__first), std::move(__lasti)};
+
+ if constexpr (random_access_iterator<_Iter>)
+   {
+     auto __n = __lasti - __first;
+     auto __k = __middle - __first;
+
+     if (__k == __n - __k)
+       {
+  ranges::swap_ranges(__first, __middle, __middle, __middle + __k);
+  return {std::move(__middle), std::move(__lasti)};
+       }
+
+     auto __p = __first;
+     auto __ret = __first + (__lasti - __middle);
+
+     for (;;)
+       {
+  if (__k < __n - __k)
+    {
+
+
+      if constexpr (__is_pod(iter_value_t<_Iter>))
+        if (__k == 1)
+   {
+     auto __t = std::move(*__p);
+     ranges::move(__p + 1, __p + __n, __p);
+     *(__p + __n - 1) = std::move(__t);
+     return {std::move(__ret), std::move(__lasti)};
+   }
+      auto __q = __p + __k;
+      for (decltype(__n) __i = 0; __i < __n - __k; ++ __i)
+        {
+   ranges::iter_swap(__p, __q);
+   ++__p;
+   ++__q;
+        }
+      __n %= __k;
+      if (__n == 0)
+        return {std::move(__ret), std::move(__lasti)};
+      ranges::swap(__n, __k);
+      __k = __n - __k;
+    }
+  else
+    {
+      __k = __n - __k;
+
+
+      if constexpr (__is_pod(iter_value_t<_Iter>))
+        if (__k == 1)
+   {
+     auto __t = std::move(*(__p + __n - 1));
+     ranges::move_backward(__p, __p + __n - 1, __p + __n);
+     *__p = std::move(__t);
+     return {std::move(__ret), std::move(__lasti)};
+   }
+      auto __q = __p + __n;
+      __p = __q - __k;
+      for (decltype(__n) __i = 0; __i < __n - __k; ++ __i)
+        {
+   --__p;
+   --__q;
+   ranges::iter_swap(__p, __q);
+        }
+      __n %= __k;
+      if (__n == 0)
+        return {std::move(__ret), std::move(__lasti)};
+      std::swap(__n, __k);
+    }
+       }
+   }
+ else if constexpr (bidirectional_iterator<_Iter>)
+   {
+     auto __tail = __lasti;
+
+     ranges::reverse(__first, __middle);
+     ranges::reverse(__middle, __tail);
+
+     while (__first != __middle && __middle != __tail)
+       {
+  ranges::iter_swap(__first, --__tail);
+  ++__first;
+       }
+
+     if (__first == __middle)
+       {
+  ranges::reverse(__middle, __tail);
+  return {std::move(__tail), std::move(__lasti)};
+       }
+     else
+       {
+  ranges::reverse(__first, __middle);
+  return {std::move(__first), std::move(__lasti)};
+       }
+   }
+ else
+   {
+     auto __first2 = __middle;
+     do
+       {
+  ranges::iter_swap(__first, __first2);
+  ++__first;
+  ++__first2;
+  if (__first == __middle)
+    __middle = __first2;
+       } while (__first2 != __last);
+
+     auto __ret = __first;
+
+     __first2 = __middle;
+
+     while (__first2 != __last)
+       {
+  ranges::iter_swap(__first, __first2);
+  ++__first;
+  ++__first2;
+  if (__first == __middle)
+    __middle = __first2;
+  else if (__first2 == __last)
+    __first2 = __middle;
+       }
+     return {std::move(__ret), std::move(__lasti)};
+   }
+      }
+
+    template<forward_range _Range>
+      requires permutable<iterator_t<_Range>>
+      constexpr borrowed_subrange_t<_Range>
+      operator()(_Range&& __r, iterator_t<_Range> __middle) const
+      {
+ return (*this)(ranges::begin(__r), std::move(__middle),
+         ranges::end(__r));
+      }
+  };
+
+  inline constexpr __rotate_fn rotate{};
+
+  template<typename _Iter, typename _Out>
+    using rotate_copy_result = in_out_result<_Iter, _Out>;
+
+  struct __rotate_copy_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out>
+      requires indirectly_copyable<_Iter, _Out>
+      constexpr rotate_copy_result<_Iter, _Out>
+      operator()(_Iter __first, _Iter __middle, _Sent __last,
+   _Out __result) const
+      {
+ auto __copy1 = ranges::copy(__middle,
+        std::move(__last),
+        std::move(__result));
+ auto __copy2 = ranges::copy(std::move(__first),
+        std::move(__middle),
+        std::move(__copy1.out));
+ return { std::move(__copy1.in), std::move(__copy2.out) };
+      }
+
+    template<forward_range _Range, weakly_incrementable _Out>
+      requires indirectly_copyable<iterator_t<_Range>, _Out>
+      constexpr rotate_copy_result<borrowed_iterator_t<_Range>, _Out>
+      operator()(_Range&& __r, iterator_t<_Range> __middle, _Out __result) const
+      {
+ return (*this)(ranges::begin(__r), std::move(__middle),
+         ranges::end(__r), std::move(__result));
+      }
+  };
+
+  inline constexpr __rotate_copy_fn rotate_copy{};
+
+  struct __sample_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out, typename _Gen>
+      requires (forward_iterator<_Iter> || random_access_iterator<_Out>)
+ && indirectly_copyable<_Iter, _Out>
+ && uniform_random_bit_generator<remove_reference_t<_Gen>>
+      _Out
+      operator()(_Iter __first, _Sent __last, _Out __out,
+   iter_difference_t<_Iter> __n, _Gen&& __g) const
+      {
+ if constexpr (forward_iterator<_Iter>)
+   {
+
+
+     auto __lasti = ranges::next(__first, __last);
+     return std::
+       sample(std::move(__first), std::move(__lasti), std::move(__out),
+       __n, std::forward<_Gen>(__g));
+   }
+ else
+   {
+     using __distrib_type
+       = uniform_int_distribution<iter_difference_t<_Iter>>;
+     using __param_type = typename __distrib_type::param_type;
+     __distrib_type __d{};
+     iter_difference_t<_Iter> __sample_sz = 0;
+     while (__first != __last && __sample_sz != __n)
+       {
+  __out[__sample_sz++] = *__first;
+  ++__first;
+       }
+     for (auto __pop_sz = __sample_sz; __first != __last;
+  ++__first, (void) ++__pop_sz)
+       {
+  const auto __k = __d(__g, __param_type{0, __pop_sz});
+  if (__k < __n)
+    __out[__k] = *__first;
+       }
+     return __out + __sample_sz;
+   }
+      }
+
+    template<input_range _Range, weakly_incrementable _Out, typename _Gen>
+      requires (forward_range<_Range> || random_access_iterator<_Out>)
+ && indirectly_copyable<iterator_t<_Range>, _Out>
+ && uniform_random_bit_generator<remove_reference_t<_Gen>>
+      _Out
+      operator()(_Range&& __r, _Out __out,
+   range_difference_t<_Range> __n, _Gen&& __g) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__out), __n,
+         std::forward<_Gen>(__g));
+      }
+  };
+
+  inline constexpr __sample_fn sample{};
+
+  struct __shuffle_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Gen>
+      requires permutable<_Iter>
+ && uniform_random_bit_generator<remove_reference_t<_Gen>>
+      _Iter
+      operator()(_Iter __first, _Sent __last, _Gen&& __g) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ std::shuffle(std::move(__first), __lasti, std::forward<_Gen>(__g));
+ return __lasti;
+      }
+
+    template<random_access_range _Range, typename _Gen>
+      requires permutable<iterator_t<_Range>>
+ && uniform_random_bit_generator<remove_reference_t<_Gen>>
+      borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Gen&& __g) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::forward<_Gen>(__g));
+      }
+  };
+
+  inline constexpr __shuffle_fn shuffle{};
+
+  struct __push_heap_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ std::push_heap(__first, __lasti,
+         __detail::__make_comp_proj(__comp, __proj));
+ return __lasti;
+      }
+
+    template<random_access_range _Range,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __push_heap_fn push_heap{};
+
+  struct __pop_heap_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ std::pop_heap(__first, __lasti,
+        __detail::__make_comp_proj(__comp, __proj));
+ return __lasti;
+      }
+
+    template<random_access_range _Range,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __pop_heap_fn pop_heap{};
+
+  struct __make_heap_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ std::make_heap(__first, __lasti,
+         __detail::__make_comp_proj(__comp, __proj));
+ return __lasti;
+      }
+
+    template<random_access_range _Range,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __make_heap_fn make_heap{};
+
+  struct __sort_heap_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ std::sort_heap(__first, __lasti,
+         __detail::__make_comp_proj(__comp, __proj));
+ return __lasti;
+      }
+
+    template<random_access_range _Range,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __sort_heap_fn sort_heap{};
+
+  struct __is_heap_until_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_strict_weak_order<projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ iter_difference_t<_Iter> __n = ranges::distance(__first, __last);
+ iter_difference_t<_Iter> __parent = 0, __child = 1;
+ for (; __child < __n; ++__child)
+   if (std::__invoke(__comp,
+       std::__invoke(__proj, *(__first + __parent)),
+       std::__invoke(__proj, *(__first + __child))))
+     return __first + __child;
+   else if ((__child & 1) == 0)
+     ++__parent;
+
+ return __first + __n;
+      }
+
+    template<random_access_range _Range,
+      typename _Proj = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __is_heap_until_fn is_heap_until{};
+
+  struct __is_heap_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_strict_weak_order<projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr bool
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (__last
+  == ranges::is_heap_until(__first, __last,
+      std::move(__comp),
+      std::move(__proj)));
+      }
+
+    template<random_access_range _Range,
+      typename _Proj = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr bool
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __is_heap_fn is_heap{};
+
+  struct __sort_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ std::sort(std::move(__first), __lasti,
+        __detail::__make_comp_proj(__comp, __proj));
+ return __lasti;
+      }
+
+    template<random_access_range _Range,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __sort_fn sort{};
+
+  struct __stable_sort_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ std::stable_sort(std::move(__first), __lasti,
+    __detail::__make_comp_proj(__comp, __proj));
+ return __lasti;
+      }
+
+    template<random_access_range _Range,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __stable_sort_fn stable_sort{};
+
+  struct __partial_sort_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      constexpr _Iter
+      operator()(_Iter __first, _Iter __middle, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ if (__first == __middle)
+   return ranges::next(__first, __last);
+
+ ranges::make_heap(__first, __middle, __comp, __proj);
+ auto __i = __middle;
+ for (; __i != __last; ++__i)
+   if (std::__invoke(__comp,
+       std::__invoke(__proj, *__i),
+       std::__invoke(__proj, *__first)))
+     {
+       ranges::pop_heap(__first, __middle, __comp, __proj);
+       ranges::iter_swap(__middle-1, __i);
+       ranges::push_heap(__first, __middle, __comp, __proj);
+     }
+ ranges::sort_heap(__first, __middle, __comp, __proj);
+
+ return __i;
+      }
+
+    template<random_access_range _Range,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, iterator_t<_Range> __middle,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), std::move(__middle),
+         ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __partial_sort_fn partial_sort{};
+
+  template<typename _Iter, typename _Out>
+    using partial_sort_copy_result = in_out_result<_Iter, _Out>;
+
+  struct __partial_sort_copy_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      random_access_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires indirectly_copyable<_Iter1, _Iter2>
+ && sortable<_Iter2, _Comp, _Proj2>
+ && indirect_strict_weak_order<_Comp,
+          projected<_Iter1, _Proj1>,
+          projected<_Iter2, _Proj2>>
+      constexpr partial_sort_copy_result<_Iter1, _Iter2>
+      operator()(_Iter1 __first, _Sent1 __last,
+   _Iter2 __result_first, _Sent2 __result_last,
+   _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ if (__result_first == __result_last)
+   {
+
+     auto __lasti = ranges::next(std::move(__first),
+     std::move(__last));
+     return {std::move(__lasti), std::move(__result_first)};
+   }
+
+ auto __result_real_last = __result_first;
+ while (__first != __last && __result_real_last != __result_last)
+   {
+     *__result_real_last = *__first;
+     ++__result_real_last;
+     ++__first;
+   }
+
+ ranges::make_heap(__result_first, __result_real_last, __comp, __proj2);
+ for (; __first != __last; ++__first)
+   if (std::__invoke(__comp,
+       std::__invoke(__proj1, *__first),
+       std::__invoke(__proj2, *__result_first)))
+     {
+       ranges::pop_heap(__result_first, __result_real_last,
+          __comp, __proj2);
+       *(__result_real_last-1) = *__first;
+       ranges::push_heap(__result_first, __result_real_last,
+    __comp, __proj2);
+     }
+ ranges::sort_heap(__result_first, __result_real_last, __comp, __proj2);
+
+ return {std::move(__first), std::move(__result_real_last)};
+      }
+
+    template<input_range _Range1, random_access_range _Range2,
+      typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires indirectly_copyable<iterator_t<_Range1>, iterator_t<_Range2>>
+ && sortable<iterator_t<_Range2>, _Comp, _Proj2>
+ && indirect_strict_weak_order<_Comp,
+          projected<iterator_t<_Range1>, _Proj1>,
+          projected<iterator_t<_Range2>, _Proj2>>
+      constexpr partial_sort_copy_result<borrowed_iterator_t<_Range1>,
+      borrowed_iterator_t<_Range2>>
+      operator()(_Range1&& __r, _Range2&& __out, _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         ranges::begin(__out), ranges::end(__out),
+         std::move(__comp),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __partial_sort_copy_fn partial_sort_copy{};
+
+  struct __is_sorted_until_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_strict_weak_order<projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ if (__first == __last)
+   return __first;
+
+ auto __next = __first;
+ for (++__next; __next != __last; __first = __next, (void)++__next)
+   if (std::__invoke(__comp,
+       std::__invoke(__proj, *__next),
+       std::__invoke(__proj, *__first)))
+     return __next;
+ return __next;
+      }
+
+    template<forward_range _Range, typename _Proj = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __is_sorted_until_fn is_sorted_until{};
+
+  struct __is_sorted_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_strict_weak_order<projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr bool
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ if (__first == __last)
+   return true;
+
+ auto __next = __first;
+ for (++__next; __next != __last; __first = __next, (void)++__next)
+   if (std::__invoke(__comp,
+       std::__invoke(__proj, *__next),
+       std::__invoke(__proj, *__first)))
+     return false;
+ return true;
+      }
+
+    template<forward_range _Range, typename _Proj = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr bool
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __is_sorted_fn is_sorted{};
+
+  struct __nth_element_fn
+  {
+    template<random_access_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      constexpr _Iter
+      operator()(_Iter __first, _Iter __nth, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ std::nth_element(std::move(__first), std::move(__nth),
+        __lasti,
+        __detail::__make_comp_proj(__comp, __proj));
+ return __lasti;
+      }
+
+    template<random_access_range _Range,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, iterator_t<_Range> __nth,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), std::move(__nth),
+         ranges::end(__r), std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __nth_element_fn nth_element{};
+
+  struct __lower_bound_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<const _Tp*, projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   const _Tp& __value, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __len = ranges::distance(__first, __last);
+
+ while (__len > 0)
+   {
+     auto __half = __len / 2;
+     auto __middle = __first;
+     ranges::advance(__middle, __half);
+     if (std::__invoke(__comp, std::__invoke(__proj, *__middle), __value))
+       {
+  __first = __middle;
+  ++__first;
+  __len = __len - __half - 1;
+       }
+     else
+       __len = __half;
+   }
+ return __first;
+      }
+
+    template<forward_range _Range, typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<const _Tp*,
+     projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r,
+   const _Tp& __value, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         __value, std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __lower_bound_fn lower_bound{};
+
+  struct __upper_bound_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<const _Tp*, projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   const _Tp& __value, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __len = ranges::distance(__first, __last);
+
+ while (__len > 0)
+   {
+     auto __half = __len / 2;
+     auto __middle = __first;
+     ranges::advance(__middle, __half);
+     if (std::__invoke(__comp, __value, std::__invoke(__proj, *__middle)))
+       __len = __half;
+     else
+       {
+  __first = __middle;
+  ++__first;
+  __len = __len - __half - 1;
+       }
+   }
+ return __first;
+      }
+
+    template<forward_range _Range, typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<const _Tp*,
+     projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r,
+   const _Tp& __value, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         __value, std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __upper_bound_fn upper_bound{};
+
+  struct __equal_range_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<const _Tp*, projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr subrange<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   const _Tp& __value, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __len = ranges::distance(__first, __last);
+
+ while (__len > 0)
+   {
+     auto __half = __len / 2;
+     auto __middle = __first;
+     ranges::advance(__middle, __half);
+     if (std::__invoke(__comp,
+         std::__invoke(__proj, *__middle),
+         __value))
+       {
+  __first = __middle;
+  ++__first;
+  __len = __len - __half - 1;
+       }
+     else if (std::__invoke(__comp,
+       __value,
+       std::__invoke(__proj, *__middle)))
+       __len = __half;
+     else
+       {
+  auto __left
+    = ranges::lower_bound(__first, __middle,
+     __value, __comp, __proj);
+  ranges::advance(__first, __len);
+  auto __right
+    = ranges::upper_bound(++__middle, __first,
+     __value, __comp, __proj);
+  return {__left, __right};
+       }
+   }
+ return {__first, __first};
+      }
+
+    template<forward_range _Range,
+      typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<const _Tp*,
+     projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr borrowed_subrange_t<_Range>
+      operator()(_Range&& __r, const _Tp& __value,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         __value, std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __equal_range_fn equal_range{};
+
+  struct __binary_search_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<const _Tp*, projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr bool
+      operator()(_Iter __first, _Sent __last,
+   const _Tp& __value, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __i = ranges::lower_bound(__first, __last, __value, __comp, __proj);
+ if (__i == __last)
+   return false;
+ return !(bool)std::__invoke(__comp, __value,
+        std::__invoke(__proj, *__i));
+      }
+
+    template<forward_range _Range,
+      typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<const _Tp*,
+     projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr bool
+      operator()(_Range&& __r, const _Tp& __value, _Comp __comp = {},
+   _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         __value, std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __binary_search_fn binary_search{};
+
+  struct __is_partitioned_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      constexpr bool
+      operator()(_Iter __first, _Sent __last,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ __first = ranges::find_if_not(std::move(__first), __last,
+          __pred, __proj);
+ if (__first == __last)
+   return true;
+ ++__first;
+ return ranges::none_of(std::move(__first), std::move(__last),
+          std::move(__pred), std::move(__proj));
+      }
+
+    template<input_range _Range, typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      constexpr bool
+      operator()(_Range&& __r, _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __is_partitioned_fn is_partitioned{};
+
+  struct __partition_fn
+  {
+    template<permutable _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      constexpr subrange<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ if constexpr (bidirectional_iterator<_Iter>)
+   {
+     auto __lasti = ranges::next(__first, __last);
+     auto __tail = __lasti;
+     for (;;)
+       {
+  for (;;)
+    if (__first == __tail)
+      return {std::move(__first), std::move(__lasti)};
+    else if (std::__invoke(__pred,
+      std::__invoke(__proj, *__first)))
+      ++__first;
+    else
+      break;
+  --__tail;
+  for (;;)
+    if (__first == __tail)
+      return {std::move(__first), std::move(__lasti)};
+    else if (!(bool)std::__invoke(__pred,
+      std::__invoke(__proj, *__tail)))
+      --__tail;
+    else
+      break;
+  ranges::iter_swap(__first, __tail);
+  ++__first;
+       }
+   }
+ else
+   {
+     if (__first == __last)
+       return {__first, __first};
+
+     while (std::__invoke(__pred, std::__invoke(__proj, *__first)))
+       if (++__first == __last)
+  return {__first, __first};
+
+     auto __next = __first;
+     while (++__next != __last)
+       if (std::__invoke(__pred, std::__invoke(__proj, *__next)))
+  {
+    ranges::iter_swap(__first, __next);
+    ++__first;
+  }
+
+     return {std::move(__first), std::move(__next)};
+   }
+      }
+
+    template<forward_range _Range, typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      requires permutable<iterator_t<_Range>>
+      constexpr borrowed_subrange_t<_Range>
+      operator()(_Range&& __r, _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __partition_fn partition{};
+
+
+  struct __stable_partition_fn
+  {
+    template<bidirectional_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      requires permutable<_Iter>
+      subrange<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ auto __middle
+   = std::stable_partition(std::move(__first), __lasti,
+      __detail::__make_pred_proj(__pred, __proj));
+ return {std::move(__middle), std::move(__lasti)};
+      }
+
+    template<bidirectional_range _Range, typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      requires permutable<iterator_t<_Range>>
+      borrowed_subrange_t<_Range>
+      operator()(_Range&& __r, _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __stable_partition_fn stable_partition{};
+
+
+  template<typename _Iter, typename _Out1, typename _Out2>
+    struct in_out_out_result
+    {
+      [[no_unique_address]] _Iter in;
+      [[no_unique_address]] _Out1 out1;
+      [[no_unique_address]] _Out2 out2;
+
+      template<typename _IIter, typename _OOut1, typename _OOut2>
+ requires convertible_to<const _Iter&, _IIter>
+   && convertible_to<const _Out1&, _OOut1>
+   && convertible_to<const _Out2&, _OOut2>
+ constexpr
+ operator in_out_out_result<_IIter, _OOut1, _OOut2>() const &
+ { return {in, out1, out2}; }
+
+      template<typename _IIter, typename _OOut1, typename _OOut2>
+ requires convertible_to<_Iter, _IIter>
+   && convertible_to<_Out1, _OOut1>
+   && convertible_to<_Out2, _OOut2>
+ constexpr
+ operator in_out_out_result<_IIter, _OOut1, _OOut2>() &&
+ { return {std::move(in), std::move(out1), std::move(out2)}; }
+    };
+
+  template<typename _Iter, typename _Out1, typename _Out2>
+    using partition_copy_result = in_out_out_result<_Iter, _Out1, _Out2>;
+
+  struct __partition_copy_fn
+  {
+    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
+      weakly_incrementable _Out1, weakly_incrementable _Out2,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      requires indirectly_copyable<_Iter, _Out1>
+ && indirectly_copyable<_Iter, _Out2>
+      constexpr partition_copy_result<_Iter, _Out1, _Out2>
+      operator()(_Iter __first, _Sent __last,
+   _Out1 __out_true, _Out2 __out_false,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ for (; __first != __last; ++__first)
+   if (std::__invoke(__pred, std::__invoke(__proj, *__first)))
+     {
+       *__out_true = *__first;
+       ++__out_true;
+     }
+   else
+     {
+       *__out_false = *__first;
+       ++__out_false;
+     }
+
+ return {std::move(__first),
+  std::move(__out_true), std::move(__out_false)};
+      }
+
+    template<input_range _Range, weakly_incrementable _Out1,
+      weakly_incrementable _Out2,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      requires indirectly_copyable<iterator_t<_Range>, _Out1>
+ && indirectly_copyable<iterator_t<_Range>, _Out2>
+      constexpr partition_copy_result<borrowed_iterator_t<_Range>, _Out1, _Out2>
+      operator()(_Range&& __r, _Out1 __out_true, _Out2 __out_false,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__out_true), std::move(__out_false),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __partition_copy_fn partition_copy{};
+
+  struct __partition_point_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_unary_predicate<projected<_Iter, _Proj>> _Pred>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Pred __pred, _Proj __proj = {}) const
+      {
+ auto __len = ranges::distance(__first, __last);
+
+ while (__len > 0)
+   {
+     auto __half = __len / 2;
+     auto __middle = __first;
+     ranges::advance(__middle, __half);
+     if (std::__invoke(__pred, std::__invoke(__proj, *__middle)))
+       {
+  __first = __middle;
+  ++__first;
+  __len = __len - __half - 1;
+       }
+     else
+       __len = __half;
+   }
+ return __first;
+      }
+
+    template<forward_range _Range, typename _Proj = identity,
+      indirect_unary_predicate<projected<iterator_t<_Range>, _Proj>>
+        _Pred>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Pred __pred, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__pred), std::move(__proj));
+      }
+  };
+
+  inline constexpr __partition_point_fn partition_point{};
+
+  template<typename _Iter1, typename _Iter2, typename _Out>
+    using merge_result = in_in_out_result<_Iter1, _Iter2, _Out>;
+
+  struct __merge_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      weakly_incrementable _Out, typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires mergeable<_Iter1, _Iter2, _Out, _Comp, _Proj1, _Proj2>
+      constexpr merge_result<_Iter1, _Iter2, _Out>
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2, _Out __result,
+   _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ while (__first1 != __last1 && __first2 != __last2)
+   {
+     if (std::__invoke(__comp,
+         std::__invoke(__proj2, *__first2),
+         std::__invoke(__proj1, *__first1)))
+       {
+  *__result = *__first2;
+  ++__first2;
+       }
+     else
+       {
+  *__result = *__first1;
+  ++__first1;
+       }
+     ++__result;
+   }
+ auto __copy1 = ranges::copy(std::move(__first1), std::move(__last1),
+        std::move(__result));
+ auto __copy2 = ranges::copy(std::move(__first2), std::move(__last2),
+        std::move(__copy1.out));
+ return { std::move(__copy1.in), std::move(__copy2.in),
+   std::move(__copy2.out) };
+      }
+
+    template<input_range _Range1, input_range _Range2, weakly_incrementable _Out,
+      typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires mergeable<iterator_t<_Range1>, iterator_t<_Range2>, _Out,
+    _Comp, _Proj1, _Proj2>
+      constexpr merge_result<borrowed_iterator_t<_Range1>,
+        borrowed_iterator_t<_Range2>,
+        _Out>
+      operator()(_Range1&& __r1, _Range2&& __r2, _Out __result,
+   _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__result), std::move(__comp),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __merge_fn merge{};
+
+  struct __inplace_merge_fn
+  {
+    template<bidirectional_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less,
+      typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      _Iter
+      operator()(_Iter __first, _Iter __middle, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __lasti = ranges::next(__first, __last);
+ std::inplace_merge(std::move(__first), std::move(__middle), __lasti,
+      __detail::__make_comp_proj(__comp, __proj));
+ return __lasti;
+      }
+
+    template<bidirectional_range _Range,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, iterator_t<_Range> __middle,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), std::move(__middle),
+         ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __inplace_merge_fn inplace_merge{};
+
+  struct __includes_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      typename _Proj1 = identity, typename _Proj2 = identity,
+      indirect_strict_weak_order<projected<_Iter1, _Proj1>,
+     projected<_Iter2, _Proj2>>
+        _Comp = ranges::less>
+      constexpr bool
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2,
+   _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ while (__first1 != __last1 && __first2 != __last2)
+   if (std::__invoke(__comp,
+       std::__invoke(__proj2, *__first2),
+       std::__invoke(__proj1, *__first1)))
+     return false;
+   else if (std::__invoke(__comp,
+     std::__invoke(__proj1, *__first1),
+     std::__invoke(__proj2, *__first2)))
+     ++__first1;
+   else
+     {
+       ++__first1;
+       ++__first2;
+     }
+
+ return __first2 == __last2;
+      }
+
+    template<input_range _Range1, input_range _Range2,
+      typename _Proj1 = identity, typename _Proj2 = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range1>, _Proj1>,
+     projected<iterator_t<_Range2>, _Proj2>>
+        _Comp = ranges::less>
+      constexpr bool
+      operator()(_Range1&& __r1, _Range2&& __r2, _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__comp),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __includes_fn includes{};
+
+  template<typename _Iter1, typename _Iter2, typename _Out>
+    using set_union_result = in_in_out_result<_Iter1, _Iter2, _Out>;
+
+  struct __set_union_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      weakly_incrementable _Out, typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires mergeable<_Iter1, _Iter2, _Out, _Comp, _Proj1, _Proj2>
+      constexpr set_union_result<_Iter1, _Iter2, _Out>
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2,
+   _Out __result, _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ while (__first1 != __last1 && __first2 != __last2)
+   {
+     if (std::__invoke(__comp,
+         std::__invoke(__proj1, *__first1),
+         std::__invoke(__proj2, *__first2)))
+       {
+  *__result = *__first1;
+  ++__first1;
+       }
+     else if (std::__invoke(__comp,
+       std::__invoke(__proj2, *__first2),
+       std::__invoke(__proj1, *__first1)))
+       {
+  *__result = *__first2;
+  ++__first2;
+       }
+     else
+       {
+  *__result = *__first1;
+  ++__first1;
+  ++__first2;
+       }
+     ++__result;
+   }
+ auto __copy1 = ranges::copy(std::move(__first1), std::move(__last1),
+        std::move(__result));
+ auto __copy2 = ranges::copy(std::move(__first2), std::move(__last2),
+        std::move(__copy1.out));
+ return {std::move(__copy1.in), std::move(__copy2.in),
+  std::move(__copy2.out)};
+      }
+
+    template<input_range _Range1, input_range _Range2, weakly_incrementable _Out,
+      typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires mergeable<iterator_t<_Range1>, iterator_t<_Range2>, _Out,
+    _Comp, _Proj1, _Proj2>
+      constexpr set_union_result<borrowed_iterator_t<_Range1>,
+     borrowed_iterator_t<_Range2>, _Out>
+      operator()(_Range1&& __r1, _Range2&& __r2,
+   _Out __result, _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__result), std::move(__comp),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __set_union_fn set_union{};
+
+  template<typename _Iter1, typename _Iter2, typename _Out>
+    using set_intersection_result = in_in_out_result<_Iter1, _Iter2, _Out>;
+
+  struct __set_intersection_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      weakly_incrementable _Out, typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires mergeable<_Iter1, _Iter2, _Out, _Comp, _Proj1, _Proj2>
+      constexpr set_intersection_result<_Iter1, _Iter2, _Out>
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2, _Out __result,
+   _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ while (__first1 != __last1 && __first2 != __last2)
+   if (std::__invoke(__comp,
+       std::__invoke(__proj1, *__first1),
+       std::__invoke(__proj2, *__first2)))
+     ++__first1;
+   else if (std::__invoke(__comp,
+     std::__invoke(__proj2, *__first2),
+     std::__invoke(__proj1, *__first1)))
+     ++__first2;
+   else
+     {
+       *__result = *__first1;
+       ++__first1;
+       ++__first2;
+       ++__result;
+     }
+
+ auto __last1i = ranges::next(std::move(__first1), std::move(__last1));
+ auto __last2i = ranges::next(std::move(__first2), std::move(__last2));
+ return {std::move(__last1i), std::move(__last2i), std::move(__result)};
+      }
+
+    template<input_range _Range1, input_range _Range2, weakly_incrementable _Out,
+      typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires mergeable<iterator_t<_Range1>, iterator_t<_Range2>, _Out,
+    _Comp, _Proj1, _Proj2>
+      constexpr set_intersection_result<borrowed_iterator_t<_Range1>,
+     borrowed_iterator_t<_Range2>, _Out>
+      operator()(_Range1&& __r1, _Range2&& __r2, _Out __result,
+   _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__result), std::move(__comp),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __set_intersection_fn set_intersection{};
+
+  template<typename _Iter, typename _Out>
+    using set_difference_result = in_out_result<_Iter, _Out>;
+
+  struct __set_difference_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      weakly_incrementable _Out, typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires mergeable<_Iter1, _Iter2, _Out, _Comp, _Proj1, _Proj2>
+      constexpr set_difference_result<_Iter1, _Out>
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2, _Out __result,
+   _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ while (__first1 != __last1 && __first2 != __last2)
+   if (std::__invoke(__comp,
+       std::__invoke(__proj1, *__first1),
+       std::__invoke(__proj2, *__first2)))
+     {
+       *__result = *__first1;
+       ++__first1;
+       ++__result;
+     }
+   else if (std::__invoke(__comp,
+     std::__invoke(__proj2, *__first2),
+     std::__invoke(__proj1, *__first1)))
+     ++__first2;
+   else
+     {
+       ++__first1;
+       ++__first2;
+     }
+ return ranges::copy(std::move(__first1), std::move(__last1),
+       std::move(__result));
+      }
+
+    template<input_range _Range1, input_range _Range2, weakly_incrementable _Out,
+      typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires mergeable<iterator_t<_Range1>, iterator_t<_Range2>, _Out,
+    _Comp, _Proj1, _Proj2>
+      constexpr set_difference_result<borrowed_iterator_t<_Range1>, _Out>
+      operator()(_Range1&& __r1, _Range2&& __r2, _Out __result,
+   _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__result), std::move(__comp),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __set_difference_fn set_difference{};
+
+  template<typename _Iter1, typename _Iter2, typename _Out>
+    using set_symmetric_difference_result
+      = in_in_out_result<_Iter1, _Iter2, _Out>;
+
+  struct __set_symmetric_difference_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      weakly_incrementable _Out, typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires mergeable<_Iter1, _Iter2, _Out, _Comp, _Proj1, _Proj2>
+      constexpr set_symmetric_difference_result<_Iter1, _Iter2, _Out>
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2,
+   _Out __result, _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ while (__first1 != __last1 && __first2 != __last2)
+   if (std::__invoke(__comp,
+       std::__invoke(__proj1, *__first1),
+       std::__invoke(__proj2, *__first2)))
+     {
+       *__result = *__first1;
+       ++__first1;
+       ++__result;
+     }
+   else if (std::__invoke(__comp,
+     std::__invoke(__proj2, *__first2),
+     std::__invoke(__proj1, *__first1)))
+     {
+       *__result = *__first2;
+       ++__first2;
+       ++__result;
+     }
+   else
+     {
+       ++__first1;
+       ++__first2;
+     }
+ auto __copy1 = ranges::copy(std::move(__first1), std::move(__last1),
+        std::move(__result));
+ auto __copy2 = ranges::copy(std::move(__first2), std::move(__last2),
+        std::move(__copy1.out));
+ return {std::move(__copy1.in), std::move(__copy2.in),
+  std::move(__copy2.out)};
+      }
+
+    template<input_range _Range1, input_range _Range2, weakly_incrementable _Out,
+      typename _Comp = ranges::less,
+      typename _Proj1 = identity, typename _Proj2 = identity>
+      requires mergeable<iterator_t<_Range1>, iterator_t<_Range2>, _Out,
+    _Comp, _Proj1, _Proj2>
+      constexpr set_symmetric_difference_result<borrowed_iterator_t<_Range1>,
+      borrowed_iterator_t<_Range2>,
+      _Out>
+      operator()(_Range1&& __r1, _Range2&& __r2, _Out __result,
+   _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__result), std::move(__comp),
+         std::move(__proj1), std::move(__proj2));
+      }
+  };
+
+  inline constexpr __set_symmetric_difference_fn set_symmetric_difference{};
+
+
+
+  struct __max_fn
+  {
+    template<typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<projected<const _Tp*, _Proj>>
+        _Comp = ranges::less>
+      constexpr const _Tp&
+      operator()(const _Tp& __a, const _Tp& __b,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ if (std::__invoke(__comp,
+     std::__invoke(__proj, __a),
+     std::__invoke(__proj, __b)))
+   return __b;
+ else
+   return __a;
+      }
+
+    template<input_range _Range, typename _Proj = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      requires indirectly_copyable_storable<iterator_t<_Range>,
+         range_value_t<_Range>*>
+      constexpr range_value_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __first = ranges::begin(__r);
+ auto __last = ranges::end(__r);
+ do { if (std::__is_constant_evaluated() && !bool(__first != __last)) std::__glibcxx_assert_fail(); } while (false);
+ auto __result = *__first;
+ while (++__first != __last)
+   {
+     auto&& __tmp = *__first;
+     if (std::__invoke(__comp,
+         std::__invoke(__proj, __result),
+         std::__invoke(__proj, __tmp)))
+       __result = std::forward<decltype(__tmp)>(__tmp);
+   }
+ return __result;
+      }
+
+    template<copyable _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<projected<const _Tp*, _Proj>>
+        _Comp = ranges::less>
+      constexpr _Tp
+      operator()(initializer_list<_Tp> __r,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::subrange(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __max_fn max{};
+
+  struct __clamp_fn
+  {
+    template<typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<projected<const _Tp*, _Proj>> _Comp
+        = ranges::less>
+      constexpr const _Tp&
+      operator()(const _Tp& __val, const _Tp& __lo, const _Tp& __hi,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ do { if (std::__is_constant_evaluated() && !bool(!(std::__invoke(__comp, std::__invoke(__proj, __hi), std::__invoke(__proj, __lo))))) std::__glibcxx_assert_fail(); } while (false)
+
+                                    ;
+ auto&& __proj_val = std::__invoke(__proj, __val);
+ if (std::__invoke(__comp,
+     std::forward<decltype(__proj_val)>(__proj_val),
+     std::__invoke(__proj, __lo)))
+   return __lo;
+ else if (std::__invoke(__comp,
+          std::__invoke(__proj, __hi),
+          std::forward<decltype(__proj_val)>(__proj_val)))
+   return __hi;
+ else
+   return __val;
+      }
+  };
+
+  inline constexpr __clamp_fn clamp{};
+
+  template<typename _Tp>
+    struct min_max_result
+    {
+      [[no_unique_address]] _Tp min;
+      [[no_unique_address]] _Tp max;
+
+      template<typename _Tp2>
+ requires convertible_to<const _Tp&, _Tp2>
+ constexpr
+ operator min_max_result<_Tp2>() const &
+ { return {min, max}; }
+
+      template<typename _Tp2>
+ requires convertible_to<_Tp, _Tp2>
+ constexpr
+ operator min_max_result<_Tp2>() &&
+ { return {std::move(min), std::move(max)}; }
+    };
+
+  template<typename _Tp>
+    using minmax_result = min_max_result<_Tp>;
+
+  struct __minmax_fn
+  {
+    template<typename _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<projected<const _Tp*, _Proj>>
+        _Comp = ranges::less>
+      constexpr minmax_result<const _Tp&>
+      operator()(const _Tp& __a, const _Tp& __b,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ if (std::__invoke(__comp,
+     std::__invoke(__proj, __b),
+     std::__invoke(__proj, __a)))
+   return {__b, __a};
+ else
+   return {__a, __b};
+      }
+
+    template<input_range _Range, typename _Proj = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      requires indirectly_copyable_storable<iterator_t<_Range>, range_value_t<_Range>*>
+      constexpr minmax_result<range_value_t<_Range>>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __first = ranges::begin(__r);
+ auto __last = ranges::end(__r);
+ do { if (std::__is_constant_evaluated() && !bool(__first != __last)) std::__glibcxx_assert_fail(); } while (false);
+ auto __comp_proj = __detail::__make_comp_proj(__comp, __proj);
+ minmax_result<range_value_t<_Range>> __result = {*__first, __result.min};
+ if (++__first == __last)
+   return __result;
+ else
+   {
+
+
+     auto&& __val = *__first;
+     if (__comp_proj(__val, __result.min))
+       __result.min = std::forward<decltype(__val)>(__val);
+     else
+       __result.max = std::forward<decltype(__val)>(__val);
+   }
+ while (++__first != __last)
+   {
+
+
+
+     range_value_t<_Range> __val1 = *__first;
+     if (++__first == __last)
+       {
+
+
+
+  if (__comp_proj(__val1, __result.min))
+    __result.min = std::move(__val1);
+  else if (!__comp_proj(__val1, __result.max))
+    __result.max = std::move(__val1);
+  break;
+       }
+     auto&& __val2 = *__first;
+     if (!__comp_proj(__val2, __val1))
+       {
+  if (__comp_proj(__val1, __result.min))
+    __result.min = std::move(__val1);
+  if (!__comp_proj(__val2, __result.max))
+    __result.max = std::forward<decltype(__val2)>(__val2);
+       }
+     else
+       {
+  if (__comp_proj(__val2, __result.min))
+    __result.min = std::forward<decltype(__val2)>(__val2);
+  if (!__comp_proj(__val1, __result.max))
+    __result.max = std::move(__val1);
+       }
+   }
+ return __result;
+      }
+
+    template<copyable _Tp, typename _Proj = identity,
+      indirect_strict_weak_order<projected<const _Tp*, _Proj>>
+        _Comp = ranges::less>
+      constexpr minmax_result<_Tp>
+      operator()(initializer_list<_Tp> __r,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::subrange(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __minmax_fn minmax{};
+
+  struct __min_element_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_strict_weak_order<projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ if (__first == __last)
+   return __first;
+
+ auto __i = __first;
+ while (++__i != __last)
+   {
+     if (std::__invoke(__comp,
+         std::__invoke(__proj, *__i),
+         std::__invoke(__proj, *__first)))
+       __first = __i;
+   }
+ return __first;
+      }
+
+    template<forward_range _Range, typename _Proj = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __min_element_fn min_element{};
+
+  struct __max_element_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_strict_weak_order<projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr _Iter
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ if (__first == __last)
+   return __first;
+
+ auto __i = __first;
+ while (++__i != __last)
+   {
+     if (std::__invoke(__comp,
+         std::__invoke(__proj, *__first),
+         std::__invoke(__proj, *__i)))
+       __first = __i;
+   }
+ return __first;
+      }
+
+    template<forward_range _Range, typename _Proj = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr borrowed_iterator_t<_Range>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __max_element_fn max_element{};
+
+  template<typename _Iter>
+    using minmax_element_result = min_max_result<_Iter>;
+
+  struct __minmax_element_fn
+  {
+    template<forward_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Proj = identity,
+      indirect_strict_weak_order<projected<_Iter, _Proj>>
+        _Comp = ranges::less>
+      constexpr minmax_element_result<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ auto __comp_proj = __detail::__make_comp_proj(__comp, __proj);
+ minmax_element_result<_Iter> __result = {__first, __first};
+ if (__first == __last || ++__first == __last)
+   return __result;
+ else
+   {
+
+
+     if (__comp_proj(*__first, *__result.min))
+       __result.min = __first;
+     else
+       __result.max = __first;
+   }
+ while (++__first != __last)
+   {
+
+
+
+     auto __prev = __first;
+     if (++__first == __last)
+       {
+
+
+
+  if (__comp_proj(*__prev, *__result.min))
+    __result.min = __prev;
+  else if (!__comp_proj(*__prev, *__result.max))
+    __result.max = __prev;
+  break;
+       }
+     if (!__comp_proj(*__first, *__prev))
+       {
+  if (__comp_proj(*__prev, *__result.min))
+    __result.min = __prev;
+  if (!__comp_proj(*__first, *__result.max))
+    __result.max = __first;
+       }
+     else
+       {
+  if (__comp_proj(*__first, *__result.min))
+    __result.min = __first;
+  if (!__comp_proj(*__prev, *__result.max))
+    __result.max = __prev;
+       }
+   }
+ return __result;
+      }
+
+    template<forward_range _Range, typename _Proj = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range>, _Proj>>
+        _Comp = ranges::less>
+      constexpr minmax_element_result<borrowed_iterator_t<_Range>>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __minmax_element_fn minmax_element{};
+
+  struct __lexicographical_compare_fn
+  {
+    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
+      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
+      typename _Proj1 = identity, typename _Proj2 = identity,
+      indirect_strict_weak_order<projected<_Iter1, _Proj1>,
+     projected<_Iter2, _Proj2>>
+        _Comp = ranges::less>
+      constexpr bool
+      operator()(_Iter1 __first1, _Sent1 __last1,
+   _Iter2 __first2, _Sent2 __last2,
+   _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ if constexpr (__detail::__is_normal_iterator<_Iter1>
+        && same_as<_Iter1, _Sent1>)
+   return (*this)(__first1.base(), __last1.base(),
+    std::move(__first2), std::move(__last2),
+    std::move(__comp),
+    std::move(__proj1), std::move(__proj2));
+ else if constexpr (__detail::__is_normal_iterator<_Iter2>
+      && same_as<_Iter2, _Sent2>)
+   return (*this)(std::move(__first1), std::move(__last1),
+    __first2.base(), __last2.base(),
+    std::move(__comp),
+    std::move(__proj1), std::move(__proj2));
+ else
+   {
+     constexpr bool __sized_iters
+       = (sized_sentinel_for<_Sent1, _Iter1>
+   && sized_sentinel_for<_Sent2, _Iter2>);
+     if constexpr (__sized_iters)
+       {
+  using _ValueType1 = iter_value_t<_Iter1>;
+  using _ValueType2 = iter_value_t<_Iter2>;
+
+
+  constexpr bool __use_memcmp
+    = (__is_memcmp_ordered_with<_ValueType1, _ValueType2>::__value
+       && __ptr_to_nonvolatile<_Iter1>
+       && __ptr_to_nonvolatile<_Iter2>
+       && (is_same_v<_Comp, ranges::less>
+    || is_same_v<_Comp, ranges::greater>)
+       && is_same_v<_Proj1, identity>
+       && is_same_v<_Proj2, identity>);
+  if constexpr (__use_memcmp)
+    {
+      const auto __d1 = __last1 - __first1;
+      const auto __d2 = __last2 - __first2;
+
+      if (const auto __len = std::min(__d1, __d2))
+        {
+   const auto __c
+     = std::__memcmp(__first1, __first2, __len);
+   if constexpr (is_same_v<_Comp, ranges::less>)
+     {
+       if (__c < 0)
+         return true;
+       if (__c > 0)
+         return false;
+     }
+   else if constexpr (is_same_v<_Comp, ranges::greater>)
+     {
+       if (__c > 0)
+         return true;
+       if (__c < 0)
+         return false;
+     }
+        }
+      return __d1 < __d2;
+    }
+       }
+
+     for (; __first1 != __last1 && __first2 != __last2;
+   ++__first1, (void) ++__first2)
+       {
+  if (std::__invoke(__comp,
+      std::__invoke(__proj1, *__first1),
+      std::__invoke(__proj2, *__first2)))
+    return true;
+  if (std::__invoke(__comp,
+      std::__invoke(__proj2, *__first2),
+      std::__invoke(__proj1, *__first1)))
+    return false;
+       }
+     return __first1 == __last1 && __first2 != __last2;
+   }
+      }
+
+    template<input_range _Range1, input_range _Range2,
+      typename _Proj1 = identity, typename _Proj2 = identity,
+      indirect_strict_weak_order<projected<iterator_t<_Range1>, _Proj1>,
+     projected<iterator_t<_Range2>, _Proj2>>
+        _Comp = ranges::less>
+      constexpr bool
+      operator()(_Range1&& __r1, _Range2&& __r2, _Comp __comp = {},
+   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
+      {
+ return (*this)(ranges::begin(__r1), ranges::end(__r1),
+         ranges::begin(__r2), ranges::end(__r2),
+         std::move(__comp),
+         std::move(__proj1), std::move(__proj2));
+      }
+
+  private:
+    template<typename _Iter, typename _Ref = iter_reference_t<_Iter>>
+      static constexpr bool __ptr_to_nonvolatile
+ = is_pointer_v<_Iter> && !is_volatile_v<remove_reference_t<_Ref>>;
+  };
+
+  inline constexpr __lexicographical_compare_fn lexicographical_compare;
+
+  template<typename _Iter>
+    struct in_found_result
+    {
+      [[no_unique_address]] _Iter in;
+      bool found;
+
+      template<typename _Iter2>
+ requires convertible_to<const _Iter&, _Iter2>
+ constexpr
+ operator in_found_result<_Iter2>() const &
+ { return {in, found}; }
+
+      template<typename _Iter2>
+ requires convertible_to<_Iter, _Iter2>
+ constexpr
+ operator in_found_result<_Iter2>() &&
+ { return {std::move(in), found}; }
+    };
+
+  template<typename _Iter>
+    using next_permutation_result = in_found_result<_Iter>;
+
+  struct __next_permutation_fn
+  {
+    template<bidirectional_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      constexpr next_permutation_result<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ if (__first == __last)
+   return {std::move(__first), false};
+
+ auto __i = __first;
+ ++__i;
+ if (__i == __last)
+   return {std::move(__i), false};
+
+ auto __lasti = ranges::next(__first, __last);
+ __i = __lasti;
+ --__i;
+
+ for (;;)
+   {
+     auto __ii = __i;
+     --__i;
+     if (std::__invoke(__comp,
+         std::__invoke(__proj, *__i),
+         std::__invoke(__proj, *__ii)))
+       {
+  auto __j = __lasti;
+  while (!(bool)std::__invoke(__comp,
+         std::__invoke(__proj, *__i),
+         std::__invoke(__proj, *--__j)))
+    ;
+  ranges::iter_swap(__i, __j);
+  ranges::reverse(__ii, __last);
+  return {std::move(__lasti), true};
+       }
+     if (__i == __first)
+       {
+  ranges::reverse(__first, __last);
+  return {std::move(__lasti), false};
+       }
+   }
+      }
+
+    template<bidirectional_range _Range, typename _Comp = ranges::less,
+      typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      constexpr next_permutation_result<borrowed_iterator_t<_Range>>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __next_permutation_fn next_permutation{};
+
+  template<typename _Iter>
+    using prev_permutation_result = in_found_result<_Iter>;
+
+  struct __prev_permutation_fn
+  {
+    template<bidirectional_iterator _Iter, sentinel_for<_Iter> _Sent,
+      typename _Comp = ranges::less, typename _Proj = identity>
+      requires sortable<_Iter, _Comp, _Proj>
+      constexpr prev_permutation_result<_Iter>
+      operator()(_Iter __first, _Sent __last,
+   _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ if (__first == __last)
+   return {std::move(__first), false};
+
+ auto __i = __first;
+ ++__i;
+ if (__i == __last)
+   return {std::move(__i), false};
+
+ auto __lasti = ranges::next(__first, __last);
+ __i = __lasti;
+ --__i;
+
+ for (;;)
+   {
+     auto __ii = __i;
+     --__i;
+     if (std::__invoke(__comp,
+         std::__invoke(__proj, *__ii),
+         std::__invoke(__proj, *__i)))
+       {
+  auto __j = __lasti;
+  while (!(bool)std::__invoke(__comp,
+         std::__invoke(__proj, *--__j),
+         std::__invoke(__proj, *__i)))
+    ;
+  ranges::iter_swap(__i, __j);
+  ranges::reverse(__ii, __last);
+  return {std::move(__lasti), true};
+       }
+     if (__i == __first)
+       {
+  ranges::reverse(__first, __last);
+  return {std::move(__lasti), false};
+       }
+   }
+      }
+
+    template<bidirectional_range _Range, typename _Comp = ranges::less,
+      typename _Proj = identity>
+      requires sortable<iterator_t<_Range>, _Comp, _Proj>
+      constexpr prev_permutation_result<borrowed_iterator_t<_Range>>
+      operator()(_Range&& __r, _Comp __comp = {}, _Proj __proj = {}) const
+      {
+ return (*this)(ranges::begin(__r), ranges::end(__r),
+         std::move(__comp), std::move(__proj));
+      }
+  };
+
+  inline constexpr __prev_permutation_fn prev_permutation{};
+# 3965 "/usr/include/c++/14.2.1/bits/ranges_algo.h" 3
+}
+
+  template<typename _ForwardIterator>
+    constexpr _ForwardIterator
+    shift_left(_ForwardIterator __first, _ForwardIterator __last,
+        typename iterator_traits<_ForwardIterator>::difference_type __n)
+    {
+      do { if (std::__is_constant_evaluated() && !bool(__n >= 0)) std::__glibcxx_assert_fail(); } while (false);
+      if (__n == 0)
+ return __last;
+
+      auto __mid = ranges::next(__first, __n, __last);
+      if (__mid == __last)
+ return __first;
+      return std::move(std::move(__mid), std::move(__last), std::move(__first));
+    }
+
+  template<typename _ForwardIterator>
+    constexpr _ForwardIterator
+    shift_right(_ForwardIterator __first, _ForwardIterator __last,
+  typename iterator_traits<_ForwardIterator>::difference_type __n)
+    {
+      do { if (std::__is_constant_evaluated() && !bool(__n >= 0)) std::__glibcxx_assert_fail(); } while (false);
+      if (__n == 0)
+ return __first;
+
+      using _Cat
+ = typename iterator_traits<_ForwardIterator>::iterator_category;
+      if constexpr (derived_from<_Cat, bidirectional_iterator_tag>)
+ {
+   auto __mid = ranges::next(__last, -__n, __first);
+   if (__mid == __first)
+     return __last;
+
+   return std::move_backward(std::move(__first), std::move(__mid),
+        std::move(__last));
+ }
+      else
+ {
+   auto __result = ranges::next(__first, __n, __last);
+   if (__result == __last)
+     return __last;
+
+   auto __dest_head = __first, __dest_tail = __result;
+   while (__dest_head != __result)
+     {
+       if (__dest_tail == __last)
+  {
+
+
+
+
+
+    std::move(std::move(__first), std::move(__dest_head), __result);
+    return __result;
+  }
+       ++__dest_head;
+       ++__dest_tail;
+     }
+
+   for (;;)
+     {
+# 4035 "/usr/include/c++/14.2.1/bits/ranges_algo.h" 3
+       auto __cursor = __first;
+       while (__cursor != __result)
+  {
+    if (__dest_tail == __last)
+      {
+
+
+
+        __dest_head = std::move(__cursor, __result,
+           std::move(__dest_head));
+        std::move(std::move(__first), std::move(__cursor),
+    std::move(__dest_head));
+        return __result;
+      }
+    std::iter_swap(__cursor, __dest_head);
+    ++__dest_head;
+    ++__dest_tail;
+    ++__cursor;
+  }
+     }
+ }
+    }
+
+
+}
+# 64 "/usr/include/c++/14.2.1/algorithm" 2 3
+# 77 "/usr/include/c++/14.2.1/algorithm" 3
+# 1 "/usr/include/c++/14.2.1/bits/version.h" 1 3
+# 47 "/usr/include/c++/14.2.1/bits/version.h" 3
+       
+# 48 "/usr/include/c++/14.2.1/bits/version.h" 3
+# 78 "/usr/include/c++/14.2.1/algorithm" 2 3
+# 86 "/usr/include/c++/14.2.1/algorithm" 3
+# 1 "/usr/include/c++/14.2.1/pstl/glue_algorithm_defs.h" 1 3
+# 17 "/usr/include/c++/14.2.1/pstl/glue_algorithm_defs.h" 3
+namespace std
+{
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Predicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+any_of(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Predicate __pred);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Predicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+all_of(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Predicate __pred);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Predicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+none_of(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Predicate __pred);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Function>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+for_each(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Function __f);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Size, class _Function>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+for_each_n(_ExecutionPolicy&& __exec, _ForwardIterator __first, _Size __n, _Function __f);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Predicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+find_if(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Predicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Predicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+find_if_not(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Predicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+find(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, const _Tp& __value);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator1>
+find_end(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __s_first,
+         _ForwardIterator2 __s_last, _BinaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator1>
+find_end(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __s_first,
+         _ForwardIterator2 __s_last);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator1>
+find_first_of(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last,
+              _ForwardIterator2 __s_first, _ForwardIterator2 __s_last, _BinaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator1>
+find_first_of(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last,
+              _ForwardIterator2 __s_first, _ForwardIterator2 __s_last);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+adjacent_find(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+adjacent_find(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _BinaryPredicate __pred);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy,
+                                                 typename iterator_traits<_ForwardIterator>::difference_type>
+count(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, const _Tp& __value);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Predicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy,
+                                                 typename iterator_traits<_ForwardIterator>::difference_type>
+count_if(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Predicate __pred);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator1>
+search(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __s_first,
+       _ForwardIterator2 __s_last, _BinaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator1>
+search(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __s_first,
+       _ForwardIterator2 __s_last);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Size, class _Tp, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+search_n(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Size __count,
+         const _Tp& __value, _BinaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Size, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+search_n(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Size __count,
+         const _Tp& __value);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+copy(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __result);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _Size, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+copy_n(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _Size __n, _ForwardIterator2 __result);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _Predicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+copy_if(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 result,
+        _Predicate __pred);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+swap_ranges(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1,
+            _ForwardIterator2 __first2);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _UnaryOperation>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+transform(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __result,
+          _UnaryOperation __op);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator,
+          class _BinaryOperation>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+transform(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+          _ForwardIterator __result, _BinaryOperation __op);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _UnaryPredicate, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+replace_if(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _UnaryPredicate __pred,
+           const _Tp& __new_value);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+replace(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, const _Tp& __old_value,
+        const _Tp& __new_value);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _UnaryPredicate, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+replace_copy_if(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last,
+                _ForwardIterator2 __result, _UnaryPredicate __pred, const _Tp& __new_value);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+replace_copy(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __result,
+             const _Tp& __old_value, const _Tp& __new_value);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+fill(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, const _Tp& __value);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Size, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+fill_n(_ExecutionPolicy&& __exec, _ForwardIterator __first, _Size __count, const _Tp& __value);
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Generator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+generate(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Generator __g);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Size, class _Generator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+generate_n(_ExecutionPolicy&& __exec, _ForwardIterator __first, _Size count, _Generator __g);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _Predicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+remove_copy_if(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last,
+               _ForwardIterator2 __result, _Predicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+remove_copy(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __result,
+            const _Tp& __value);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _UnaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+remove_if(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _UnaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Tp>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+remove(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, const _Tp& __value);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+unique(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _BinaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+unique(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+unique_copy(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __result,
+            _BinaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+unique_copy(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __result);
+
+
+
+template <class _ExecutionPolicy, class _BidirectionalIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+reverse(_ExecutionPolicy&& __exec, _BidirectionalIterator __first, _BidirectionalIterator __last);
+
+template <class _ExecutionPolicy, class _BidirectionalIterator, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+reverse_copy(_ExecutionPolicy&& __exec, _BidirectionalIterator __first, _BidirectionalIterator __last,
+             _ForwardIterator __d_first);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+rotate(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __middle, _ForwardIterator __last);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+rotate_copy(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __middle, _ForwardIterator1 __last,
+            _ForwardIterator2 __result);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _UnaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+is_partitioned(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _UnaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _UnaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+partition(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _UnaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _BidirectionalIterator, class _UnaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _BidirectionalIterator>
+stable_partition(_ExecutionPolicy&& __exec, _BidirectionalIterator __first, _BidirectionalIterator __last,
+                 _UnaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _ForwardIterator1, class _ForwardIterator2,
+          class _UnaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, std::pair<_ForwardIterator1, _ForwardIterator2>>
+partition_copy(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last,
+               _ForwardIterator1 __out_true, _ForwardIterator2 __out_false, _UnaryPredicate __pred);
+
+
+
+template <class _ExecutionPolicy, class _RandomAccessIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+sort(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _RandomAccessIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+sort(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __last);
+
+
+
+template <class _ExecutionPolicy, class _RandomAccessIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+stable_sort(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _RandomAccessIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+stable_sort(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __last);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, std::pair<_ForwardIterator1, _ForwardIterator2>>
+mismatch(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+         _ForwardIterator2 __last2, _BinaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, std::pair<_ForwardIterator1, _ForwardIterator2>>
+mismatch(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+         _BinaryPredicate __pred);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, std::pair<_ForwardIterator1, _ForwardIterator2>>
+mismatch(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+         _ForwardIterator2 __last2);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, std::pair<_ForwardIterator1, _ForwardIterator2>>
+mismatch(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+equal(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+      _BinaryPredicate __p);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+equal(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+equal(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+      _ForwardIterator2 __last2, _BinaryPredicate __p);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+equal(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+      _ForwardIterator2 __last2);
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator2>
+move(_ExecutionPolicy&& __exec, _ForwardIterator1 __first, _ForwardIterator1 __last, _ForwardIterator2 __d_first);
+
+
+
+template <class _ExecutionPolicy, class _RandomAccessIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+partial_sort(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __middle,
+             _RandomAccessIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _RandomAccessIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+partial_sort(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __middle,
+             _RandomAccessIterator __last);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _RandomAccessIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _RandomAccessIterator>
+partial_sort_copy(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last,
+                  _RandomAccessIterator __d_first, _RandomAccessIterator __d_last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _RandomAccessIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _RandomAccessIterator>
+partial_sort_copy(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last,
+                  _RandomAccessIterator __d_first, _RandomAccessIterator __d_last);
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+is_sorted_until(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+is_sorted_until(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+is_sorted(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+is_sorted(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last);
+
+
+
+template <class _ExecutionPolicy, class _RandomAccessIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+nth_element(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __nth,
+            _RandomAccessIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _RandomAccessIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+nth_element(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __nth,
+            _RandomAccessIterator __last);
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator,
+          class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+merge(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+      _ForwardIterator2 __last2, _ForwardIterator __d_first, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+merge(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+      _ForwardIterator2 __last2, _ForwardIterator __d_first);
+
+template <class _ExecutionPolicy, class _BidirectionalIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+inplace_merge(_ExecutionPolicy&& __exec, _BidirectionalIterator __first, _BidirectionalIterator __middle,
+              _BidirectionalIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _BidirectionalIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, void>
+inplace_merge(_ExecutionPolicy&& __exec, _BidirectionalIterator __first, _BidirectionalIterator __middle,
+              _BidirectionalIterator __last);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+includes(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+         _ForwardIterator2 __last2, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+includes(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+         _ForwardIterator2 __last2);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator,
+          class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+set_union(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+          _ForwardIterator2 __last2, _ForwardIterator __result, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+set_union(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2,
+          _ForwardIterator2 __last2, _ForwardIterator __result);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator,
+          class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+set_intersection(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1,
+                 _ForwardIterator2 __first2, _ForwardIterator2 __last2, _ForwardIterator __result, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+set_intersection(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1,
+                 _ForwardIterator2 __first2, _ForwardIterator2 __last2, _ForwardIterator __result);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator,
+          class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+set_difference(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1,
+               _ForwardIterator2 __first2, _ForwardIterator2 __last2, _ForwardIterator __result, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+set_difference(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1,
+               _ForwardIterator2 __first2, _ForwardIterator2 __last2, _ForwardIterator __result);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator,
+          class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+set_symmetric_difference(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1,
+                         _ForwardIterator2 __first2, _ForwardIterator2 __last2, _ForwardIterator result,
+                         _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+set_symmetric_difference(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1,
+                         _ForwardIterator2 __first2, _ForwardIterator2 __last2, _ForwardIterator __result);
+
+
+template <class _ExecutionPolicy, class _RandomAccessIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _RandomAccessIterator>
+is_heap_until(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _RandomAccessIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _RandomAccessIterator>
+is_heap_until(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __last);
+
+template <class _ExecutionPolicy, class _RandomAccessIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+is_heap(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _RandomAccessIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+is_heap(_ExecutionPolicy&& __exec, _RandomAccessIterator __first, _RandomAccessIterator __last);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+min_element(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+min_element(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+max_element(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, _ForwardIterator>
+max_element(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last);
+
+template <class _ExecutionPolicy, class _ForwardIterator, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, std::pair<_ForwardIterator, _ForwardIterator>>
+minmax_element(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, std::pair<_ForwardIterator, _ForwardIterator>>
+minmax_element(_ExecutionPolicy&& __exec, _ForwardIterator __first, _ForwardIterator __last);
+
+
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2, class _Compare>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+lexicographical_compare(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1,
+                        _ForwardIterator2 __first2, _ForwardIterator2 __last2, _Compare __comp);
+
+template <class _ExecutionPolicy, class _ForwardIterator1, class _ForwardIterator2>
+__pstl::__internal::__enable_if_execution_policy<_ExecutionPolicy, bool>
+lexicographical_compare(_ExecutionPolicy&& __exec, _ForwardIterator1 __first1, _ForwardIterator1 __last1,
+                        _ForwardIterator2 __first2, _ForwardIterator2 __last2);
+
+}
+# 87 "/usr/include/c++/14.2.1/algorithm" 2 3
+# 6 "/home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/FileReader.h" 2
+
+
+# 7 "/home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/FileReader.h"
+template <typename T> class FileReader
+{
+public:
+    T *ReadFile(std::string path)
+    {
+        std::ifstream file(path);
+        std::string line;
+        int base_size = 0;
+
+        T *tab;
+
+
+        while (file >> line)
+        {
+
+            if (line != "49")
+            {
+                T *temp = new T[base_size];
+                for (int i = 0; i < base_size; i++)
+                {
+                    temp[i] = tab[i];
+                }
+
+                delete[] tab;
+                base_size++;
+
+                tab = new T[base_size];
+                for (int i = 0; i < base_size - 1; i++)
+                {
+                    tab[i] = temp[i];
+                }
+
+                if (IsFloat(line) == false)
+                {
+                    tab[base_size - 1] = std::stoi(line);
+                }
+
+                else if(IsFloat(line))
+                {
+                    std::ranges::replace(line, ',', '.');
+                    tab[base_size - 1] = std::stof(line);
+                }
+
+                else
+                {
+                    std::cout << "Niepoprawne dane w pliku" << std::endl;
+                    return nullptr;
+                }
+
+                delete[] temp;
+            }
+        }
+
+        file.close();
+        return tab;
+    }
+
+private:
+    static bool IsFloat(std::string line)
+    {
+        return line.find(',') != std::string::npos || line.find('.') != std::string::npos;
+    }
+};
+# 10 "/home/kollibroman/Studia/AIZO/Projekt1/UI/MainMenu.h" 2
+
+class MainMenu
+{
+public:
+    explicit MainMenu(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+    {
+            std::cout<< "Menu programu" << std::endl;
+
+            std::vector<std::string> options =
+            {
+                "Wygeneruj dane danego typu (1)",
+                "Wczytaj dane z pliku (2)",
+                "Opusc program (3)"
+            };
+
+            int choice;
+
+            for (auto option : options)
+            {
+                std::cout << option << std::endl;
+            }
+
+            std::cin >> choice;
+
+            switch (choice)
+            {
+                case 1:
+                    userInput->Option = choice;
+                    ChooseDataType(userInput);
+                    ChooseAlgorithm(userInput);
+                    HandleDataGeneration(userInput, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
+                    break;
+
+                case 2:
+                    userInput->Option = choice;
+                    ChooseDataType(userInput);
+                    ChooseAlgorithm(userInput);
+                    HandleDataRead(userInput, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
+                    break;
+
+                case 3:
+                    std::cout << "Koncze prace programu" << std::endl;
+                    return;
+
+                default:
+                    std::cout << "Wrong input" << std::endl;
+                    break;
+            }
+    }
+
+private:
+
+    void ChooseAlgorithm(UserInputStorer* &userInput)
+    {
+        std::cout<< "Menu programu" << std::endl;
+
+        std::vector<std::string> options =
+        {
+            "Sortowanie szybkie (1)",
+            "Sortowanie przez wstawianie (2)",
+            "Sortowanie przez wstawianie binarne (3)",
+            "Sortowanie przez kopcowanie (4)"
+        };
+
+        int choice;
+
+        for (auto option : options)
+        {
+            std::cout << option << std::endl;
+        }
+
+        std::cin >> choice;
+
+        switch(choice)
+        {
+            case 1:
+                std::cout << "Wybrano sortowanie szybkie" << std::endl;
+                userInput->ChosenAlgorithm = choice;
+                break;
+
+            case 2:
+                std::cout << "Wybrano sortowanie przez wstawianie" << std::endl;
+                userInput->ChosenAlgorithm = choice;
+                break;
+
+            case 3:
+                std::cout << "Wybrano sortowanie przez wstawianie binarne" << std::endl;
+                userInput->ChosenAlgorithm = choice;
+                break;
+
+            case 4:
+                std::cout << "Wybrano sortowanie przez kopcowanie" << std::endl;
+                userInput->ChosenAlgorithm = choice;
+                break;
+
+            default:
+                std::cout << "nieakceptowalny wybor" << std::endl;
+                break;
+        }
+    }
+
+    void ChooseDataType(UserInputStorer* &userInput)
+    {
+        std::cout<< "Wybierz typ danych" << std::endl;
+
+        std::vector<std::string> options =
+        {
+            "Int (1)",
+            "Float (2)",
+        };
+
+        int choice;
+
+        for (auto option : options)
+        {
+            std::cout << option << std::endl;
+        }
+
+        std::cin >> choice;
+
+        switch(choice)
+        {
+            case 1:
+                std::cout << "Wybrano int" << std::endl;
+                userInput->DataType = "int";
+                break;
+
+            case 2:
+                std::cout << "Wybrano float" << std::endl;
+                userInput->DataType = "float";
+                break;
+
+            default:
+                std::cout << "nieakceptowalny wybor" << std::endl;
+                break;
+        }
+    }
+
+    void HandleDataGeneration(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+    {
+        for (int i = 0; i < GENERATION_COUNT; i++)
+        {
+            if (userInput->DataType == "int")
+            {
+                auto arrayDataGenerator = new ArrayDataGenerator<int>();
+                int *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
+                intArrayStorer->Arrays[i] = tab;
+            }
+
+            else if (userInput->DataType == "float")
+            {
+                auto arrayDataGenerator = new ArrayDataGenerator<float>();
+                float *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
+                floatArrayStorer->Arrays[i] = tab;
+            }
+        }
+    }
+
+    void HandleDataRead(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+    {
+        std::cout << "Podaj nazwe pliku" << std::endl;
+        std::string fileName;
+        std::cin >> fileName;
+
+        if(fileName.find(".txt") == std::string::npos)
+        {
+            fileName += ".txt";
+        }
+
+        fileName = "../TestFiles/z1/" + fileName;
+
+        if (userInput->DataType == "int")
+        {
+            auto fileReader = new FileReader<int>();
+            int *tab = fileReader->ReadFile(fileName);
+            intArrayStorer->Arrays[0] = tab;
+        }
+
+        else if (userInput->DataType == "float")
+        {
+            auto fileReader = new FileReader<float>();
+            float *tab = fileReader->ReadFile(fileName);
+            floatArrayStorer->Arrays[0] = tab;
+        }
+    }
+};
+# 3 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
+# 1 "/home/kollibroman/Studia/AIZO/Projekt1/Util/UserInputStorer.h" 1
+# 4 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
+# 1 "/home/kollibroman/Studia/AIZO/Projekt1/Lib/Algorithms.h" 1
+
+
+
+template <typename T>
+class Algorithms
+{
+    public:
+        Algorithms()
+        {
+        }
+
+        void QuickSort(T *tab, int left, int right)
+        {
+            if (left >= right)
+                return;
+
+            T v = tab[(right + left) / 2];
+            int i = left, j = right;
+
+            do
+            {
+                while (tab[i] < v)
+                    i++;
+                while (tab[j] > v)
+                    j--;
+
+                if (i <= j)
+                {
+                    std::swap(tab[i], tab[j]);
+                    i++;
+                    j--;
+                }
+            } while (i <= j);
+
+            if (j > left) {
+                QuickSort(tab, left, j);
+            }
+
+            if (i < right) {
+                QuickSort(tab, i, right);
+            }
+        }
+
+        void HeapSort(T *tab, int n)
+        {
+
+        }
+
+        void InsertSort(T *tab, int n)
+        {
+            T temp;
+            int j;
+            for (int i = 1; i < n; i++)
+            {
+                temp = tab[i];
+                j = i - 1;
+
+                while (j >= 0 && tab[j] > temp)
+                {
+                    tab[j + 1] = tab[j];
+                    j--;
+                }
+                tab[j + 1] = temp;
+            }
+        }
+
+        void InsertSortBinary(T *tab, int n)
+        {
+
+        }
+
+        T* copyArray(T* original, int size)
+        {
+            T* copy = new T[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                copy[i] = original[i];
+            }
+
+            return copy;
+        }
+};
+# 5 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
+
+# 1 "/usr/include/c++/14.2.1/chrono" 1 3
+# 33 "/usr/include/c++/14.2.1/chrono" 3
+       
+# 34 "/usr/include/c++/14.2.1/chrono" 3
+
+
+
+
+
+
+
+# 1 "/usr/include/c++/14.2.1/bits/chrono.h" 1 3
+# 33 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+       
+# 34 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+
+
+
+# 1 "/usr/include/c++/14.2.1/ratio" 1 3
+# 33 "/usr/include/c++/14.2.1/ratio" 3
+       
+# 34 "/usr/include/c++/14.2.1/ratio" 3
+# 43 "/usr/include/c++/14.2.1/ratio" 3
+# 1 "/usr/include/c++/14.2.1/bits/version.h" 1 3
+# 47 "/usr/include/c++/14.2.1/bits/version.h" 3
+       
+# 48 "/usr/include/c++/14.2.1/bits/version.h" 3
+# 44 "/usr/include/c++/14.2.1/ratio" 2 3
+
+
+# 45 "/usr/include/c++/14.2.1/ratio" 3
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+# 59 "/usr/include/c++/14.2.1/ratio" 3
+  template<intmax_t _Pn>
+    struct __static_sign
+    : integral_constant<intmax_t, (_Pn < 0) ? -1 : 1>
+    { };
+
+  template<intmax_t _Pn>
+    struct __static_abs
+    : integral_constant<intmax_t, _Pn * __static_sign<_Pn>::value>
+    { };
+
+  template<intmax_t _Pn, intmax_t _Qn>
+    struct __static_gcd
+    : __static_gcd<_Qn, (_Pn % _Qn)>
+    { };
+
+  template<intmax_t _Pn>
+    struct __static_gcd<_Pn, 0>
+    : integral_constant<intmax_t, __static_abs<_Pn>::value>
+    { };
+
+  template<intmax_t _Qn>
+    struct __static_gcd<0, _Qn>
+    : integral_constant<intmax_t, __static_abs<_Qn>::value>
+    { };
+
+
+
+
+
+
+
+  template<intmax_t _Pn, intmax_t _Qn>
+    struct __safe_multiply
+    {
+    private:
+      static const uintmax_t __c = uintmax_t(1) << (sizeof(intmax_t) * 4);
+
+      static const uintmax_t __a0 = __static_abs<_Pn>::value % __c;
+      static const uintmax_t __a1 = __static_abs<_Pn>::value / __c;
+      static const uintmax_t __b0 = __static_abs<_Qn>::value % __c;
+      static const uintmax_t __b1 = __static_abs<_Qn>::value / __c;
+
+      static_assert(__a1 == 0 || __b1 == 0,
+      "overflow in multiplication");
+      static_assert(__a0 * __b1 + __b0 * __a1 < (__c >> 1),
+      "overflow in multiplication");
+      static_assert(__b0 * __a0 <= 0x7fffffffffffffffL,
+      "overflow in multiplication");
+      static_assert((__a0 * __b1 + __b0 * __a1) * __c
+      <= 0x7fffffffffffffffL - __b0 * __a0,
+      "overflow in multiplication");
+
+    public:
+      static const intmax_t value = _Pn * _Qn;
+    };
+
+
+
+  template<uintmax_t __hi1, uintmax_t __lo1, uintmax_t __hi2, uintmax_t __lo2>
+    struct __big_less
+    : integral_constant<bool, (__hi1 < __hi2
+          || (__hi1 == __hi2 && __lo1 < __lo2))>
+    { };
+
+  template<uintmax_t __hi1, uintmax_t __lo1, uintmax_t __hi2, uintmax_t __lo2>
+    struct __big_add
+    {
+      static constexpr uintmax_t __lo = __lo1 + __lo2;
+      static constexpr uintmax_t __hi = (__hi1 + __hi2 +
+      (__lo1 + __lo2 < __lo1));
+    };
+
+
+  template<uintmax_t __hi1, uintmax_t __lo1, uintmax_t __hi2, uintmax_t __lo2>
+    struct __big_sub
+    {
+      static_assert(!__big_less<__hi1, __lo1, __hi2, __lo2>::value,
+      "Internal library error");
+      static constexpr uintmax_t __lo = __lo1 - __lo2;
+      static constexpr uintmax_t __hi = (__hi1 - __hi2 -
+      (__lo1 < __lo2));
+    };
+
+
+  template<uintmax_t __x, uintmax_t __y>
+    struct __big_mul
+    {
+    private:
+      static constexpr uintmax_t __c = uintmax_t(1) << (sizeof(intmax_t) * 4);
+      static constexpr uintmax_t __x0 = __x % __c;
+      static constexpr uintmax_t __x1 = __x / __c;
+      static constexpr uintmax_t __y0 = __y % __c;
+      static constexpr uintmax_t __y1 = __y / __c;
+      static constexpr uintmax_t __x0y0 = __x0 * __y0;
+      static constexpr uintmax_t __x0y1 = __x0 * __y1;
+      static constexpr uintmax_t __x1y0 = __x1 * __y0;
+      static constexpr uintmax_t __x1y1 = __x1 * __y1;
+      static constexpr uintmax_t __mix = __x0y1 + __x1y0;
+      static constexpr uintmax_t __mix_lo = __mix * __c;
+      static constexpr uintmax_t __mix_hi
+      = __mix / __c + ((__mix < __x0y1) ? __c : 0);
+      typedef __big_add<__mix_hi, __mix_lo, __x1y1, __x0y0> _Res;
+    public:
+      static constexpr uintmax_t __hi = _Res::__hi;
+      static constexpr uintmax_t __lo = _Res::__lo;
+    };
+
+
+
+  template<uintmax_t __n1, uintmax_t __n0, uintmax_t __d>
+    struct __big_div_impl
+    {
+    private:
+      static_assert(__d >= (uintmax_t(1) << (sizeof(intmax_t) * 8 - 1)),
+      "Internal library error");
+      static_assert(__n1 < __d, "Internal library error");
+      static constexpr uintmax_t __c = uintmax_t(1) << (sizeof(intmax_t) * 4);
+      static constexpr uintmax_t __d1 = __d / __c;
+      static constexpr uintmax_t __d0 = __d % __c;
+
+      static constexpr uintmax_t __q1x = __n1 / __d1;
+      static constexpr uintmax_t __r1x = __n1 % __d1;
+      static constexpr uintmax_t __m = __q1x * __d0;
+      static constexpr uintmax_t __r1y = __r1x * __c + __n0 / __c;
+      static constexpr uintmax_t __r1z = __r1y + __d;
+      static constexpr uintmax_t __r1
+      = ((__r1y < __m) ? ((__r1z >= __d) && (__r1z < __m))
+  ? (__r1z + __d) : __r1z : __r1y) - __m;
+      static constexpr uintmax_t __q1
+      = __q1x - ((__r1y < __m)
+   ? ((__r1z >= __d) && (__r1z < __m)) ? 2 : 1 : 0);
+      static constexpr uintmax_t __q0x = __r1 / __d1;
+      static constexpr uintmax_t __r0x = __r1 % __d1;
+      static constexpr uintmax_t __n = __q0x * __d0;
+      static constexpr uintmax_t __r0y = __r0x * __c + __n0 % __c;
+      static constexpr uintmax_t __r0z = __r0y + __d;
+      static constexpr uintmax_t __r0
+      = ((__r0y < __n) ? ((__r0z >= __d) && (__r0z < __n))
+  ? (__r0z + __d) : __r0z : __r0y) - __n;
+      static constexpr uintmax_t __q0
+      = __q0x - ((__r0y < __n) ? ((__r0z >= __d)
+      && (__r0z < __n)) ? 2 : 1 : 0);
+
+    public:
+      static constexpr uintmax_t __quot = __q1 * __c + __q0;
+      static constexpr uintmax_t __rem = __r0;
+
+    private:
+      typedef __big_mul<__quot, __d> _Prod;
+      typedef __big_add<_Prod::__hi, _Prod::__lo, 0, __rem> _Sum;
+      static_assert(_Sum::__hi == __n1 && _Sum::__lo == __n0,
+      "Internal library error");
+  };
+
+  template<uintmax_t __n1, uintmax_t __n0, uintmax_t __d>
+    struct __big_div
+    {
+    private:
+      static_assert(__d != 0, "Internal library error");
+      static_assert(sizeof (uintmax_t) == sizeof (unsigned long long),
+      "This library calls __builtin_clzll on uintmax_t, which "
+      "is unsafe on your platform. Please complain to "
+      "http://gcc.gnu.org/bugzilla/");
+      static constexpr int __shift = __builtin_clzll(__d);
+      static constexpr int __coshift_ = sizeof(uintmax_t) * 8 - __shift;
+      static constexpr int __coshift = (__shift != 0) ? __coshift_ : 0;
+      static constexpr uintmax_t __c1 = uintmax_t(1) << __shift;
+      static constexpr uintmax_t __c2 = uintmax_t(1) << __coshift;
+      static constexpr uintmax_t __new_d = __d * __c1;
+      static constexpr uintmax_t __new_n0 = __n0 * __c1;
+      static constexpr uintmax_t __n1_shifted = (__n1 % __d) * __c1;
+      static constexpr uintmax_t __n0_top = (__shift != 0) ? (__n0 / __c2) : 0;
+      static constexpr uintmax_t __new_n1 = __n1_shifted + __n0_top;
+      typedef __big_div_impl<__new_n1, __new_n0, __new_d> _Res;
+
+    public:
+      static constexpr uintmax_t __quot_hi = __n1 / __d;
+      static constexpr uintmax_t __quot_lo = _Res::__quot;
+      static constexpr uintmax_t __rem = _Res::__rem / __c1;
+
+    private:
+      typedef __big_mul<__quot_lo, __d> _P0;
+      typedef __big_mul<__quot_hi, __d> _P1;
+      typedef __big_add<_P0::__hi, _P0::__lo, _P1::__lo, __rem> _Sum;
+
+      static_assert(_P1::__hi == 0, "Internal library error");
+      static_assert(_Sum::__hi >= _P0::__hi, "Internal library error");
+
+      static_assert(_Sum::__hi == __n1 && _Sum::__lo == __n0,
+      "Internal library error");
+      static_assert(__rem < __d, "Internal library error");
+    };
+# 268 "/usr/include/c++/14.2.1/ratio" 3
+  template<intmax_t _Num, intmax_t _Den = 1>
+    struct ratio
+    {
+      static_assert(_Den != 0, "denominator cannot be zero");
+      static_assert(_Num >= -0x7fffffffffffffffL && _Den >= -0x7fffffffffffffffL,
+      "out of range");
+
+
+      static constexpr intmax_t num =
+        _Num * __static_sign<_Den>::value / __static_gcd<_Num, _Den>::value;
+
+      static constexpr intmax_t den =
+        __static_abs<_Den>::value / __static_gcd<_Num, _Den>::value;
+
+      typedef ratio<num, den> type;
+    };
+# 295 "/usr/include/c++/14.2.1/ratio" 3
+  template<typename _Tp>
+    struct __is_ratio
+    : std::false_type
+    { };
+
+  template<intmax_t _Num, intmax_t _Den>
+    struct __is_ratio<ratio<_Num, _Den>>
+    : std::true_type
+    { };
+
+
+  template<typename _Tp>
+    constexpr bool __is_ratio_v = false;
+  template<intmax_t _Num, intmax_t _Den>
+    constexpr bool __is_ratio_v<ratio<_Num, _Den>> = true;
+
+
+  template<typename _R1, typename _R2>
+    constexpr bool
+    __are_both_ratios() noexcept
+    {
+
+      if constexpr (__is_ratio_v<_R1>)
+ if constexpr (__is_ratio_v<_R2>)
+   return true;
+      return false;
+
+
+
+    }
+
+  template<typename _R1, typename _R2>
+    struct __ratio_multiply
+    {
+      static_assert(std::__are_both_ratios<_R1, _R2>(),
+      "both template arguments must be a std::ratio");
+
+    private:
+      static const intmax_t __gcd1 =
+        __static_gcd<_R1::num, _R2::den>::value;
+      static const intmax_t __gcd2 =
+        __static_gcd<_R2::num, _R1::den>::value;
+
+    public:
+      typedef ratio<
+        __safe_multiply<(_R1::num / __gcd1),
+                        (_R2::num / __gcd2)>::value,
+        __safe_multiply<(_R1::den / __gcd2),
+                        (_R2::den / __gcd1)>::value> type;
+
+      static constexpr intmax_t num = type::num;
+      static constexpr intmax_t den = type::den;
+    };
+# 360 "/usr/include/c++/14.2.1/ratio" 3
+  template<typename _R1, typename _R2>
+    using ratio_multiply = typename __ratio_multiply<_R1, _R2>::type;
+
+
+
+  template<typename _R1, typename _R2>
+    struct __ratio_divide
+    {
+      static_assert(_R2::num != 0, "division by 0");
+
+      typedef typename __ratio_multiply<
+        _R1,
+        ratio<_R2::den, _R2::num>>::type type;
+
+      static constexpr intmax_t num = type::num;
+      static constexpr intmax_t den = type::den;
+    };
+# 389 "/usr/include/c++/14.2.1/ratio" 3
+  template<typename _R1, typename _R2>
+    using ratio_divide = typename __ratio_divide<_R1, _R2>::type;
+
+
+  template<typename _R1, typename _R2>
+    struct ratio_equal
+    : integral_constant<bool, _R1::num == _R2::num && _R1::den == _R2::den>
+    {
+      static_assert(std::__are_both_ratios<_R1, _R2>(),
+      "both template arguments must be a std::ratio");
+    };
+
+
+  template<typename _R1, typename _R2>
+    struct ratio_not_equal
+    : integral_constant<bool, !ratio_equal<_R1, _R2>::value>
+    { };
+
+
+
+
+  template<typename _R1, typename _R2,
+           typename _Left = __big_mul<_R1::num,_R2::den>,
+           typename _Right = __big_mul<_R2::num,_R1::den> >
+    struct __ratio_less_impl_1
+    : integral_constant<bool, __big_less<_Left::__hi, _Left::__lo,
+           _Right::__hi, _Right::__lo>::value>
+    { };
+
+  template<typename _R1, typename _R2,
+    bool = (_R1::num == 0 || _R2::num == 0
+     || (__static_sign<_R1::num>::value
+         != __static_sign<_R2::num>::value)),
+    bool = (__static_sign<_R1::num>::value == -1
+     && __static_sign<_R2::num>::value == -1)>
+    struct __ratio_less_impl
+    : __ratio_less_impl_1<_R1, _R2>::type
+    { };
+
+  template<typename _R1, typename _R2>
+    struct __ratio_less_impl<_R1, _R2, true, false>
+    : integral_constant<bool, _R1::num < _R2::num>
+    { };
+
+  template<typename _R1, typename _R2>
+    struct __ratio_less_impl<_R1, _R2, false, true>
+    : __ratio_less_impl_1<ratio<-_R2::num, _R2::den>,
+           ratio<-_R1::num, _R1::den> >::type
+    { };
+
+
+
+
+  template<typename _R1, typename _R2>
+    struct ratio_less
+    : __ratio_less_impl<_R1, _R2>::type
+    {
+      static_assert(std::__are_both_ratios<_R1, _R2>(),
+      "both template arguments must be a std::ratio");
+    };
+
+
+  template<typename _R1, typename _R2>
+    struct ratio_less_equal
+    : integral_constant<bool, !ratio_less<_R2, _R1>::value>
+    { };
+
+
+  template<typename _R1, typename _R2>
+    struct ratio_greater
+    : integral_constant<bool, ratio_less<_R2, _R1>::value>
+    { };
+
+
+  template<typename _R1, typename _R2>
+    struct ratio_greater_equal
+    : integral_constant<bool, !ratio_less<_R1, _R2>::value>
+    { };
+
+
+  template <typename _R1, typename _R2>
+    inline constexpr bool ratio_equal_v = ratio_equal<_R1, _R2>::value;
+  template <typename _R1, typename _R2>
+    inline constexpr bool ratio_not_equal_v = ratio_not_equal<_R1, _R2>::value;
+  template <typename _R1, typename _R2>
+    inline constexpr bool ratio_less_v = ratio_less<_R1, _R2>::value;
+  template <typename _R1, typename _R2>
+    inline constexpr bool ratio_less_equal_v
+      = ratio_less_equal<_R1, _R2>::value;
+  template <typename _R1, typename _R2>
+    inline constexpr bool ratio_greater_v = ratio_greater<_R1, _R2>::value;
+  template <typename _R1, typename _R2>
+    inline constexpr bool ratio_greater_equal_v
+      = ratio_greater_equal<_R1, _R2>::value;
+
+
+
+
+  template<typename _R1, typename _R2,
+      bool = (_R1::num >= 0),
+      bool = (_R2::num >= 0),
+      bool = ratio_less<ratio<__static_abs<_R1::num>::value, _R1::den>,
+        ratio<__static_abs<_R2::num>::value, _R2::den> >::value>
+    struct __ratio_add_impl
+    {
+    private:
+      typedef typename __ratio_add_impl<
+        ratio<-_R1::num, _R1::den>,
+        ratio<-_R2::num, _R2::den> >::type __t;
+    public:
+      typedef ratio<-__t::num, __t::den> type;
+    };
+
+
+  template<typename _R1, typename _R2, bool __b>
+    struct __ratio_add_impl<_R1, _R2, true, true, __b>
+    {
+    private:
+      static constexpr uintmax_t __g = __static_gcd<_R1::den, _R2::den>::value;
+      static constexpr uintmax_t __d2 = _R2::den / __g;
+      typedef __big_mul<_R1::den, __d2> __d;
+      typedef __big_mul<_R1::num, _R2::den / __g> __x;
+      typedef __big_mul<_R2::num, _R1::den / __g> __y;
+      typedef __big_add<__x::__hi, __x::__lo, __y::__hi, __y::__lo> __n;
+      static_assert(__n::__hi >= __x::__hi, "Internal library error");
+      typedef __big_div<__n::__hi, __n::__lo, __g> __ng;
+      static constexpr uintmax_t __g2 = __static_gcd<__ng::__rem, __g>::value;
+      typedef __big_div<__n::__hi, __n::__lo, __g2> __n_final;
+      static_assert(__n_final::__rem == 0, "Internal library error");
+      static_assert(__n_final::__quot_hi == 0 &&
+        __n_final::__quot_lo <= 0x7fffffffffffffffL, "overflow in addition");
+      typedef __big_mul<_R1::den / __g2, __d2> __d_final;
+      static_assert(__d_final::__hi == 0 &&
+        __d_final::__lo <= 0x7fffffffffffffffL, "overflow in addition");
+    public:
+      typedef ratio<__n_final::__quot_lo, __d_final::__lo> type;
+    };
+
+  template<typename _R1, typename _R2>
+    struct __ratio_add_impl<_R1, _R2, false, true, true>
+    : __ratio_add_impl<_R2, _R1>
+    { };
+
+
+  template<typename _R1, typename _R2>
+    struct __ratio_add_impl<_R1, _R2, true, false, false>
+    {
+    private:
+      static constexpr uintmax_t __g = __static_gcd<_R1::den, _R2::den>::value;
+      static constexpr uintmax_t __d2 = _R2::den / __g;
+      typedef __big_mul<_R1::den, __d2> __d;
+      typedef __big_mul<_R1::num, _R2::den / __g> __x;
+      typedef __big_mul<-_R2::num, _R1::den / __g> __y;
+      typedef __big_sub<__x::__hi, __x::__lo, __y::__hi, __y::__lo> __n;
+      typedef __big_div<__n::__hi, __n::__lo, __g> __ng;
+      static constexpr uintmax_t __g2 = __static_gcd<__ng::__rem, __g>::value;
+      typedef __big_div<__n::__hi, __n::__lo, __g2> __n_final;
+      static_assert(__n_final::__rem == 0, "Internal library error");
+      static_assert(__n_final::__quot_hi == 0 &&
+        __n_final::__quot_lo <= 0x7fffffffffffffffL, "overflow in addition");
+      typedef __big_mul<_R1::den / __g2, __d2> __d_final;
+      static_assert(__d_final::__hi == 0 &&
+        __d_final::__lo <= 0x7fffffffffffffffL, "overflow in addition");
+    public:
+      typedef ratio<__n_final::__quot_lo, __d_final::__lo> type;
+    };
+
+  template<typename _R1, typename _R2>
+    struct __ratio_add
+    {
+      static_assert(std::__are_both_ratios<_R1, _R2>(),
+      "both template arguments must be a std::ratio");
+
+      typedef typename __ratio_add_impl<_R1, _R2>::type type;
+      static constexpr intmax_t num = type::num;
+      static constexpr intmax_t den = type::den;
+    };
+# 578 "/usr/include/c++/14.2.1/ratio" 3
+  template<typename _R1, typename _R2>
+    using ratio_add = typename __ratio_add<_R1, _R2>::type;
+
+
+
+  template<typename _R1, typename _R2>
+    struct __ratio_subtract
+    {
+      typedef typename __ratio_add<
+        _R1,
+        ratio<-_R2::num, _R2::den>>::type type;
+
+      static constexpr intmax_t num = type::num;
+      static constexpr intmax_t den = type::den;
+    };
+# 605 "/usr/include/c++/14.2.1/ratio" 3
+  template<typename _R1, typename _R2>
+    using ratio_subtract = typename __ratio_subtract<_R1, _R2>::type;
+# 618 "/usr/include/c++/14.2.1/ratio" 3
+  using atto = ratio< 1, 1000000000000000000>;
+  using femto = ratio< 1, 1000000000000000>;
+  using pico = ratio< 1, 1000000000000>;
+  using nano = ratio< 1, 1000000000>;
+  using micro = ratio< 1, 1000000>;
+  using milli = ratio< 1, 1000>;
+  using centi = ratio< 1, 100>;
+  using deci = ratio< 1, 10>;
+  using deca = ratio< 10, 1>;
+  using hecto = ratio< 100, 1>;
+  using kilo = ratio< 1000, 1>;
+  using mega = ratio< 1000000, 1>;
+  using giga = ratio< 1000000000, 1>;
+  using tera = ratio< 1000000000000, 1>;
+  using peta = ratio< 1000000000000000, 1>;
+  using exa = ratio< 1000000000000000000, 1>;
+# 646 "/usr/include/c++/14.2.1/ratio" 3
+
+}
+# 38 "/usr/include/c++/14.2.1/bits/chrono.h" 2 3
+
+
+# 1 "/usr/include/c++/14.2.1/ctime" 1 3
+# 39 "/usr/include/c++/14.2.1/ctime" 3
+       
+# 40 "/usr/include/c++/14.2.1/ctime" 3
+# 58 "/usr/include/c++/14.2.1/ctime" 3
+namespace std
+{
+  using ::clock_t;
+  using ::time_t;
+  using ::tm;
+
+  using ::clock;
+  using ::difftime;
+  using ::mktime;
+  using ::time;
+  using ::asctime;
+  using ::ctime;
+  using ::gmtime;
+  using ::localtime;
+  using ::strftime;
+}
+
+
+
+namespace std
+{
+  using ::timespec;
+  using ::timespec_get;
+}
+# 41 "/usr/include/c++/14.2.1/bits/chrono.h" 2 3
+# 1 "/usr/include/c++/14.2.1/bits/parse_numbers.h" 1 3
+# 33 "/usr/include/c++/14.2.1/bits/parse_numbers.h" 3
+       
+# 34 "/usr/include/c++/14.2.1/bits/parse_numbers.h" 3
+# 42 "/usr/include/c++/14.2.1/bits/parse_numbers.h" 3
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+
+namespace __parse_int
+{
+  template<unsigned _Base, char _Dig>
+    struct _Digit;
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '0'> : integral_constant<unsigned, 0>
+    {
+      using __valid = true_type;
+    };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '1'> : integral_constant<unsigned, 1>
+    {
+      using __valid = true_type;
+    };
+
+  template<unsigned _Base, unsigned _Val>
+    struct _Digit_impl : integral_constant<unsigned, _Val>
+    {
+      static_assert(_Base > _Val, "invalid digit");
+      using __valid = true_type;
+    };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '2'> : _Digit_impl<_Base, 2>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '3'> : _Digit_impl<_Base, 3>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '4'> : _Digit_impl<_Base, 4>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '5'> : _Digit_impl<_Base, 5>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '6'> : _Digit_impl<_Base, 6>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '7'> : _Digit_impl<_Base, 7>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '8'> : _Digit_impl<_Base, 8>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '9'> : _Digit_impl<_Base, 9>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'a'> : _Digit_impl<_Base, 0xa>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'A'> : _Digit_impl<_Base, 0xa>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'b'> : _Digit_impl<_Base, 0xb>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'B'> : _Digit_impl<_Base, 0xb>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'c'> : _Digit_impl<_Base, 0xc>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'C'> : _Digit_impl<_Base, 0xc>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'd'> : _Digit_impl<_Base, 0xd>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'D'> : _Digit_impl<_Base, 0xd>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'e'> : _Digit_impl<_Base, 0xe>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'E'> : _Digit_impl<_Base, 0xe>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'f'> : _Digit_impl<_Base, 0xf>
+    { };
+
+  template<unsigned _Base>
+    struct _Digit<_Base, 'F'> : _Digit_impl<_Base, 0xf>
+    { };
+
+
+  template<unsigned _Base>
+    struct _Digit<_Base, '\''> : integral_constant<unsigned, 0>
+    {
+      using __valid = false_type;
+    };
+
+
+
+  template<unsigned long long _Val>
+    using __ull_constant = integral_constant<unsigned long long, _Val>;
+
+  template<unsigned _Base, char _Dig, char... _Digs>
+    struct _Power_help
+    {
+      using __next = typename _Power_help<_Base, _Digs...>::type;
+      using __valid_digit = typename _Digit<_Base, _Dig>::__valid;
+      using type
+ = __ull_constant<__next::value * (__valid_digit{} ? _Base : 1ULL)>;
+    };
+
+  template<unsigned _Base, char _Dig>
+    struct _Power_help<_Base, _Dig>
+    {
+      using __valid_digit = typename _Digit<_Base, _Dig>::__valid;
+      using type = __ull_constant<__valid_digit::value>;
+    };
+
+  template<unsigned _Base, char... _Digs>
+    struct _Power : _Power_help<_Base, _Digs...>::type
+    { };
+
+  template<unsigned _Base>
+    struct _Power<_Base> : __ull_constant<0>
+    { };
+
+
+
+  template<unsigned _Base, unsigned long long _Pow, char _Dig, char... _Digs>
+    struct _Number_help
+    {
+      using __digit = _Digit<_Base, _Dig>;
+      using __valid_digit = typename __digit::__valid;
+      using __next = _Number_help<_Base,
+      __valid_digit::value ? _Pow / _Base : _Pow,
+      _Digs...>;
+      using type = __ull_constant<_Pow * __digit::value + __next::type::value>;
+      static_assert((type::value / _Pow) == __digit::value,
+      "integer literal does not fit in unsigned long long");
+    };
+
+
+  template<unsigned _Base, unsigned long long _Pow, char _Dig, char..._Digs>
+    struct _Number_help<_Base, _Pow, '\'', _Dig, _Digs...>
+    : _Number_help<_Base, _Pow, _Dig, _Digs...>
+    { };
+
+
+  template<unsigned _Base, char _Dig>
+    struct _Number_help<_Base, 1ULL, _Dig>
+    {
+      using type = __ull_constant<_Digit<_Base, _Dig>::value>;
+    };
+
+  template<unsigned _Base, char... _Digs>
+    struct _Number
+    : _Number_help<_Base, _Power<_Base, _Digs...>::value, _Digs...>::type
+    { };
+
+  template<unsigned _Base>
+    struct _Number<_Base>
+    : __ull_constant<0>
+    { };
+
+
+
+  template<char... _Digs>
+    struct _Parse_int;
+
+  template<char... _Digs>
+    struct _Parse_int<'0', 'b', _Digs...>
+    : _Number<2U, _Digs...>::type
+    { };
+
+  template<char... _Digs>
+    struct _Parse_int<'0', 'B', _Digs...>
+    : _Number<2U, _Digs...>::type
+    { };
+
+  template<char... _Digs>
+    struct _Parse_int<'0', 'x', _Digs...>
+    : _Number<16U, _Digs...>::type
+    { };
+
+  template<char... _Digs>
+    struct _Parse_int<'0', 'X', _Digs...>
+    : _Number<16U, _Digs...>::type
+    { };
+
+  template<char... _Digs>
+    struct _Parse_int<'0', _Digs...>
+    : _Number<8U, _Digs...>::type
+    { };
+
+  template<char... _Digs>
+    struct _Parse_int
+    : _Number<10U, _Digs...>::type
+    { };
+
+}
+
+
+namespace __select_int
+{
+  template<unsigned long long _Val, typename... _Ints>
+    struct _Select_int_base;
+
+  template<unsigned long long _Val, typename _IntType, typename... _Ints>
+    struct _Select_int_base<_Val, _IntType, _Ints...>
+    : __conditional_t<(_Val <= __gnu_cxx::__int_traits<_IntType>::__max),
+        integral_constant<_IntType, (_IntType)_Val>,
+        _Select_int_base<_Val, _Ints...>>
+    { };
+
+  template<unsigned long long _Val>
+    struct _Select_int_base<_Val>
+    { };
+
+  template<char... _Digs>
+    using _Select_int = typename _Select_int_base<
+ __parse_int::_Parse_int<_Digs...>::value,
+ unsigned char,
+ unsigned short,
+ unsigned int,
+ unsigned long,
+ unsigned long long
+      >::type;
+
+}
+
+
+}
+# 42 "/usr/include/c++/14.2.1/bits/chrono.h" 2 3
+
+
+
+
+
+# 1 "/usr/include/c++/14.2.1/bits/version.h" 1 3
+# 47 "/usr/include/c++/14.2.1/bits/version.h" 3
+       
+# 48 "/usr/include/c++/14.2.1/bits/version.h" 3
+# 48 "/usr/include/c++/14.2.1/bits/chrono.h" 2 3
+
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+
+
+  namespace filesystem { struct __file_clock; };
+
+
+  namespace chrono
+  {
+
+
+
+
+    template<typename _Rep, typename _Period = ratio<1>>
+      class duration;
+
+
+    template<typename _Clock, typename _Dur = typename _Clock::duration>
+      class time_point;
+
+  }
+# 79 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+  template<typename _CT, typename _Period1, typename _Period2, typename = void>
+    struct __duration_common_type
+    { };
+
+  template<typename _CT, typename _Period1, typename _Period2>
+    struct __duration_common_type<_CT, _Period1, _Period2,
+      __void_t<typename _CT::type>>
+    {
+    private:
+      using __gcd_num = __static_gcd<_Period1::num, _Period2::num>;
+      using __gcd_den = __static_gcd<_Period1::den, _Period2::den>;
+      using __cr = typename _CT::type;
+      using __r = ratio<__gcd_num::value,
+   (_Period1::den / __gcd_den::value) * _Period2::den>;
+
+    public:
+      using type = chrono::duration<__cr, typename __r::type>;
+    };
+
+
+
+
+
+
+
+  template<typename _Rep1, typename _Period1, typename _Rep2, typename _Period2>
+    struct common_type<chrono::duration<_Rep1, _Period1>,
+         chrono::duration<_Rep2, _Period2>>
+    : __duration_common_type<common_type<_Rep1, _Rep2>,
+        typename _Period1::type,
+        typename _Period2::type>
+    { };
+
+
+  template<typename _Rep, typename _Period>
+    struct common_type<chrono::duration<_Rep, _Period>,
+         chrono::duration<_Rep, _Period>>
+    {
+      using type = chrono::duration<typename common_type<_Rep>::type,
+        typename _Period::type>;
+    };
+
+
+  template<typename _Rep, typename _Period>
+    struct common_type<chrono::duration<_Rep, _Period>>
+    {
+      using type = chrono::duration<typename common_type<_Rep>::type,
+        typename _Period::type>;
+    };
+
+
+
+
+
+
+  template<typename _CT, typename _Clock, typename = void>
+    struct __timepoint_common_type
+    { };
+
+  template<typename _CT, typename _Clock>
+    struct __timepoint_common_type<_CT, _Clock, __void_t<typename _CT::type>>
+    {
+      using type = chrono::time_point<_Clock, typename _CT::type>;
+    };
+
+
+
+
+
+
+
+  template<typename _Clock, typename _Duration1, typename _Duration2>
+    struct common_type<chrono::time_point<_Clock, _Duration1>,
+         chrono::time_point<_Clock, _Duration2>>
+    : __timepoint_common_type<common_type<_Duration1, _Duration2>, _Clock>
+    { };
+
+
+  template<typename _Clock, typename _Duration>
+    struct common_type<chrono::time_point<_Clock, _Duration>,
+         chrono::time_point<_Clock, _Duration>>
+    { using type = chrono::time_point<_Clock, _Duration>; };
+
+
+  template<typename _Clock, typename _Duration>
+    struct common_type<chrono::time_point<_Clock, _Duration>>
+    { using type = chrono::time_point<_Clock, _Duration>; };
+
+
+
+
+  namespace chrono
+  {
+
+
+
+
+
+
+    template<typename _ToDur, typename _CF, typename _CR,
+      bool _NumIsOne = false, bool _DenIsOne = false>
+      struct __duration_cast_impl
+      {
+ template<typename _Rep, typename _Period>
+   static constexpr _ToDur
+   __cast(const duration<_Rep, _Period>& __d)
+   {
+     typedef typename _ToDur::rep __to_rep;
+     return _ToDur(static_cast<__to_rep>(static_cast<_CR>(__d.count())
+       * static_cast<_CR>(_CF::num)
+       / static_cast<_CR>(_CF::den)));
+   }
+      };
+
+    template<typename _ToDur, typename _CF, typename _CR>
+      struct __duration_cast_impl<_ToDur, _CF, _CR, true, true>
+      {
+ template<typename _Rep, typename _Period>
+   static constexpr _ToDur
+   __cast(const duration<_Rep, _Period>& __d)
+   {
+     typedef typename _ToDur::rep __to_rep;
+     return _ToDur(static_cast<__to_rep>(__d.count()));
+   }
+      };
+
+    template<typename _ToDur, typename _CF, typename _CR>
+      struct __duration_cast_impl<_ToDur, _CF, _CR, true, false>
+      {
+ template<typename _Rep, typename _Period>
+   static constexpr _ToDur
+   __cast(const duration<_Rep, _Period>& __d)
+   {
+     typedef typename _ToDur::rep __to_rep;
+     return _ToDur(static_cast<__to_rep>(
+       static_cast<_CR>(__d.count()) / static_cast<_CR>(_CF::den)));
+   }
+      };
+
+    template<typename _ToDur, typename _CF, typename _CR>
+      struct __duration_cast_impl<_ToDur, _CF, _CR, false, true>
+      {
+ template<typename _Rep, typename _Period>
+   static constexpr _ToDur
+   __cast(const duration<_Rep, _Period>& __d)
+   {
+     typedef typename _ToDur::rep __to_rep;
+     return _ToDur(static_cast<__to_rep>(
+       static_cast<_CR>(__d.count()) * static_cast<_CR>(_CF::num)));
+   }
+      };
+
+    template<typename _Tp>
+      struct __is_duration
+      : std::false_type
+      { };
+
+    template<typename _Rep, typename _Period>
+      struct __is_duration<duration<_Rep, _Period>>
+      : std::true_type
+      { };
+
+    template<typename _Tp>
+      using __enable_if_is_duration
+ = typename enable_if<__is_duration<_Tp>::value, _Tp>::type;
+
+    template<typename _Tp>
+      using __disable_if_is_duration
+ = typename enable_if<!__is_duration<_Tp>::value, _Tp>::type;
+
+
+    template<typename _Tp>
+      inline constexpr bool __is_duration_v = false;
+    template<typename _Rep, typename _Period>
+      inline constexpr bool __is_duration_v<duration<_Rep, _Period>> = true;
+    template<typename _Tp>
+      inline constexpr bool __is_time_point_v = false;
+    template<typename _Clock, typename _Dur>
+      inline constexpr bool __is_time_point_v<time_point<_Clock, _Dur>> = true;
+# 272 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _ToDur, typename _Rep, typename _Period>
+      [[__nodiscard__]]
+      constexpr __enable_if_is_duration<_ToDur>
+      duration_cast(const duration<_Rep, _Period>& __d)
+      {
+
+ if constexpr (is_same_v<_ToDur, duration<_Rep, _Period>>)
+   return __d;
+ else
+   {
+
+   using __to_period = typename _ToDur::period;
+   using __to_rep = typename _ToDur::rep;
+   using __cf = ratio_divide<_Period, __to_period>;
+   using __cr = typename common_type<__to_rep, _Rep, intmax_t>::type;
+   using __dc = __duration_cast_impl<_ToDur, __cf, __cr,
+         __cf::num == 1, __cf::den == 1>;
+   return __dc::__cast(__d);
+
+   }
+
+      }
+# 306 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _Rep>
+      struct treat_as_floating_point
+      : is_floating_point<_Rep>
+      { };
+
+
+    template <typename _Rep>
+      inline constexpr bool treat_as_floating_point_v =
+ treat_as_floating_point<_Rep>::value;
+
+    template<>
+      inline constexpr bool treat_as_floating_point_v<int> = false;
+    template<>
+      inline constexpr bool treat_as_floating_point_v<long> = false;
+    template<>
+      inline constexpr bool treat_as_floating_point_v<long long> = false;
+    template<>
+      inline constexpr bool treat_as_floating_point_v<float> = true;
+    template<>
+      inline constexpr bool treat_as_floating_point_v<double> = true;
+    template<>
+      inline constexpr bool treat_as_floating_point_v<long double> = true;
+
+
+
+
+    template<typename _Tp>
+      inline constexpr bool is_clock_v = false;
+
+    template<typename _Tp>
+      requires requires {
+ typename _Tp::rep;
+ typename _Tp::period;
+ typename _Tp::duration;
+ typename _Tp::time_point::clock;
+ typename _Tp::time_point::duration;
+ { &_Tp::is_steady } -> same_as<const bool*>;
+ { _Tp::now() } -> same_as<typename _Tp::time_point>;
+ requires same_as<typename _Tp::duration,
+    duration<typename _Tp::rep, typename _Tp::period>>;
+ requires same_as<typename _Tp::time_point::duration,
+    typename _Tp::duration>;
+      }
+    inline constexpr bool is_clock_v<_Tp> = true;
+# 369 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _Tp>
+      struct is_clock
+      : bool_constant<is_clock_v<_Tp>>
+      { };
+# 386 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _ToDur, typename _Rep, typename _Period>
+      [[nodiscard]] constexpr __enable_if_is_duration<_ToDur>
+      floor(const duration<_Rep, _Period>& __d)
+      {
+ auto __to = chrono::duration_cast<_ToDur>(__d);
+ if (__to > __d)
+   return __to - _ToDur{1};
+ return __to;
+      }
+# 406 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _ToDur, typename _Rep, typename _Period>
+      [[nodiscard]] constexpr __enable_if_is_duration<_ToDur>
+      ceil(const duration<_Rep, _Period>& __d)
+      {
+ auto __to = chrono::duration_cast<_ToDur>(__d);
+ if (__to < __d)
+   return __to + _ToDur{1};
+ return __to;
+      }
+# 427 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template <typename _ToDur, typename _Rep, typename _Period>
+      [[nodiscard]] constexpr
+      enable_if_t<
+ __and_<__is_duration<_ToDur>,
+        __not_<treat_as_floating_point<typename _ToDur::rep>>>::value,
+ _ToDur>
+      round(const duration<_Rep, _Period>& __d)
+      {
+ _ToDur __t0 = chrono::floor<_ToDur>(__d);
+ _ToDur __t1 = __t0 + _ToDur{1};
+ auto __diff0 = __d - __t0;
+ auto __diff1 = __t1 - __d;
+ if (__diff0 == __diff1)
+   {
+     if (__t0.count() & 1)
+       return __t1;
+     return __t0;
+   }
+ else if (__diff0 < __diff1)
+   return __t0;
+ return __t1;
+      }
+
+
+
+
+
+
+
+    template<typename _Rep, typename _Period>
+      [[nodiscard]] constexpr
+      enable_if_t<numeric_limits<_Rep>::is_signed, duration<_Rep, _Period>>
+      abs(duration<_Rep, _Period> __d)
+      {
+ if (__d >= __d.zero())
+   return __d;
+ return -__d;
+      }
+
+
+    namespace __detail { using chrono::ceil; }
+# 494 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _Rep>
+      struct duration_values
+      {
+ static constexpr _Rep
+ zero() noexcept
+ { return _Rep(0); }
+
+ static constexpr _Rep
+ max() noexcept
+ { return numeric_limits<_Rep>::max(); }
+
+ static constexpr _Rep
+ min() noexcept
+ { return numeric_limits<_Rep>::lowest(); }
+      };
+
+    template<typename _Rep, typename _Period>
+      class duration
+      {
+ static_assert(!__is_duration<_Rep>::value,
+        "rep cannot be a std::chrono::duration");
+ static_assert(__is_ratio<_Period>::value,
+        "period must be a specialization of std::ratio");
+ static_assert(_Period::num > 0, "period must be positive");
+
+ template<typename _Rep2>
+   using __is_float = treat_as_floating_point<_Rep2>;
+
+ static constexpr intmax_t
+ _S_gcd(intmax_t __m, intmax_t __n) noexcept
+ {
+
+
+
+   do
+     {
+       intmax_t __rem = __m % __n;
+       __m = __n;
+       __n = __rem;
+     }
+   while (__n != 0);
+   return __m;
+
+
+
+
+
+ }
+
+
+
+
+
+ template<typename _R1, typename _R2,
+   intmax_t __gcd1 = _S_gcd(_R1::num, _R2::num),
+   intmax_t __gcd2 = _S_gcd(_R1::den, _R2::den)>
+   using __divide = ratio<(_R1::num / __gcd1) * (_R2::den / __gcd2),
+     (_R1::den / __gcd2) * (_R2::num / __gcd1)>;
+
+
+ template<typename _Period2>
+   using __is_harmonic
+     = __bool_constant<__divide<_Period2, _Period>::den == 1>;
+
+      public:
+
+ using rep = _Rep;
+ using period = typename _Period::type;
+
+
+ constexpr duration() = default;
+
+ duration(const duration&) = default;
+
+
+
+ template<typename _Rep2, typename = _Require<
+   is_convertible<const _Rep2&, rep>,
+   __or_<__is_float<rep>, __not_<__is_float<_Rep2>>>>>
+   constexpr explicit duration(const _Rep2& __rep)
+   : __r(static_cast<rep>(__rep)) { }
+
+ template<typename _Rep2, typename _Period2, typename = _Require<
+   is_convertible<const _Rep2&, rep>,
+   __or_<__is_float<rep>,
+         __and_<__is_harmonic<_Period2>,
+         __not_<__is_float<_Rep2>>>>>>
+   constexpr duration(const duration<_Rep2, _Period2>& __d)
+   : __r(duration_cast<duration>(__d).count()) { }
+
+ ~duration() = default;
+ duration& operator=(const duration&) = default;
+
+
+ constexpr rep
+ count() const
+ { return __r; }
+
+
+
+ constexpr duration<typename common_type<rep>::type, period>
+ operator+() const
+ { return duration<typename common_type<rep>::type, period>(__r); }
+
+ constexpr duration<typename common_type<rep>::type, period>
+ operator-() const
+ { return duration<typename common_type<rep>::type, period>(-__r); }
+
+ constexpr duration&
+ operator++()
+ {
+   ++__r;
+   return *this;
+ }
+
+ constexpr duration
+ operator++(int)
+ { return duration(__r++); }
+
+ constexpr duration&
+ operator--()
+ {
+   --__r;
+   return *this;
+ }
+
+ constexpr duration
+ operator--(int)
+ { return duration(__r--); }
+
+ constexpr duration&
+ operator+=(const duration& __d)
+ {
+   __r += __d.count();
+   return *this;
+ }
+
+ constexpr duration&
+ operator-=(const duration& __d)
+ {
+   __r -= __d.count();
+   return *this;
+ }
+
+ constexpr duration&
+ operator*=(const rep& __rhs)
+ {
+   __r *= __rhs;
+   return *this;
+ }
+
+ constexpr duration&
+ operator/=(const rep& __rhs)
+ {
+   __r /= __rhs;
+   return *this;
+ }
+
+
+ template<typename _Rep2 = rep>
+   constexpr
+   __enable_if_t<!treat_as_floating_point<_Rep2>::value, duration&>
+   operator%=(const rep& __rhs)
+   {
+     __r %= __rhs;
+     return *this;
+   }
+
+ template<typename _Rep2 = rep>
+   constexpr
+   __enable_if_t<!treat_as_floating_point<_Rep2>::value, duration&>
+   operator%=(const duration& __d)
+   {
+     __r %= __d.count();
+     return *this;
+   }
+
+
+ static constexpr duration
+ zero() noexcept
+ { return duration(duration_values<rep>::zero()); }
+
+ static constexpr duration
+ min() noexcept
+ { return duration(duration_values<rep>::min()); }
+
+ static constexpr duration
+ max() noexcept
+ { return duration(duration_values<rep>::max()); }
+
+      private:
+ rep __r;
+      };
+
+
+
+
+
+    template<typename _Rep1, typename _Period1,
+      typename _Rep2, typename _Period2>
+      constexpr typename common_type<duration<_Rep1, _Period1>,
+         duration<_Rep2, _Period2>>::type
+      operator+(const duration<_Rep1, _Period1>& __lhs,
+  const duration<_Rep2, _Period2>& __rhs)
+      {
+ typedef duration<_Rep1, _Period1> __dur1;
+ typedef duration<_Rep2, _Period2> __dur2;
+ typedef typename common_type<__dur1,__dur2>::type __cd;
+ return __cd(__cd(__lhs).count() + __cd(__rhs).count());
+      }
+
+
+    template<typename _Rep1, typename _Period1,
+      typename _Rep2, typename _Period2>
+      constexpr typename common_type<duration<_Rep1, _Period1>,
+         duration<_Rep2, _Period2>>::type
+      operator-(const duration<_Rep1, _Period1>& __lhs,
+  const duration<_Rep2, _Period2>& __rhs)
+      {
+ typedef duration<_Rep1, _Period1> __dur1;
+ typedef duration<_Rep2, _Period2> __dur2;
+ typedef typename common_type<__dur1,__dur2>::type __cd;
+ return __cd(__cd(__lhs).count() - __cd(__rhs).count());
+      }
+# 727 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _Rep1, typename _Rep2,
+      typename _CRep = typename common_type<_Rep1, _Rep2>::type>
+      using __common_rep_t = typename
+ enable_if<is_convertible<const _Rep2&, _CRep>::value, _CRep>::type;
+# 739 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _Rep1, typename _Period, typename _Rep2>
+      constexpr duration<__common_rep_t<_Rep1, _Rep2>, _Period>
+      operator*(const duration<_Rep1, _Period>& __d, const _Rep2& __s)
+      {
+ typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
+   __cd;
+ return __cd(__cd(__d).count() * __s);
+      }
+
+    template<typename _Rep1, typename _Rep2, typename _Period>
+      constexpr duration<__common_rep_t<_Rep2, _Rep1>, _Period>
+      operator*(const _Rep1& __s, const duration<_Rep2, _Period>& __d)
+      { return __d * __s; }
+
+    template<typename _Rep1, typename _Period, typename _Rep2>
+      constexpr
+      duration<__common_rep_t<_Rep1, __disable_if_is_duration<_Rep2>>, _Period>
+      operator/(const duration<_Rep1, _Period>& __d, const _Rep2& __s)
+      {
+ typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
+   __cd;
+ return __cd(__cd(__d).count() / __s);
+      }
+
+    template<typename _Rep1, typename _Period1,
+      typename _Rep2, typename _Period2>
+      constexpr typename common_type<_Rep1, _Rep2>::type
+      operator/(const duration<_Rep1, _Period1>& __lhs,
+  const duration<_Rep2, _Period2>& __rhs)
+      {
+ typedef duration<_Rep1, _Period1> __dur1;
+ typedef duration<_Rep2, _Period2> __dur2;
+ typedef typename common_type<__dur1,__dur2>::type __cd;
+ return __cd(__lhs).count() / __cd(__rhs).count();
+      }
+
+
+    template<typename _Rep1, typename _Period, typename _Rep2>
+      constexpr
+      duration<__common_rep_t<_Rep1, __disable_if_is_duration<_Rep2>>, _Period>
+      operator%(const duration<_Rep1, _Period>& __d, const _Rep2& __s)
+      {
+ typedef duration<typename common_type<_Rep1, _Rep2>::type, _Period>
+   __cd;
+ return __cd(__cd(__d).count() % __s);
+      }
+
+    template<typename _Rep1, typename _Period1,
+      typename _Rep2, typename _Period2>
+      constexpr typename common_type<duration<_Rep1, _Period1>,
+         duration<_Rep2, _Period2>>::type
+      operator%(const duration<_Rep1, _Period1>& __lhs,
+  const duration<_Rep2, _Period2>& __rhs)
+      {
+ typedef duration<_Rep1, _Period1> __dur1;
+ typedef duration<_Rep2, _Period2> __dur2;
+ typedef typename common_type<__dur1,__dur2>::type __cd;
+ return __cd(__cd(__lhs).count() % __cd(__rhs).count());
+      }
+# 807 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _Rep1, typename _Period1,
+      typename _Rep2, typename _Period2>
+      constexpr bool
+      operator==(const duration<_Rep1, _Period1>& __lhs,
+   const duration<_Rep2, _Period2>& __rhs)
+      {
+ typedef duration<_Rep1, _Period1> __dur1;
+ typedef duration<_Rep2, _Period2> __dur2;
+ typedef typename common_type<__dur1,__dur2>::type __ct;
+ return __ct(__lhs).count() == __ct(__rhs).count();
+      }
+
+    template<typename _Rep1, typename _Period1,
+      typename _Rep2, typename _Period2>
+      constexpr bool
+      operator<(const duration<_Rep1, _Period1>& __lhs,
+  const duration<_Rep2, _Period2>& __rhs)
+      {
+ typedef duration<_Rep1, _Period1> __dur1;
+ typedef duration<_Rep2, _Period2> __dur2;
+ typedef typename common_type<__dur1,__dur2>::type __ct;
+ return __ct(__lhs).count() < __ct(__rhs).count();
+      }
+
+
+    template<typename _Rep1, typename _Period1,
+      typename _Rep2, typename _Period2>
+      requires three_way_comparable<common_type_t<_Rep1, _Rep2>>
+      constexpr auto
+      operator<=>(const duration<_Rep1, _Period1>& __lhs,
+    const duration<_Rep2, _Period2>& __rhs)
+      {
+ using __ct = common_type_t<duration<_Rep1, _Period1>,
+       duration<_Rep2, _Period2>>;
+ return __ct(__lhs).count() <=> __ct(__rhs).count();
+      }
+# 852 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _Rep1, typename _Period1,
+      typename _Rep2, typename _Period2>
+      constexpr bool
+      operator<=(const duration<_Rep1, _Period1>& __lhs,
+   const duration<_Rep2, _Period2>& __rhs)
+      { return !(__rhs < __lhs); }
+
+    template<typename _Rep1, typename _Period1,
+      typename _Rep2, typename _Period2>
+      constexpr bool
+      operator>(const duration<_Rep1, _Period1>& __lhs,
+  const duration<_Rep2, _Period2>& __rhs)
+      { return __rhs < __lhs; }
+
+    template<typename _Rep1, typename _Period1,
+      typename _Rep2, typename _Period2>
+      constexpr bool
+      operator>=(const duration<_Rep1, _Period1>& __lhs,
+   const duration<_Rep2, _Period2>& __rhs)
+      { return !(__lhs < __rhs); }
+# 888 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    using nanoseconds = duration<int64_t, nano>;
+
+
+    using microseconds = duration<int64_t, micro>;
+
+
+    using milliseconds = duration<int64_t, milli>;
+
+
+    using seconds = duration<int64_t>;
+
+
+    using minutes = duration<int64_t, ratio< 60>>;
+
+
+    using hours = duration<int64_t, ratio<3600>>;
+
+
+
+    using days = duration<int64_t, ratio<86400>>;
+
+
+    using weeks = duration<int64_t, ratio<604800>>;
+
+
+    using years = duration<int64_t, ratio<31556952>>;
+
+
+    using months = duration<int64_t, ratio<2629746>>;
+
+
+
+
+    template<typename _Clock, typename _Dur>
+      class time_point
+      {
+ static_assert(__is_duration<_Dur>::value,
+     "duration must be a specialization of std::chrono::duration");
+
+      public:
+ typedef _Clock clock;
+ typedef _Dur duration;
+ typedef typename duration::rep rep;
+ typedef typename duration::period period;
+
+ constexpr time_point() : __d(duration::zero())
+ { }
+
+ constexpr explicit time_point(const duration& __dur)
+ : __d(__dur)
+ { }
+
+
+ template<typename _Dur2,
+   typename = _Require<is_convertible<_Dur2, _Dur>>>
+   constexpr time_point(const time_point<clock, _Dur2>& __t)
+   : __d(__t.time_since_epoch())
+   { }
+
+
+ constexpr duration
+ time_since_epoch() const
+ { return __d; }
+
+
+ constexpr time_point&
+ operator++()
+ {
+   ++__d;
+   return *this;
+ }
+
+ constexpr time_point
+ operator++(int)
+ { return time_point{__d++}; }
+
+ constexpr time_point&
+ operator--()
+ {
+   --__d;
+   return *this;
+ }
+
+ constexpr time_point
+ operator--(int)
+ { return time_point{__d--}; }
+
+
+
+ constexpr time_point&
+ operator+=(const duration& __dur)
+ {
+   __d += __dur;
+   return *this;
+ }
+
+ constexpr time_point&
+ operator-=(const duration& __dur)
+ {
+   __d -= __dur;
+   return *this;
+ }
+
+
+ static constexpr time_point
+ min() noexcept
+ { return time_point(duration::min()); }
+
+ static constexpr time_point
+ max() noexcept
+ { return time_point(duration::max()); }
+
+      private:
+ duration __d;
+      };
+# 1016 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _ToDur, typename _Clock, typename _Dur>
+      [[__nodiscard__]] constexpr
+      __enable_if_t<__is_duration<_ToDur>::value, time_point<_Clock, _ToDur>>
+      time_point_cast(const time_point<_Clock, _Dur>& __t)
+      {
+ typedef time_point<_Clock, _ToDur> __time_point;
+ return __time_point(duration_cast<_ToDur>(__t.time_since_epoch()));
+      }
+# 1038 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _ToDur, typename _Clock, typename _Dur>
+      [[nodiscard]] constexpr
+      enable_if_t<__is_duration_v<_ToDur>, time_point<_Clock, _ToDur>>
+      floor(const time_point<_Clock, _Dur>& __tp)
+      {
+ return time_point<_Clock, _ToDur>{
+     chrono::floor<_ToDur>(__tp.time_since_epoch())};
+      }
+# 1059 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _ToDur, typename _Clock, typename _Dur>
+      [[nodiscard]] constexpr
+      enable_if_t<__is_duration_v<_ToDur>, time_point<_Clock, _ToDur>>
+      ceil(const time_point<_Clock, _Dur>& __tp)
+      {
+ return time_point<_Clock, _ToDur>{
+     chrono::ceil<_ToDur>(__tp.time_since_epoch())};
+      }
+# 1081 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _ToDur, typename _Clock, typename _Dur>
+      [[nodiscard]] constexpr
+      enable_if_t<__is_duration_v<_ToDur>
+      && !treat_as_floating_point_v<typename _ToDur::rep>,
+    time_point<_Clock, _ToDur>>
+      round(const time_point<_Clock, _Dur>& __tp)
+      {
+ return time_point<_Clock, _ToDur>{
+     chrono::round<_ToDur>(__tp.time_since_epoch())};
+      }
+
+
+
+
+
+
+    template<typename _Clock, typename _Dur1,
+      typename _Rep2, typename _Period2>
+      constexpr time_point<_Clock,
+ typename common_type<_Dur1, duration<_Rep2, _Period2>>::type>
+      operator+(const time_point<_Clock, _Dur1>& __lhs,
+  const duration<_Rep2, _Period2>& __rhs)
+      {
+ typedef duration<_Rep2, _Period2> __dur2;
+ typedef typename common_type<_Dur1,__dur2>::type __ct;
+ typedef time_point<_Clock, __ct> __time_point;
+ return __time_point(__lhs.time_since_epoch() + __rhs);
+      }
+
+
+    template<typename _Rep1, typename _Period1,
+      typename _Clock, typename _Dur2>
+      constexpr time_point<_Clock,
+ typename common_type<duration<_Rep1, _Period1>, _Dur2>::type>
+      operator+(const duration<_Rep1, _Period1>& __lhs,
+  const time_point<_Clock, _Dur2>& __rhs)
+      {
+ typedef duration<_Rep1, _Period1> __dur1;
+ typedef typename common_type<__dur1,_Dur2>::type __ct;
+ typedef time_point<_Clock, __ct> __time_point;
+ return __time_point(__rhs.time_since_epoch() + __lhs);
+      }
+
+
+    template<typename _Clock, typename _Dur1,
+      typename _Rep2, typename _Period2>
+      constexpr time_point<_Clock,
+ typename common_type<_Dur1, duration<_Rep2, _Period2>>::type>
+      operator-(const time_point<_Clock, _Dur1>& __lhs,
+  const duration<_Rep2, _Period2>& __rhs)
+      {
+ typedef duration<_Rep2, _Period2> __dur2;
+ typedef typename common_type<_Dur1,__dur2>::type __ct;
+ typedef time_point<_Clock, __ct> __time_point;
+ return __time_point(__lhs.time_since_epoch() -__rhs);
+      }
+
+
+    template<typename _Clock, typename _Dur1, typename _Dur2>
+      constexpr typename common_type<_Dur1, _Dur2>::type
+      operator-(const time_point<_Clock, _Dur1>& __lhs,
+  const time_point<_Clock, _Dur2>& __rhs)
+      { return __lhs.time_since_epoch() - __rhs.time_since_epoch(); }
+
+
+
+
+
+
+
+    template<typename _Clock, typename _Dur1, typename _Dur2>
+      constexpr bool
+      operator==(const time_point<_Clock, _Dur1>& __lhs,
+   const time_point<_Clock, _Dur2>& __rhs)
+      { return __lhs.time_since_epoch() == __rhs.time_since_epoch(); }
+
+
+    template<typename _Clock, typename _Dur1,
+      three_way_comparable_with<_Dur1> _Dur2>
+      constexpr auto
+      operator<=>(const time_point<_Clock, _Dur1>& __lhs,
+    const time_point<_Clock, _Dur2>& __rhs)
+      { return __lhs.time_since_epoch() <=> __rhs.time_since_epoch(); }
+# 1172 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    template<typename _Clock, typename _Dur1, typename _Dur2>
+      constexpr bool
+      operator<(const time_point<_Clock, _Dur1>& __lhs,
+  const time_point<_Clock, _Dur2>& __rhs)
+      { return __lhs.time_since_epoch() < __rhs.time_since_epoch(); }
+
+    template<typename _Clock, typename _Dur1, typename _Dur2>
+      constexpr bool
+      operator<=(const time_point<_Clock, _Dur1>& __lhs,
+   const time_point<_Clock, _Dur2>& __rhs)
+      { return !(__rhs < __lhs); }
+
+    template<typename _Clock, typename _Dur1, typename _Dur2>
+      constexpr bool
+      operator>(const time_point<_Clock, _Dur1>& __lhs,
+  const time_point<_Clock, _Dur2>& __rhs)
+      { return __rhs < __lhs; }
+
+    template<typename _Clock, typename _Dur1, typename _Dur2>
+      constexpr bool
+      operator>=(const time_point<_Clock, _Dur1>& __lhs,
+   const time_point<_Clock, _Dur2>& __rhs)
+      { return !(__lhs < __rhs); }
+# 1217 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+inline namespace _V2 {
+
+
+
+
+
+
+
+    struct system_clock
+    {
+      typedef chrono::nanoseconds duration;
+      typedef duration::rep rep;
+      typedef duration::period period;
+      typedef chrono::time_point<system_clock, duration> time_point;
+
+      static_assert(system_clock::duration::min()
+      < system_clock::duration::zero(),
+      "a clock's minimum duration cannot be less than its epoch");
+
+      static constexpr bool is_steady = false;
+
+      static time_point
+      now() noexcept;
+
+
+      static std::time_t
+      to_time_t(const time_point& __t) noexcept
+      {
+ return std::time_t(duration_cast<chrono::seconds>
+      (__t.time_since_epoch()).count());
+      }
+
+      static time_point
+      from_time_t(std::time_t __t) noexcept
+      {
+ typedef chrono::time_point<system_clock, seconds> __from;
+ return time_point_cast<system_clock::duration>
+        (__from(chrono::seconds(__t)));
+      }
+    };
+# 1265 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    struct steady_clock
+    {
+      typedef chrono::nanoseconds duration;
+      typedef duration::rep rep;
+      typedef duration::period period;
+      typedef chrono::time_point<steady_clock, duration> time_point;
+
+      static constexpr bool is_steady = true;
+
+      static time_point
+      now() noexcept;
+    };
+# 1287 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+    using high_resolution_clock = system_clock;
+
+}
+
+
+
+
+    template<typename _Duration>
+      using sys_time = time_point<system_clock, _Duration>;
+    using sys_seconds = sys_time<seconds>;
+    using sys_days = sys_time<days>;
+
+    using file_clock = ::std::filesystem::__file_clock;
+
+    template<typename _Duration>
+      using file_time = time_point<file_clock, _Duration>;
+
+    template<> struct is_clock<system_clock> : true_type { };
+    template<> struct is_clock<steady_clock> : true_type { };
+    template<> struct is_clock<file_clock> : true_type { };
+
+    template<> inline constexpr bool is_clock_v<system_clock> = true;
+    template<> inline constexpr bool is_clock_v<steady_clock> = true;
+    template<> inline constexpr bool is_clock_v<file_clock> = true;
+
+
+  }
+
+
+  inline namespace literals
+  {
+# 1342 "/usr/include/c++/14.2.1/bits/chrono.h" 3
+  inline namespace chrono_literals
+  {
+
+
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wliteral-suffix"
+
+    template<typename _Dur, char... _Digits>
+      constexpr _Dur __check_overflow()
+      {
+ using _Val = __parse_int::_Parse_int<_Digits...>;
+ constexpr typename _Dur::rep __repval = _Val::value;
+ static_assert(__repval >= 0 && __repval == _Val::value,
+        "literal value cannot be represented by duration type");
+ return _Dur(__repval);
+      }
+
+
+
+    constexpr chrono::duration<long double, ratio<3600,1>>
+    operator""h(long double __hours)
+    { return chrono::duration<long double, ratio<3600,1>>{__hours}; }
+
+
+    template <char... _Digits>
+      constexpr chrono::hours
+      operator""h()
+      { return __check_overflow<chrono::hours, _Digits...>(); }
+
+
+    constexpr chrono::duration<long double, ratio<60,1>>
+    operator""min(long double __mins)
+    { return chrono::duration<long double, ratio<60,1>>{__mins}; }
+
+
+    template <char... _Digits>
+      constexpr chrono::minutes
+      operator""min()
+      { return __check_overflow<chrono::minutes, _Digits...>(); }
+
+
+    constexpr chrono::duration<long double>
+    operator""s(long double __secs)
+    { return chrono::duration<long double>{__secs}; }
+
+
+    template <char... _Digits>
+      constexpr chrono::seconds
+      operator""s()
+      { return __check_overflow<chrono::seconds, _Digits...>(); }
+
+
+    constexpr chrono::duration<long double, milli>
+    operator""ms(long double __msecs)
+    { return chrono::duration<long double, milli>{__msecs}; }
+
+
+    template <char... _Digits>
+      constexpr chrono::milliseconds
+      operator""ms()
+      { return __check_overflow<chrono::milliseconds, _Digits...>(); }
+
+
+    constexpr chrono::duration<long double, micro>
+    operator""us(long double __usecs)
+    { return chrono::duration<long double, micro>{__usecs}; }
+
+
+    template <char... _Digits>
+      constexpr chrono::microseconds
+      operator""us()
+      { return __check_overflow<chrono::microseconds, _Digits...>(); }
+
+
+    constexpr chrono::duration<long double, nano>
+    operator""ns(long double __nsecs)
+    { return chrono::duration<long double, nano>{__nsecs}; }
+
+
+    template <char... _Digits>
+      constexpr chrono::nanoseconds
+      operator""ns()
+      { return __check_overflow<chrono::nanoseconds, _Digits...>(); }
+
+#pragma GCC diagnostic pop
+
+  }
+  }
+
+  namespace chrono
+  {
+    using namespace literals::chrono_literals;
+  }
+
+
+
+  namespace filesystem
+  {
+    struct __file_clock
+    {
+      using duration = chrono::nanoseconds;
+      using rep = duration::rep;
+      using period = duration::period;
+      using time_point = chrono::time_point<__file_clock>;
+      static constexpr bool is_steady = false;
+
+      static time_point
+      now() noexcept
+      { return _S_from_sys(chrono::system_clock::now()); }
+
+
+      template<typename _Dur>
+ static
+ chrono::file_time<common_type_t<_Dur, chrono::seconds>>
+ from_sys(const chrono::sys_time<_Dur>& __t) noexcept
+ { return _S_from_sys(__t); }
+
+
+      template<typename _Dur>
+ static
+ chrono::sys_time<common_type_t<_Dur, chrono::seconds>>
+ to_sys(const chrono::file_time<_Dur>& __t) noexcept
+ { return _S_to_sys(__t); }
+
+
+    private:
+      using __sys_clock = chrono::system_clock;
+
+
+
+
+      static constexpr chrono::seconds _S_epoch_diff{6437664000};
+
+    protected:
+
+      template<typename _Dur>
+ static
+ chrono::time_point<__file_clock, common_type_t<_Dur, chrono::seconds>>
+ _S_from_sys(const chrono::time_point<__sys_clock, _Dur>& __t) noexcept
+ {
+   using _CDur = common_type_t<_Dur, chrono::seconds>;
+   using __file_time = chrono::time_point<__file_clock, _CDur>;
+   return __file_time{__t.time_since_epoch()} - _S_epoch_diff;
+ }
+
+
+      template<typename _Dur>
+ static
+ chrono::time_point<__sys_clock, common_type_t<_Dur, chrono::seconds>>
+ _S_to_sys(const chrono::time_point<__file_clock, _Dur>& __t) noexcept
+ {
+   using _CDur = common_type_t<_Dur, chrono::seconds>;
+   using __sys_time = chrono::time_point<__sys_clock, _CDur>;
+   return __sys_time{__t.time_since_epoch()} + _S_epoch_diff;
+ }
+    };
+  }
+
+
+
+}
+# 42 "/usr/include/c++/14.2.1/chrono" 2 3
+
+
+
+# 1 "/usr/include/c++/14.2.1/sstream" 1 3
+# 36 "/usr/include/c++/14.2.1/sstream" 3
+       
+# 37 "/usr/include/c++/14.2.1/sstream" 3
+# 55 "/usr/include/c++/14.2.1/sstream" 3
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+namespace __cxx11 {
+# 78 "/usr/include/c++/14.2.1/sstream" 3
+  template<typename _CharT, typename _Traits, typename _Alloc>
+    class basic_stringbuf : public basic_streambuf<_CharT, _Traits>
+    {
+      struct __xfer_bufptrs;
+
+
+      using allocator_traits = std::allocator_traits<_Alloc>;
+      using _Noexcept_swap
+ = __or_<typename allocator_traits::propagate_on_container_swap,
+  typename allocator_traits::is_always_equal>;
+
+
+    public:
+
+      typedef _CharT char_type;
+      typedef _Traits traits_type;
+
+
+      typedef _Alloc allocator_type;
+      typedef typename traits_type::int_type int_type;
+      typedef typename traits_type::pos_type pos_type;
+      typedef typename traits_type::off_type off_type;
+
+      typedef basic_streambuf<char_type, traits_type> __streambuf_type;
+      typedef basic_string<char_type, _Traits, _Alloc> __string_type;
+      typedef typename __string_type::size_type __size_type;
+
+    protected:
+
+      ios_base::openmode _M_mode;
+
+
+      __string_type _M_string;
+
+    public:
+# 121 "/usr/include/c++/14.2.1/sstream" 3
+      basic_stringbuf()
+      : __streambuf_type(), _M_mode(ios_base::in | ios_base::out), _M_string()
+      { }
+# 132 "/usr/include/c++/14.2.1/sstream" 3
+      explicit
+      basic_stringbuf(ios_base::openmode __mode)
+      : __streambuf_type(), _M_mode(__mode), _M_string()
+      { }
+# 145 "/usr/include/c++/14.2.1/sstream" 3
+      explicit
+      basic_stringbuf(const __string_type& __str,
+        ios_base::openmode __mode = ios_base::in | ios_base::out)
+      : __streambuf_type(), _M_mode(),
+ _M_string(__str.data(), __str.size(), __str.get_allocator())
+      { _M_stringbuf_init(__mode); }
+
+
+      basic_stringbuf(const basic_stringbuf&) = delete;
+
+      basic_stringbuf(basic_stringbuf&& __rhs)
+      : basic_stringbuf(std::move(__rhs), __xfer_bufptrs(__rhs, this))
+      { __rhs._M_sync(const_cast<char_type*>(__rhs._M_string.data()), 0, 0); }
+
+
+      explicit
+      basic_stringbuf(const allocator_type& __a)
+      : basic_stringbuf(ios_base::in | std::ios_base::out, __a)
+      { }
+
+      basic_stringbuf(ios_base::openmode __mode,
+        const allocator_type& __a)
+      : __streambuf_type(), _M_mode(__mode), _M_string(__a)
+      { }
+
+      explicit
+      basic_stringbuf(__string_type&& __s,
+        ios_base::openmode __mode = ios_base::in
+        | ios_base::out)
+      : __streambuf_type(), _M_mode(__mode), _M_string(std::move(__s))
+      { _M_stringbuf_init(__mode); }
+
+      template<typename _SAlloc>
+ basic_stringbuf(const basic_string<_CharT, _Traits, _SAlloc>& __s,
+   const allocator_type& __a)
+ : basic_stringbuf(__s, ios_base::in | std::ios_base::out, __a)
+ { }
+
+      template<typename _SAlloc>
+ basic_stringbuf(const basic_string<_CharT, _Traits, _SAlloc>& __s,
+   ios_base::openmode __mode,
+   const allocator_type& __a)
+ : __streambuf_type(), _M_mode(__mode),
+   _M_string(__s.data(), __s.size(), __a)
+ { _M_stringbuf_init(__mode); }
+
+      template<typename _SAlloc>
+ explicit
+ basic_stringbuf(const basic_string<_CharT, _Traits, _SAlloc>& __s,
+   ios_base::openmode __mode = ios_base::in
+          | ios_base::out)
+ : basic_stringbuf(__s, __mode, allocator_type{})
+ { }
+
+      basic_stringbuf(basic_stringbuf&& __rhs, const allocator_type& __a)
+      : basic_stringbuf(std::move(__rhs), __a, __xfer_bufptrs(__rhs, this))
+      { __rhs._M_sync(const_cast<char_type*>(__rhs._M_string.data()), 0, 0); }
+
+      allocator_type get_allocator() const noexcept
+      { return _M_string.get_allocator(); }
+
+
+
+
+      basic_stringbuf&
+      operator=(const basic_stringbuf&) = delete;
+
+      basic_stringbuf&
+      operator=(basic_stringbuf&& __rhs)
+      {
+ __xfer_bufptrs __st{__rhs, this};
+ const __streambuf_type& __base = __rhs;
+ __streambuf_type::operator=(__base);
+ this->pubimbue(__rhs.getloc());
+ _M_mode = __rhs._M_mode;
+ _M_string = std::move(__rhs._M_string);
+ __rhs._M_sync(const_cast<char_type*>(__rhs._M_string.data()), 0, 0);
+ return *this;
+      }
+
+      void
+      swap(basic_stringbuf& __rhs) noexcept(_Noexcept_swap::value)
+      {
+ __xfer_bufptrs __l_st{*this, std::__addressof(__rhs)};
+ __xfer_bufptrs __r_st{__rhs, this};
+ __streambuf_type& __base = __rhs;
+ __streambuf_type::swap(__base);
+ __rhs.pubimbue(this->pubimbue(__rhs.getloc()));
+ std::swap(_M_mode, __rhs._M_mode);
+ std::swap(_M_string, __rhs._M_string);
+      }
+# 248 "/usr/include/c++/14.2.1/sstream" 3
+      __string_type
+      str() const &
+      {
+ __string_type __ret(_M_string.get_allocator());
+ if (char_type* __hi = _M_high_mark())
+   __ret.assign(this->pbase(), __hi);
+ else
+   __ret = _M_string;
+ return __ret;
+      }
+
+
+
+
+      template<__allocator_like _SAlloc>
+ basic_string<_CharT, _Traits, _SAlloc>
+ str(const _SAlloc& __sa) const
+ {
+   auto __sv = view();
+   return { __sv.data(), __sv.size(), __sa };
+ }
+
+
+      __string_type
+      str() &&
+      {
+ if (char_type* __hi = _M_high_mark())
+   {
+
+     _M_string._M_set_length(_M_high_mark() - this->pbase());
+   }
+ auto __str = std::move(_M_string);
+ _M_string.clear();
+ _M_sync(_M_string.data(), 0, 0);
+ return __str;
+      }
+
+
+     
+      basic_string_view<char_type, traits_type>
+      view() const noexcept
+      {
+ if (char_type* __hi = _M_high_mark())
+   return { this->pbase(), __hi };
+ else
+   return _M_string;
+      }
+# 304 "/usr/include/c++/14.2.1/sstream" 3
+      void
+      str(const __string_type& __s)
+      {
+
+
+ _M_string.assign(__s.data(), __s.size());
+ _M_stringbuf_init(_M_mode);
+      }
+
+
+
+      template<__allocator_like _SAlloc>
+ requires (!is_same_v<_SAlloc, _Alloc>)
+ void
+ str(const basic_string<_CharT, _Traits, _SAlloc>& __s)
+ {
+   _M_string.assign(__s.data(), __s.size());
+   _M_stringbuf_init(_M_mode);
+ }
+
+
+      void
+      str(__string_type&& __s)
+      {
+ _M_string = std::move(__s);
+ _M_stringbuf_init(_M_mode);
+      }
+
+
+    protected:
+
+      void
+      _M_stringbuf_init(ios_base::openmode __mode)
+      {
+ _M_mode = __mode;
+ __size_type __len = 0;
+ if (_M_mode & (ios_base::ate | ios_base::app))
+   __len = _M_string.size();
+ _M_sync(const_cast<char_type*>(_M_string.data()), 0, __len);
+      }
+
+      virtual streamsize
+      showmanyc()
+      {
+ streamsize __ret = -1;
+ if (_M_mode & ios_base::in)
+   {
+     _M_update_egptr();
+     __ret = this->egptr() - this->gptr();
+   }
+ return __ret;
+      }
+
+      virtual int_type
+      underflow();
+
+      virtual int_type
+      pbackfail(int_type __c = traits_type::eof());
+
+      virtual int_type
+      overflow(int_type __c = traits_type::eof());
+# 377 "/usr/include/c++/14.2.1/sstream" 3
+      virtual __streambuf_type*
+      setbuf(char_type* __s, streamsize __n)
+      {
+ if (__s && __n >= 0)
+   {
+
+
+
+
+
+
+     _M_string.clear();
+
+
+     _M_sync(__s, __n, 0);
+   }
+ return this;
+      }
+
+      virtual pos_type
+      seekoff(off_type __off, ios_base::seekdir __way,
+       ios_base::openmode __mode = ios_base::in | ios_base::out);
+
+      virtual pos_type
+      seekpos(pos_type __sp,
+       ios_base::openmode __mode = ios_base::in | ios_base::out);
+
+
+
+
+      void
+      _M_sync(char_type* __base, __size_type __i, __size_type __o);
+
+
+
+      void
+      _M_update_egptr()
+      {
+ if (char_type* __pptr = this->pptr())
+   {
+     char_type* __egptr = this->egptr();
+     if (!__egptr || __pptr > __egptr)
+       {
+  if (_M_mode & ios_base::in)
+    this->setg(this->eback(), this->gptr(), __pptr);
+  else
+    this->setg(__pptr, __pptr, __pptr);
+       }
+   }
+      }
+
+
+
+      void
+      _M_pbump(char_type* __pbeg, char_type* __pend, off_type __off);
+
+    private:
+
+
+
+
+      __attribute__((__always_inline__))
+      char_type*
+      _M_high_mark() const noexcept
+      {
+ if (char_type* __pptr = this->pptr())
+   {
+     char_type* __egptr = this->egptr();
+     if (!__egptr || __pptr > __egptr)
+       return __pptr;
+     else
+       return __egptr;
+   }
+ return 0;
+      }
+
+
+
+
+
+      struct __xfer_bufptrs
+      {
+ __xfer_bufptrs(const basic_stringbuf& __from, basic_stringbuf* __to)
+ : _M_to{__to}, _M_goff{-1, -1, -1}, _M_poff{-1, -1, -1}
+ {
+   const _CharT* const __str = __from._M_string.data();
+   const _CharT* __end = nullptr;
+   if (__from.eback())
+     {
+       _M_goff[0] = __from.eback() - __str;
+       _M_goff[1] = __from.gptr() - __str;
+       _M_goff[2] = __from.egptr() - __str;
+       __end = __from.egptr();
+     }
+   if (__from.pbase())
+     {
+       _M_poff[0] = __from.pbase() - __str;
+       _M_poff[1] = __from.pptr() - __from.pbase();
+       _M_poff[2] = __from.epptr() - __str;
+       if (!__end || __from.pptr() > __end)
+  __end = __from.pptr();
+     }
+
+
+   if (__end)
+     {
+
+
+       auto& __mut_from = const_cast<basic_stringbuf&>(__from);
+       __mut_from._M_string._M_length(__end - __str);
+     }
+ }
+
+ ~__xfer_bufptrs()
+ {
+   char_type* __str = const_cast<char_type*>(_M_to->_M_string.data());
+   if (_M_goff[0] != -1)
+     _M_to->setg(__str+_M_goff[0], __str+_M_goff[1], __str+_M_goff[2]);
+   if (_M_poff[0] != -1)
+     _M_to->_M_pbump(__str+_M_poff[0], __str+_M_poff[2], _M_poff[1]);
+ }
+
+ basic_stringbuf* _M_to;
+ off_type _M_goff[3];
+ off_type _M_poff[3];
+      };
+# 513 "/usr/include/c++/14.2.1/sstream" 3
+      basic_stringbuf(basic_stringbuf&& __rhs, __xfer_bufptrs&&)
+      : __streambuf_type(static_cast<const __streambuf_type&>(__rhs)),
+      _M_mode(__rhs._M_mode), _M_string(std::move(__rhs._M_string))
+      { }
+
+
+
+
+      basic_stringbuf(basic_stringbuf&& __rhs, const allocator_type& __a,
+        __xfer_bufptrs&&)
+      : __streambuf_type(static_cast<const __streambuf_type&>(__rhs)),
+      _M_mode(__rhs._M_mode), _M_string(std::move(__rhs._M_string), __a)
+      { }
+
+
+    };
+# 546 "/usr/include/c++/14.2.1/sstream" 3
+  template<typename _CharT, typename _Traits, typename _Alloc>
+    class basic_istringstream : public basic_istream<_CharT, _Traits>
+    {
+    public:
+
+      typedef _CharT char_type;
+      typedef _Traits traits_type;
+
+
+      typedef _Alloc allocator_type;
+      typedef typename traits_type::int_type int_type;
+      typedef typename traits_type::pos_type pos_type;
+      typedef typename traits_type::off_type off_type;
+
+
+      typedef basic_string<_CharT, _Traits, _Alloc> __string_type;
+      typedef basic_stringbuf<_CharT, _Traits, _Alloc> __stringbuf_type;
+      typedef basic_istream<char_type, traits_type> __istream_type;
+
+    private:
+      __stringbuf_type _M_stringbuf;
+
+    public:
+# 580 "/usr/include/c++/14.2.1/sstream" 3
+      basic_istringstream()
+      : __istream_type(), _M_stringbuf(ios_base::in)
+      { this->init(&_M_stringbuf); }
+# 596 "/usr/include/c++/14.2.1/sstream" 3
+      explicit
+      basic_istringstream(ios_base::openmode __mode)
+      : __istream_type(), _M_stringbuf(__mode | ios_base::in)
+      { this->init(&_M_stringbuf); }
+# 614 "/usr/include/c++/14.2.1/sstream" 3
+      explicit
+      basic_istringstream(const __string_type& __str,
+     ios_base::openmode __mode = ios_base::in)
+      : __istream_type(), _M_stringbuf(__str, __mode | ios_base::in)
+      { this->init(&_M_stringbuf); }
+
+
+
+
+
+
+
+      ~basic_istringstream()
+      { }
+
+
+      basic_istringstream(const basic_istringstream&) = delete;
+
+      basic_istringstream(basic_istringstream&& __rhs)
+      : __istream_type(std::move(__rhs)),
+      _M_stringbuf(std::move(__rhs._M_stringbuf))
+      { __istream_type::set_rdbuf(&_M_stringbuf); }
+
+
+      basic_istringstream(ios_base::openmode __mode, const allocator_type& __a)
+      : __istream_type(), _M_stringbuf(__mode | ios_base::in, __a)
+      { this->init(std::__addressof(_M_stringbuf)); }
+
+      explicit
+      basic_istringstream(__string_type&& __str,
+     ios_base::openmode __mode = ios_base::in)
+      : __istream_type(), _M_stringbuf(std::move(__str), __mode | ios_base::in)
+      { this->init(std::__addressof(_M_stringbuf)); }
+
+      template<typename _SAlloc>
+ basic_istringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
+       const allocator_type& __a)
+ : basic_istringstream(__str, ios_base::in, __a)
+ { }
+
+      template<typename _SAlloc>
+ basic_istringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
+       ios_base::openmode __mode,
+       const allocator_type& __a)
+ : __istream_type(), _M_stringbuf(__str, __mode | ios_base::in, __a)
+ { this->init(std::__addressof(_M_stringbuf)); }
+
+      template<typename _SAlloc>
+ explicit
+ basic_istringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
+       ios_base::openmode __mode = ios_base::in)
+ : basic_istringstream(__str, __mode, allocator_type())
+ { }
+
+
+
+
+      basic_istringstream&
+      operator=(const basic_istringstream&) = delete;
+
+      basic_istringstream&
+      operator=(basic_istringstream&& __rhs)
+      {
+ __istream_type::operator=(std::move(__rhs));
+ _M_stringbuf = std::move(__rhs._M_stringbuf);
+ return *this;
+      }
+
+      void
+      swap(basic_istringstream& __rhs)
+      {
+ __istream_type::swap(__rhs);
+ _M_stringbuf.swap(__rhs._M_stringbuf);
+      }
+# 697 "/usr/include/c++/14.2.1/sstream" 3
+      __stringbuf_type*
+      rdbuf() const
+      { return const_cast<__stringbuf_type*>(&_M_stringbuf); }
+
+
+
+
+
+      __string_type
+      str() const &
+      { return _M_stringbuf.str(); }
+
+
+
+
+      template<__allocator_like _SAlloc>
+ basic_string<_CharT, _Traits, _SAlloc>
+ str(const _SAlloc& __sa) const
+ { return _M_stringbuf.str(__sa); }
+
+
+      __string_type
+      str() &&
+      { return std::move(_M_stringbuf).str(); }
+
+
+     
+      basic_string_view<char_type, traits_type>
+      view() const noexcept
+      { return _M_stringbuf.view(); }
+# 735 "/usr/include/c++/14.2.1/sstream" 3
+      void
+      str(const __string_type& __s)
+      { _M_stringbuf.str(__s); }
+
+
+
+      template<__allocator_like _SAlloc>
+ requires (!is_same_v<_SAlloc, _Alloc>)
+ void
+ str(const basic_string<_CharT, _Traits, _SAlloc>& __s)
+ { _M_stringbuf.str(__s); }
+
+
+      void
+      str(__string_type&& __s)
+      { _M_stringbuf.str(std::move(__s)); }
+
+    };
+# 770 "/usr/include/c++/14.2.1/sstream" 3
+  template <typename _CharT, typename _Traits, typename _Alloc>
+    class basic_ostringstream : public basic_ostream<_CharT, _Traits>
+    {
+    public:
+
+      typedef _CharT char_type;
+      typedef _Traits traits_type;
+
+
+      typedef _Alloc allocator_type;
+      typedef typename traits_type::int_type int_type;
+      typedef typename traits_type::pos_type pos_type;
+      typedef typename traits_type::off_type off_type;
+
+
+      typedef basic_string<_CharT, _Traits, _Alloc> __string_type;
+      typedef basic_stringbuf<_CharT, _Traits, _Alloc> __stringbuf_type;
+      typedef basic_ostream<char_type, traits_type> __ostream_type;
+
+    private:
+      __stringbuf_type _M_stringbuf;
+
+    public:
+# 804 "/usr/include/c++/14.2.1/sstream" 3
+      basic_ostringstream()
+      : __ostream_type(), _M_stringbuf(ios_base::out)
+      { this->init(&_M_stringbuf); }
+# 820 "/usr/include/c++/14.2.1/sstream" 3
+      explicit
+      basic_ostringstream(ios_base::openmode __mode)
+      : __ostream_type(), _M_stringbuf(__mode | ios_base::out)
+      { this->init(&_M_stringbuf); }
+# 838 "/usr/include/c++/14.2.1/sstream" 3
+      explicit
+      basic_ostringstream(const __string_type& __str,
+     ios_base::openmode __mode = ios_base::out)
+      : __ostream_type(), _M_stringbuf(__str, __mode | ios_base::out)
+      { this->init(&_M_stringbuf); }
+
+
+
+
+
+
+
+      ~basic_ostringstream()
+      { }
+
+
+      basic_ostringstream(const basic_ostringstream&) = delete;
+
+      basic_ostringstream(basic_ostringstream&& __rhs)
+      : __ostream_type(std::move(__rhs)),
+      _M_stringbuf(std::move(__rhs._M_stringbuf))
+      { __ostream_type::set_rdbuf(&_M_stringbuf); }
+
+
+      basic_ostringstream(ios_base::openmode __mode, const allocator_type& __a)
+      : __ostream_type(), _M_stringbuf(__mode | ios_base::out, __a)
+      { this->init(std::__addressof(_M_stringbuf)); }
+
+      explicit
+      basic_ostringstream(__string_type&& __str,
+     ios_base::openmode __mode = ios_base::out)
+      : __ostream_type(), _M_stringbuf(std::move(__str), __mode | ios_base::out)
+      { this->init(std::__addressof(_M_stringbuf)); }
+
+      template<typename _SAlloc>
+ basic_ostringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
+       const allocator_type& __a)
+ : basic_ostringstream(__str, ios_base::out, __a)
+ { }
+
+      template<typename _SAlloc>
+ basic_ostringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
+       ios_base::openmode __mode,
+       const allocator_type& __a)
+ : __ostream_type(), _M_stringbuf(__str, __mode | ios_base::out, __a)
+ { this->init(std::__addressof(_M_stringbuf)); }
+
+      template<typename _SAlloc>
+ explicit
+ basic_ostringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
+       ios_base::openmode __mode = ios_base::out)
+ : basic_ostringstream(__str, __mode, allocator_type())
+ { }
+
+
+
+
+      basic_ostringstream&
+      operator=(const basic_ostringstream&) = delete;
+
+      basic_ostringstream&
+      operator=(basic_ostringstream&& __rhs)
+      {
+ __ostream_type::operator=(std::move(__rhs));
+ _M_stringbuf = std::move(__rhs._M_stringbuf);
+ return *this;
+      }
+
+      void
+      swap(basic_ostringstream& __rhs)
+      {
+ __ostream_type::swap(__rhs);
+ _M_stringbuf.swap(__rhs._M_stringbuf);
+      }
+# 921 "/usr/include/c++/14.2.1/sstream" 3
+      __stringbuf_type*
+      rdbuf() const
+      { return const_cast<__stringbuf_type*>(&_M_stringbuf); }
+
+
+
+
+
+      __string_type
+      str() const &
+      { return _M_stringbuf.str(); }
+
+
+
+
+      template<__allocator_like _SAlloc>
+ basic_string<_CharT, _Traits, _SAlloc>
+ str(const _SAlloc& __sa) const
+ { return _M_stringbuf.str(__sa); }
+
+
+      __string_type
+      str() &&
+      { return std::move(_M_stringbuf).str(); }
+
+
+     
+      basic_string_view<char_type, traits_type>
+      view() const noexcept
+      { return _M_stringbuf.view(); }
+# 959 "/usr/include/c++/14.2.1/sstream" 3
+      void
+      str(const __string_type& __s)
+      { _M_stringbuf.str(__s); }
+
+
+
+      template<__allocator_like _SAlloc>
+ requires (!is_same_v<_SAlloc, _Alloc>)
+ void
+ str(const basic_string<_CharT, _Traits, _SAlloc>& __s)
+ { _M_stringbuf.str(__s); }
+
+
+      void
+      str(__string_type&& __s)
+      { _M_stringbuf.str(std::move(__s)); }
+
+    };
+# 994 "/usr/include/c++/14.2.1/sstream" 3
+  template <typename _CharT, typename _Traits, typename _Alloc>
+    class basic_stringstream : public basic_iostream<_CharT, _Traits>
+    {
+    public:
+
+      typedef _CharT char_type;
+      typedef _Traits traits_type;
+
+
+      typedef _Alloc allocator_type;
+      typedef typename traits_type::int_type int_type;
+      typedef typename traits_type::pos_type pos_type;
+      typedef typename traits_type::off_type off_type;
+
+
+      typedef basic_string<_CharT, _Traits, _Alloc> __string_type;
+      typedef basic_stringbuf<_CharT, _Traits, _Alloc> __stringbuf_type;
+      typedef basic_iostream<char_type, traits_type> __iostream_type;
+
+    private:
+      __stringbuf_type _M_stringbuf;
+
+    public:
+# 1028 "/usr/include/c++/14.2.1/sstream" 3
+      basic_stringstream()
+      : __iostream_type(), _M_stringbuf(ios_base::out | ios_base::in)
+      { this->init(&_M_stringbuf); }
+# 1042 "/usr/include/c++/14.2.1/sstream" 3
+      explicit
+      basic_stringstream(ios_base::openmode __m)
+      : __iostream_type(), _M_stringbuf(__m)
+      { this->init(&_M_stringbuf); }
+# 1058 "/usr/include/c++/14.2.1/sstream" 3
+      explicit
+      basic_stringstream(const __string_type& __str,
+    ios_base::openmode __m = ios_base::out | ios_base::in)
+      : __iostream_type(), _M_stringbuf(__str, __m)
+      { this->init(&_M_stringbuf); }
+
+
+
+
+
+
+
+      ~basic_stringstream()
+      { }
+
+
+      basic_stringstream(const basic_stringstream&) = delete;
+
+      basic_stringstream(basic_stringstream&& __rhs)
+      : __iostream_type(std::move(__rhs)),
+      _M_stringbuf(std::move(__rhs._M_stringbuf))
+      { __iostream_type::set_rdbuf(&_M_stringbuf); }
+
+
+      basic_stringstream(ios_base::openmode __mode, const allocator_type& __a)
+      : __iostream_type(), _M_stringbuf(__mode, __a)
+      { this->init(&_M_stringbuf); }
+
+      explicit
+      basic_stringstream(__string_type&& __str,
+    ios_base::openmode __mode = ios_base::in
+           | ios_base::out)
+      : __iostream_type(), _M_stringbuf(std::move(__str), __mode)
+      { this->init(std::__addressof(_M_stringbuf)); }
+
+      template<typename _SAlloc>
+ basic_stringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
+      const allocator_type& __a)
+ : basic_stringstream(__str, ios_base::in | ios_base::out, __a)
+ { }
+
+      template<typename _SAlloc>
+ basic_stringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
+      ios_base::openmode __mode,
+      const allocator_type& __a)
+ : __iostream_type(), _M_stringbuf(__str, __mode, __a)
+ { this->init(std::__addressof(_M_stringbuf)); }
+
+      template<typename _SAlloc>
+ explicit
+ basic_stringstream(const basic_string<_CharT, _Traits, _SAlloc>& __str,
+      ios_base::openmode __mode = ios_base::in
+             | ios_base::out)
+ : basic_stringstream(__str, __mode, allocator_type())
+ { }
+
+
+
+
+      basic_stringstream&
+      operator=(const basic_stringstream&) = delete;
+
+      basic_stringstream&
+      operator=(basic_stringstream&& __rhs)
+      {
+ __iostream_type::operator=(std::move(__rhs));
+ _M_stringbuf = std::move(__rhs._M_stringbuf);
+ return *this;
+      }
+
+      void
+      swap(basic_stringstream& __rhs)
+      {
+ __iostream_type::swap(__rhs);
+ _M_stringbuf.swap(__rhs._M_stringbuf);
+      }
+# 1143 "/usr/include/c++/14.2.1/sstream" 3
+      __stringbuf_type*
+      rdbuf() const
+      { return const_cast<__stringbuf_type*>(&_M_stringbuf); }
+
+
+
+
+
+      __string_type
+      str() const &
+      { return _M_stringbuf.str(); }
+
+
+
+
+      template<__allocator_like _SAlloc>
+ basic_string<_CharT, _Traits, _SAlloc>
+ str(const _SAlloc& __sa) const
+ { return _M_stringbuf.str(__sa); }
+
+
+      __string_type
+      str() &&
+      { return std::move(_M_stringbuf).str(); }
+
+
+     
+      basic_string_view<char_type, traits_type>
+      view() const noexcept
+      { return _M_stringbuf.view(); }
+# 1181 "/usr/include/c++/14.2.1/sstream" 3
+      void
+      str(const __string_type& __s)
+      { _M_stringbuf.str(__s); }
+
+
+
+      template<__allocator_like _SAlloc>
+ requires (!is_same_v<_SAlloc, _Alloc>)
+ void
+ str(const basic_string<_CharT, _Traits, _SAlloc>& __s)
+ { _M_stringbuf.str(__s); }
+
+
+      void
+      str(__string_type&& __s)
+      { _M_stringbuf.str(std::move(__s)); }
+
+    };
+
+
+
+  template <class _CharT, class _Traits, class _Allocator>
+    inline void
+    swap(basic_stringbuf<_CharT, _Traits, _Allocator>& __x,
+  basic_stringbuf<_CharT, _Traits, _Allocator>& __y)
+    noexcept(noexcept(__x.swap(__y)))
+    { __x.swap(__y); }
+
+
+  template <class _CharT, class _Traits, class _Allocator>
+    inline void
+    swap(basic_istringstream<_CharT, _Traits, _Allocator>& __x,
+  basic_istringstream<_CharT, _Traits, _Allocator>& __y)
+    { __x.swap(__y); }
+
+
+  template <class _CharT, class _Traits, class _Allocator>
+    inline void
+    swap(basic_ostringstream<_CharT, _Traits, _Allocator>& __x,
+  basic_ostringstream<_CharT, _Traits, _Allocator>& __y)
+    { __x.swap(__y); }
+
+
+  template <class _CharT, class _Traits, class _Allocator>
+    inline void
+    swap(basic_stringstream<_CharT, _Traits, _Allocator>& __x,
+  basic_stringstream<_CharT, _Traits, _Allocator>& __y)
+    { __x.swap(__y); }
+
+
+}
+
+}
+
+
+
+
+# 1 "/usr/include/c++/14.2.1/bits/sstream.tcc" 1 3
+# 37 "/usr/include/c++/14.2.1/bits/sstream.tcc" 3
+       
+# 38 "/usr/include/c++/14.2.1/bits/sstream.tcc" 3
+
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+
+  template <class _CharT, class _Traits, class _Alloc>
+    typename basic_stringbuf<_CharT, _Traits, _Alloc>::int_type
+    basic_stringbuf<_CharT, _Traits, _Alloc>::
+    pbackfail(int_type __c)
+    {
+      int_type __ret = traits_type::eof();
+      if (this->eback() < this->gptr())
+ {
+
+
+   const bool __testeof = traits_type::eq_int_type(__c, __ret);
+   if (!__testeof)
+     {
+       const bool __testeq = traits_type::eq(traits_type::
+          to_char_type(__c),
+          this->gptr()[-1]);
+       const bool __testout = this->_M_mode & ios_base::out;
+       if (__testeq || __testout)
+  {
+    this->gbump(-1);
+    if (!__testeq)
+      *this->gptr() = traits_type::to_char_type(__c);
+    __ret = __c;
+  }
+     }
+   else
+     {
+       this->gbump(-1);
+       __ret = traits_type::not_eof(__c);
+     }
+ }
+      return __ret;
+    }
+
+  template <class _CharT, class _Traits, class _Alloc>
+    typename basic_stringbuf<_CharT, _Traits, _Alloc>::int_type
+    basic_stringbuf<_CharT, _Traits, _Alloc>::
+    overflow(int_type __c)
+    {
+      const bool __testout = this->_M_mode & ios_base::out;
+      if (__builtin_expect(!__testout, false))
+ return traits_type::eof();
+
+      const bool __testeof = traits_type::eq_int_type(__c, traits_type::eof());
+      if (__builtin_expect(__testeof, false))
+ return traits_type::not_eof(__c);
+
+      const __size_type __capacity = _M_string.capacity();
+
+
+      if (size_t(this->epptr() - this->pbase()) < __capacity)
+ {
+
+   char_type* __base = const_cast<char_type*>(_M_string.data());
+   _M_pbump(__base, __base + __capacity, this->pptr() - this->pbase());
+   if (_M_mode & ios_base::in)
+     {
+       const __size_type __nget = this->gptr() - this->eback();
+       const __size_type __eget = this->egptr() - this->eback();
+       this->setg(__base, __base + __nget, __base + __eget + 1);
+     }
+   *this->pptr() = traits_type::to_char_type(__c);
+   this->pbump(1);
+   return __c;
+ }
+
+
+      const __size_type __max_size = _M_string.max_size();
+      const bool __testput = this->pptr() < this->epptr();
+      if (__builtin_expect(!__testput && __capacity == __max_size, false))
+ return traits_type::eof();
+
+
+
+      const char_type __conv = traits_type::to_char_type(__c);
+      if (!__testput)
+ {
+# 129 "/usr/include/c++/14.2.1/bits/sstream.tcc" 3
+   const __size_type __opt_len = std::max(__size_type(2 * __capacity),
+       __size_type(512));
+   const __size_type __len = std::min(__opt_len, __max_size);
+   __string_type __tmp(_M_string.get_allocator());
+   __tmp.reserve(__len);
+   if (this->pbase())
+     __tmp.assign(this->pbase(), this->epptr() - this->pbase());
+   __tmp.push_back(__conv);
+   _M_string.swap(__tmp);
+   _M_sync(const_cast<char_type*>(_M_string.data()),
+    this->gptr() - this->eback(), this->pptr() - this->pbase());
+ }
+      else
+ *this->pptr() = __conv;
+      this->pbump(1);
+      return __c;
+    }
+
+  template <class _CharT, class _Traits, class _Alloc>
+    typename basic_stringbuf<_CharT, _Traits, _Alloc>::int_type
+    basic_stringbuf<_CharT, _Traits, _Alloc>::
+    underflow()
+    {
+      int_type __ret = traits_type::eof();
+      const bool __testin = this->_M_mode & ios_base::in;
+      if (__testin)
+ {
+
+   _M_update_egptr();
+
+   if (this->gptr() < this->egptr())
+     __ret = traits_type::to_int_type(*this->gptr());
+ }
+      return __ret;
+    }
+
+  template <class _CharT, class _Traits, class _Alloc>
+    typename basic_stringbuf<_CharT, _Traits, _Alloc>::pos_type
+    basic_stringbuf<_CharT, _Traits, _Alloc>::
+    seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode __mode)
+    {
+      pos_type __ret = pos_type(off_type(-1));
+      bool __testin = (ios_base::in & this->_M_mode & __mode) != 0;
+      bool __testout = (ios_base::out & this->_M_mode & __mode) != 0;
+      const bool __testboth = __testin && __testout && __way != ios_base::cur;
+      __testin &= !(__mode & ios_base::out);
+      __testout &= !(__mode & ios_base::in);
+
+
+
+      const char_type* __beg = __testin ? this->eback() : this->pbase();
+      if ((__beg || !__off) && (__testin || __testout || __testboth))
+ {
+   _M_update_egptr();
+
+   off_type __newoffi = __off;
+   off_type __newoffo = __newoffi;
+   if (__way == ios_base::cur)
+     {
+       __newoffi += this->gptr() - __beg;
+       __newoffo += this->pptr() - __beg;
+     }
+   else if (__way == ios_base::end)
+     __newoffo = __newoffi += this->egptr() - __beg;
+
+   if ((__testin || __testboth)
+       && __newoffi >= 0
+       && this->egptr() - __beg >= __newoffi)
+     {
+       this->setg(this->eback(), this->eback() + __newoffi,
+    this->egptr());
+       __ret = pos_type(__newoffi);
+     }
+   if ((__testout || __testboth)
+       && __newoffo >= 0
+       && this->egptr() - __beg >= __newoffo)
+     {
+       _M_pbump(this->pbase(), this->epptr(), __newoffo);
+       __ret = pos_type(__newoffo);
+     }
+ }
+      return __ret;
+    }
+
+  template <class _CharT, class _Traits, class _Alloc>
+    typename basic_stringbuf<_CharT, _Traits, _Alloc>::pos_type
+    basic_stringbuf<_CharT, _Traits, _Alloc>::
+    seekpos(pos_type __sp, ios_base::openmode __mode)
+    {
+      pos_type __ret = pos_type(off_type(-1));
+      const bool __testin = (ios_base::in & this->_M_mode & __mode) != 0;
+      const bool __testout = (ios_base::out & this->_M_mode & __mode) != 0;
+
+      const char_type* __beg = __testin ? this->eback() : this->pbase();
+      if ((__beg || !off_type(__sp)) && (__testin || __testout))
+ {
+   _M_update_egptr();
+
+   const off_type __pos(__sp);
+   const bool __testpos = (0 <= __pos
+      && __pos <= this->egptr() - __beg);
+   if (__testpos)
+     {
+       if (__testin)
+  this->setg(this->eback(), this->eback() + __pos,
+      this->egptr());
+       if (__testout)
+  _M_pbump(this->pbase(), this->epptr(), __pos);
+       __ret = __sp;
+     }
+ }
+      return __ret;
+    }
+
+  template <class _CharT, class _Traits, class _Alloc>
+    void
+    basic_stringbuf<_CharT, _Traits, _Alloc>::
+    _M_sync(char_type* __base, __size_type __i, __size_type __o)
+    {
+      const bool __testin = _M_mode & ios_base::in;
+      const bool __testout = _M_mode & ios_base::out;
+      char_type* __endg = __base + _M_string.size();
+      char_type* __endp = __base + _M_string.capacity();
+
+      if (__base != _M_string.data())
+ {
+
+   __endg += __i;
+   __i = 0;
+   __endp = __endg;
+ }
+
+      if (__testin)
+ this->setg(__base, __base + __i, __endg);
+      if (__testout)
+ {
+   _M_pbump(__base, __endp, __o);
+
+
+
+   if (!__testin)
+     this->setg(__endg, __endg, __endg);
+ }
+    }
+
+  template <class _CharT, class _Traits, class _Alloc>
+    void
+    basic_stringbuf<_CharT, _Traits, _Alloc>::
+    _M_pbump(char_type* __pbeg, char_type* __pend, off_type __off)
+    {
+      this->setp(__pbeg, __pend);
+      while (__off > __gnu_cxx::__numeric_traits<int>::__max)
+ {
+   this->pbump(__gnu_cxx::__numeric_traits<int>::__max);
+   __off -= __gnu_cxx::__numeric_traits<int>::__max;
+ }
+      this->pbump(__off);
+    }
+
+
+
+
+  extern template class basic_stringbuf<char>;
+  extern template class basic_istringstream<char>;
+  extern template class basic_ostringstream<char>;
+  extern template class basic_stringstream<char>;
+
+
+  extern template class basic_stringbuf<wchar_t>;
+  extern template class basic_istringstream<wchar_t>;
+  extern template class basic_ostringstream<wchar_t>;
+  extern template class basic_stringstream<wchar_t>;
+
+
+
+
+}
+# 1239 "/usr/include/c++/14.2.1/sstream" 2 3
+# 46 "/usr/include/c++/14.2.1/chrono" 2 3
+
+
+
 # 1 "/usr/include/c++/14.2.1/bits/shared_ptr.h" 1 3
 # 53 "/usr/include/c++/14.2.1/bits/shared_ptr.h" 3
 # 1 "/usr/include/c++/14.2.1/bits/shared_ptr_base.h" 1 3
@@ -97200,572 +101865,7 @@ namespace __variant
 # 53 "/usr/include/c++/14.2.1/format" 2 3
 
 
-# 1 "/usr/include/c++/14.2.1/bits/ranges_algobase.h" 1 3
-# 43 "/usr/include/c++/14.2.1/bits/ranges_algobase.h" 3
-namespace std __attribute__ ((__visibility__ ("default")))
-{
 
-namespace ranges
-{
-  namespace __detail
-  {
-    template<typename _Tp>
-      constexpr inline bool __is_normal_iterator = false;
-
-    template<typename _Iterator, typename _Container>
-      constexpr inline bool
- __is_normal_iterator<__gnu_cxx::__normal_iterator<_Iterator,
-         _Container>> = true;
-
-    template<typename _Tp>
-      constexpr inline bool __is_reverse_iterator = false;
-
-    template<typename _Iterator>
-      constexpr inline bool
- __is_reverse_iterator<reverse_iterator<_Iterator>> = true;
-
-    template<typename _Tp>
-      constexpr inline bool __is_move_iterator = false;
-
-    template<typename _Iterator>
-      constexpr inline bool
- __is_move_iterator<move_iterator<_Iterator>> = true;
-  }
-
-  struct __equal_fn
-  {
-    template<input_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
-      input_iterator _Iter2, sentinel_for<_Iter2> _Sent2,
-      typename _Pred = ranges::equal_to,
-      typename _Proj1 = identity, typename _Proj2 = identity>
-      requires indirectly_comparable<_Iter1, _Iter2, _Pred, _Proj1, _Proj2>
-      constexpr bool
-      operator()(_Iter1 __first1, _Sent1 __last1,
-   _Iter2 __first2, _Sent2 __last2, _Pred __pred = {},
-   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
-      {
-
-
- if constexpr (__detail::__is_normal_iterator<_Iter1>
-        && same_as<_Iter1, _Sent1>)
-   return (*this)(__first1.base(), __last1.base(),
-    std::move(__first2), std::move(__last2),
-    std::move(__pred),
-    std::move(__proj1), std::move(__proj2));
- else if constexpr (__detail::__is_normal_iterator<_Iter2>
-      && same_as<_Iter2, _Sent2>)
-   return (*this)(std::move(__first1), std::move(__last1),
-    __first2.base(), __last2.base(),
-    std::move(__pred),
-    std::move(__proj1), std::move(__proj2));
- else if constexpr (sized_sentinel_for<_Sent1, _Iter1>
-      && sized_sentinel_for<_Sent2, _Iter2>)
-   {
-     auto __d1 = ranges::distance(__first1, __last1);
-     auto __d2 = ranges::distance(__first2, __last2);
-     if (__d1 != __d2)
-       return false;
-
-     using _ValueType1 = iter_value_t<_Iter1>;
-     constexpr bool __use_memcmp
-       = ((is_integral_v<_ValueType1> || is_pointer_v<_ValueType1>)
-   && __memcmpable<_Iter1, _Iter2>::__value
-   && is_same_v<_Pred, ranges::equal_to>
-   && is_same_v<_Proj1, identity>
-   && is_same_v<_Proj2, identity>);
-     if constexpr (__use_memcmp)
-       {
-  if (const size_t __len = (__last1 - __first1))
-    return !std::__memcmp(__first1, __first2, __len);
-  return true;
-       }
-     else
-       {
-  for (; __first1 != __last1; ++__first1, (void)++__first2)
-    if (!(bool)std::__invoke(__pred,
-        std::__invoke(__proj1, *__first1),
-        std::__invoke(__proj2, *__first2)))
-      return false;
-  return true;
-       }
-   }
- else
-   {
-     for (; __first1 != __last1 && __first2 != __last2;
-   ++__first1, (void)++__first2)
-       if (!(bool)std::__invoke(__pred,
-           std::__invoke(__proj1, *__first1),
-           std::__invoke(__proj2, *__first2)))
-  return false;
-     return __first1 == __last1 && __first2 == __last2;
-   }
-      }
-
-    template<input_range _Range1, input_range _Range2,
-      typename _Pred = ranges::equal_to,
-      typename _Proj1 = identity, typename _Proj2 = identity>
-      requires indirectly_comparable<iterator_t<_Range1>, iterator_t<_Range2>,
-         _Pred, _Proj1, _Proj2>
-      constexpr bool
-      operator()(_Range1&& __r1, _Range2&& __r2, _Pred __pred = {},
-   _Proj1 __proj1 = {}, _Proj2 __proj2 = {}) const
-      {
-
-
- if constexpr (sized_range<_Range1>)
-   if constexpr (sized_range<_Range2>)
-     if (ranges::distance(__r1) != ranges::distance(__r2))
-       return false;
-
- return (*this)(ranges::begin(__r1), ranges::end(__r1),
-         ranges::begin(__r2), ranges::end(__r2),
-         std::move(__pred),
-         std::move(__proj1), std::move(__proj2));
-      }
-  };
-
-  inline constexpr __equal_fn equal{};
-
-  template<typename _Iter, typename _Out>
-    struct in_out_result
-    {
-      [[no_unique_address]] _Iter in;
-      [[no_unique_address]] _Out out;
-
-      template<typename _Iter2, typename _Out2>
- requires convertible_to<const _Iter&, _Iter2>
-   && convertible_to<const _Out&, _Out2>
- constexpr
- operator in_out_result<_Iter2, _Out2>() const &
- { return {in, out}; }
-
-      template<typename _Iter2, typename _Out2>
- requires convertible_to<_Iter, _Iter2>
-   && convertible_to<_Out, _Out2>
- constexpr
- operator in_out_result<_Iter2, _Out2>() &&
- { return {std::move(in), std::move(out)}; }
-    };
-
-  template<typename _Iter, typename _Out>
-    using copy_result = in_out_result<_Iter, _Out>;
-
-  template<typename _Iter, typename _Out>
-    using move_result = in_out_result<_Iter, _Out>;
-
-  template<typename _Iter1, typename _Iter2>
-    using move_backward_result = in_out_result<_Iter1, _Iter2>;
-
-  template<typename _Iter1, typename _Iter2>
-    using copy_backward_result = in_out_result<_Iter1, _Iter2>;
-
-  template<bool _IsMove,
-    bidirectional_iterator _Iter, sentinel_for<_Iter> _Sent,
-    bidirectional_iterator _Out>
-    requires (_IsMove
-       ? indirectly_movable<_Iter, _Out>
-       : indirectly_copyable<_Iter, _Out>)
-    constexpr __conditional_t<_IsMove,
-         move_backward_result<_Iter, _Out>,
-         copy_backward_result<_Iter, _Out>>
-    __copy_or_move_backward(_Iter __first, _Sent __last, _Out __result);
-
-  template<bool _IsMove,
-    input_iterator _Iter, sentinel_for<_Iter> _Sent,
-    weakly_incrementable _Out>
-    requires (_IsMove
-       ? indirectly_movable<_Iter, _Out>
-       : indirectly_copyable<_Iter, _Out>)
-    constexpr __conditional_t<_IsMove,
-         move_result<_Iter, _Out>,
-         copy_result<_Iter, _Out>>
-    __copy_or_move(_Iter __first, _Sent __last, _Out __result)
-    {
-
-
-      using __detail::__is_move_iterator;
-      using __detail::__is_reverse_iterator;
-      using __detail::__is_normal_iterator;
-      if constexpr (__is_move_iterator<_Iter> && same_as<_Iter, _Sent>)
- {
-   auto [__in, __out]
-     = ranges::__copy_or_move<true>(std::move(__first).base(),
-        std::move(__last).base(),
-        std::move(__result));
-   return {move_iterator{std::move(__in)}, std::move(__out)};
- }
-      else if constexpr (__is_reverse_iterator<_Iter> && same_as<_Iter, _Sent>
-    && __is_reverse_iterator<_Out>)
- {
-   auto [__in,__out]
-     = ranges::__copy_or_move_backward<_IsMove>(std::move(__last).base(),
-             std::move(__first).base(),
-             std::move(__result).base());
-   return {reverse_iterator{std::move(__in)},
-    reverse_iterator{std::move(__out)}};
- }
-      else if constexpr (__is_normal_iterator<_Iter> && same_as<_Iter, _Sent>)
- {
-   auto [__in,__out]
-     = ranges::__copy_or_move<_IsMove>(__first.base(), __last.base(),
-           std::move(__result));
-   return {decltype(__first){__in}, std::move(__out)};
- }
-      else if constexpr (__is_normal_iterator<_Out>)
- {
-   auto [__in,__out]
-     = ranges::__copy_or_move<_IsMove>(std::move(__first), __last, __result.base());
-   return {std::move(__in), decltype(__result){__out}};
- }
-      else if constexpr (sized_sentinel_for<_Sent, _Iter>)
- {
-   if (!std::__is_constant_evaluated())
-     {
-       if constexpr (__memcpyable<_Out, _Iter>::__value)
-  {
-    using _ValueTypeI = iter_value_t<_Iter>;
-    static_assert(_IsMove
-        ? is_move_assignable_v<_ValueTypeI>
-        : is_copy_assignable_v<_ValueTypeI>);
-    auto __num = __last - __first;
-    if (__num)
-      __builtin_memmove(__result, __first,
-   sizeof(_ValueTypeI) * __num);
-    return {__first + __num, __result + __num};
-  }
-     }
-
-   for (auto __n = __last - __first; __n > 0; --__n)
-     {
-       if constexpr (_IsMove)
-  *__result = std::move(*__first);
-       else
-  *__result = *__first;
-       ++__first;
-       ++__result;
-     }
-   return {std::move(__first), std::move(__result)};
- }
-      else
- {
-   while (__first != __last)
-     {
-       if constexpr (_IsMove)
-  *__result = std::move(*__first);
-       else
-  *__result = *__first;
-       ++__first;
-       ++__result;
-     }
-   return {std::move(__first), std::move(__result)};
- }
-    }
-
-  struct __copy_fn
-  {
-    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
-      weakly_incrementable _Out>
-      requires indirectly_copyable<_Iter, _Out>
-      constexpr copy_result<_Iter, _Out>
-      operator()(_Iter __first, _Sent __last, _Out __result) const
-      {
- return ranges::__copy_or_move<false>(std::move(__first),
-          std::move(__last),
-          std::move(__result));
-      }
-
-    template<input_range _Range, weakly_incrementable _Out>
-      requires indirectly_copyable<iterator_t<_Range>, _Out>
-      constexpr copy_result<borrowed_iterator_t<_Range>, _Out>
-      operator()(_Range&& __r, _Out __result) const
-      {
- return (*this)(ranges::begin(__r), ranges::end(__r),
-         std::move(__result));
-      }
-  };
-
-  inline constexpr __copy_fn copy{};
-
-  struct __move_fn
-  {
-    template<input_iterator _Iter, sentinel_for<_Iter> _Sent,
-      weakly_incrementable _Out>
-      requires indirectly_movable<_Iter, _Out>
-      constexpr move_result<_Iter, _Out>
-      operator()(_Iter __first, _Sent __last, _Out __result) const
-      {
- return ranges::__copy_or_move<true>(std::move(__first),
-         std::move(__last),
-         std::move(__result));
-      }
-
-    template<input_range _Range, weakly_incrementable _Out>
-      requires indirectly_movable<iterator_t<_Range>, _Out>
-      constexpr move_result<borrowed_iterator_t<_Range>, _Out>
-      operator()(_Range&& __r, _Out __result) const
-      {
- return (*this)(ranges::begin(__r), ranges::end(__r),
-         std::move(__result));
-      }
-  };
-
-  inline constexpr __move_fn move{};
-
-  template<bool _IsMove,
-    bidirectional_iterator _Iter, sentinel_for<_Iter> _Sent,
-    bidirectional_iterator _Out>
-    requires (_IsMove
-       ? indirectly_movable<_Iter, _Out>
-       : indirectly_copyable<_Iter, _Out>)
-    constexpr __conditional_t<_IsMove,
-         move_backward_result<_Iter, _Out>,
-         copy_backward_result<_Iter, _Out>>
-    __copy_or_move_backward(_Iter __first, _Sent __last, _Out __result)
-    {
-
-
-      using __detail::__is_reverse_iterator;
-      using __detail::__is_normal_iterator;
-      if constexpr (__is_reverse_iterator<_Iter> && same_as<_Iter, _Sent>
-      && __is_reverse_iterator<_Out>)
- {
-   auto [__in,__out]
-     = ranges::__copy_or_move<_IsMove>(std::move(__last).base(),
-           std::move(__first).base(),
-           std::move(__result).base());
-   return {reverse_iterator{std::move(__in)},
-    reverse_iterator{std::move(__out)}};
- }
-      else if constexpr (__is_normal_iterator<_Iter> && same_as<_Iter, _Sent>)
- {
-   auto [__in,__out]
-     = ranges::__copy_or_move_backward<_IsMove>(__first.base(),
-             __last.base(),
-             std::move(__result));
-   return {decltype(__first){__in}, std::move(__out)};
- }
-      else if constexpr (__is_normal_iterator<_Out>)
- {
-   auto [__in,__out]
-     = ranges::__copy_or_move_backward<_IsMove>(std::move(__first),
-             std::move(__last),
-             __result.base());
-   return {std::move(__in), decltype(__result){__out}};
- }
-      else if constexpr (sized_sentinel_for<_Sent, _Iter>)
- {
-   if (!std::__is_constant_evaluated())
-     {
-       if constexpr (__memcpyable<_Out, _Iter>::__value)
-  {
-    using _ValueTypeI = iter_value_t<_Iter>;
-    static_assert(_IsMove
-        ? is_move_assignable_v<_ValueTypeI>
-        : is_copy_assignable_v<_ValueTypeI>);
-    auto __num = __last - __first;
-    if (__num)
-      __builtin_memmove(__result - __num, __first,
-          sizeof(_ValueTypeI) * __num);
-    return {__first + __num, __result - __num};
-  }
-     }
-
-   auto __lasti = ranges::next(__first, __last);
-   auto __tail = __lasti;
-
-   for (auto __n = __last - __first; __n > 0; --__n)
-     {
-       --__tail;
-       --__result;
-       if constexpr (_IsMove)
-  *__result = std::move(*__tail);
-       else
-  *__result = *__tail;
-     }
-   return {std::move(__lasti), std::move(__result)};
- }
-      else
- {
-   auto __lasti = ranges::next(__first, __last);
-   auto __tail = __lasti;
-
-   while (__first != __tail)
-     {
-       --__tail;
-       --__result;
-       if constexpr (_IsMove)
-  *__result = std::move(*__tail);
-       else
-  *__result = *__tail;
-     }
-   return {std::move(__lasti), std::move(__result)};
- }
-    }
-
-  struct __copy_backward_fn
-  {
-    template<bidirectional_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
-      bidirectional_iterator _Iter2>
-      requires indirectly_copyable<_Iter1, _Iter2>
-      constexpr copy_backward_result<_Iter1, _Iter2>
-      operator()(_Iter1 __first, _Sent1 __last, _Iter2 __result) const
-      {
- return ranges::__copy_or_move_backward<false>(std::move(__first),
-            std::move(__last),
-            std::move(__result));
-      }
-
-    template<bidirectional_range _Range, bidirectional_iterator _Iter>
-      requires indirectly_copyable<iterator_t<_Range>, _Iter>
-      constexpr copy_backward_result<borrowed_iterator_t<_Range>, _Iter>
-      operator()(_Range&& __r, _Iter __result) const
-      {
- return (*this)(ranges::begin(__r), ranges::end(__r),
-         std::move(__result));
-      }
-  };
-
-  inline constexpr __copy_backward_fn copy_backward{};
-
-  struct __move_backward_fn
-  {
-    template<bidirectional_iterator _Iter1, sentinel_for<_Iter1> _Sent1,
-      bidirectional_iterator _Iter2>
-      requires indirectly_movable<_Iter1, _Iter2>
-      constexpr move_backward_result<_Iter1, _Iter2>
-      operator()(_Iter1 __first, _Sent1 __last, _Iter2 __result) const
-      {
- return ranges::__copy_or_move_backward<true>(std::move(__first),
-           std::move(__last),
-           std::move(__result));
-      }
-
-    template<bidirectional_range _Range, bidirectional_iterator _Iter>
-      requires indirectly_movable<iterator_t<_Range>, _Iter>
-      constexpr move_backward_result<borrowed_iterator_t<_Range>, _Iter>
-      operator()(_Range&& __r, _Iter __result) const
-      {
- return (*this)(ranges::begin(__r), ranges::end(__r),
-         std::move(__result));
-      }
-  };
-
-  inline constexpr __move_backward_fn move_backward{};
-
-  template<typename _Iter, typename _Out>
-    using copy_n_result = in_out_result<_Iter, _Out>;
-
-  struct __copy_n_fn
-  {
-    template<input_iterator _Iter, weakly_incrementable _Out>
-      requires indirectly_copyable<_Iter, _Out>
-      constexpr copy_n_result<_Iter, _Out>
-      operator()(_Iter __first, iter_difference_t<_Iter> __n,
-   _Out __result) const
-      {
- if constexpr (random_access_iterator<_Iter>)
-   {
-     if (__n > 0)
-       return ranges::copy(__first, __first + __n, std::move(__result));
-   }
- else
-   {
-     for (; __n > 0; --__n, (void)++__result, (void)++__first)
-       *__result = *__first;
-   }
- return {std::move(__first), std::move(__result)};
-      }
-  };
-
-  inline constexpr __copy_n_fn copy_n{};
-
-  struct __fill_n_fn
-  {
-    template<typename _Tp, output_iterator<const _Tp&> _Out>
-      constexpr _Out
-      operator()(_Out __first, iter_difference_t<_Out> __n,
-   const _Tp& __value) const
-      {
-
-
- if (__n <= 0)
-   return __first;
-
- if constexpr (is_scalar_v<_Tp>)
-   {
-
-     if constexpr (is_pointer_v<_Out>
-
-     && __is_byte<remove_pointer_t<_Out>>::__value
-     && integral<_Tp>)
-       {
-  if (!std::__is_constant_evaluated())
-    {
-      __builtin_memset(__first,
-         static_cast<unsigned char>(__value),
-         __n);
-      return __first + __n;
-    }
-       }
-
-     const auto __tmp = __value;
-     for (; __n > 0; --__n, (void)++__first)
-       *__first = __tmp;
-     return __first;
-   }
- else
-   {
-     for (; __n > 0; --__n, (void)++__first)
-       *__first = __value;
-     return __first;
-   }
-      }
-  };
-
-  inline constexpr __fill_n_fn fill_n{};
-
-  struct __fill_fn
-  {
-    template<typename _Tp,
-      output_iterator<const _Tp&> _Out, sentinel_for<_Out> _Sent>
-      constexpr _Out
-      operator()(_Out __first, _Sent __last, const _Tp& __value) const
-      {
-
-
- if constexpr (sized_sentinel_for<_Sent, _Out>)
-   {
-     const auto __len = __last - __first;
-     return ranges::fill_n(std::move(__first), __len, __value);
-   }
- else if constexpr (is_scalar_v<_Tp>)
-   {
-     const auto __tmp = __value;
-     for (; __first != __last; ++__first)
-       *__first = __tmp;
-     return __first;
-   }
- else
-   {
-     for (; __first != __last; ++__first)
-       *__first = __value;
-     return __first;
-   }
-      }
-
-    template<typename _Tp, output_range<const _Tp&> _Range>
-      constexpr borrowed_iterator_t<_Range>
-      operator()(_Range&& __r, const _Tp& __value) const
-      {
- return (*this)(ranges::begin(__r), ranges::end(__r), __value);
-      }
-  };
-
-  inline constexpr __fill_fn fill{};
-}
-
-}
-# 56 "/usr/include/c++/14.2.1/format" 2 3
 
 
 # 1 "/usr/include/c++/14.2.1/bits/unicode.h" 1 3
@@ -107637,6 +111737,7 @@ namespace __detail
 }
 # 3361 "/usr/include/c++/14.2.1/chrono" 2 3
 # 7 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
+
 # 1 "/home/kollibroman/Studia/AIZO/Projekt1/Util/SortChecker.h" 1
 
 
@@ -107682,86 +111783,214 @@ class SortChecker
             return isSortedAscending(arr, size) || isSortedDescending(arr, size);
         }
 };
-# 8 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
+# 9 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
+
+template<typename T> void displayArray(T* tab, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (i % 10 == 0 && i != 0)
+        {
+            std::cout << tab[i] << std::endl;
+        }
+
+        else
+        {
+            std::cout << tab[i] << " ";
+        }
+    }
+}
 
 int main()
 {
-    auto userInputStorer = new UserInputStorer(0, "", 0);
+    srand(time(0));
+    int GENERATION_COUNT = 10;
+    int ARRAY_SIZE = 100;
+
+    auto userInputStorer = new UserInputStorer(0, "");
 
     auto intArrayStorer = new ArrayStorer<int>();
     auto floatArrayStorer = new ArrayStorer<float>();
 
 
-    intArrayStorer->Arrays = new int *[1000];
-    floatArrayStorer->Arrays = new float *[1000];
+    intArrayStorer->Arrays = new int *[GENERATION_COUNT];
+    floatArrayStorer->Arrays = new float *[GENERATION_COUNT];
 
-    intArrayStorer->SortingTimesQuickSort = new double[1000];
-    intArrayStorer->SortingTimesInsertSort = new double[1000];
+    intArrayStorer->SortingTimesQuickSort = new double[GENERATION_COUNT];
+    intArrayStorer->SortingTimesInsertSort = new double[GENERATION_COUNT];
 
-    floatArrayStorer->SortingTimesQuickSort = new double[100];
-    floatArrayStorer->SortingTimesInsertSort = new double[100];
+    floatArrayStorer->SortingTimesQuickSort = new double[GENERATION_COUNT];
+    floatArrayStorer->SortingTimesInsertSort = new double[GENERATION_COUNT];
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < GENERATION_COUNT; i++)
     {
-        intArrayStorer->Arrays[i] = new int[10];
-        floatArrayStorer->Arrays[i] = new float[10];
+        intArrayStorer->Arrays[i] = new int[ARRAY_SIZE];
+        floatArrayStorer->Arrays[i] = new float[ARRAY_SIZE];
     }
 
-    auto menu = new MainMenu(userInputStorer, intArrayStorer, floatArrayStorer);
+    auto menu = new MainMenu(userInputStorer, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
 
-    if (intArrayStorer->Arrays[0] != nullptr)
+    if (userInputStorer->Option == 1)
     {
-        auto algorithms = new Algorithms<int>();
-        auto sortChecker = new SortChecker();
-
-        for (int i = 0; i < 100; i++)
+        if (intArrayStorer->Arrays[0] != nullptr)
         {
-            auto startQuick = std::chrono::high_resolution_clock::now();
-            algorithms->QuickSort(intArrayStorer->Arrays[i], 0, 100 - 1);
-            auto endQuick = std::chrono::high_resolution_clock::now();
-            double quickSortTime = std::chrono::duration<double, std::milli>(endQuick - startQuick).count();
-            intArrayStorer->SortingTimesQuickSort[i] = quickSortTime;
+            auto algorithms = new Algorithms<int>();
+            auto sortChecker = new SortChecker();
 
-            auto startInsert = std::chrono::high_resolution_clock::now();
-            algorithms->InsertSort(intArrayStorer->Arrays[i], 100);
-            auto endInsert = std::chrono::high_resolution_clock::now();
-            double insertSortTime = std::chrono::duration<double, std::milli>(endInsert - startInsert).count();
-            intArrayStorer->SortingTimesInsertSort[i] = insertSortTime;
+            for (int i = 0; i < GENERATION_COUNT; i++)
+            {
+                auto copy = algorithms->copyArray(intArrayStorer->Arrays[i], ARRAY_SIZE);
+                std::cout << "Array: " << std::endl;
+                displayArray(copy, ARRAY_SIZE);
+# 85 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp"
+                    auto startInsert = std::chrono::high_resolution_clock::now();
+                    algorithms->InsertSort(copy, ARRAY_SIZE);
+                    auto endInsert = std::chrono::high_resolution_clock::now();
+                    double insertSortTime = std::chrono::duration<double, std::milli>(endInsert - startInsert).count();
+                    intArrayStorer->SortingTimesInsertSort[0] = insertSortTime;
 
-            std::cout << "Array " << i << " - QuickSort Time: " << quickSortTime << " ms, InsertSort Time: " << insertSortTime << " ms\n";
-            std::cout << "Is sorted? " << sortChecker->isSorted(intArrayStorer->Arrays[i], 100) << std::endl;
+                    std::cout << "\n SortedArray: " << std::endl;
+                    displayArray(copy, ARRAY_SIZE);
+
+                    std::cout << "\n Sorted? " << sortChecker->isSorted(copy, ARRAY_SIZE) << std::endl;
+                    std::cout << "\n Array " << 0 << " - InsertSort Time: " << insertSortTime << " ms" << std::endl;
+
+
+                delete[] copy;
+            }
+
+            delete algorithms;
         }
 
-        delete algorithms;
-    }
-    else if (floatArrayStorer->Arrays[0] != nullptr)
+        else if (floatArrayStorer->Arrays[0] != nullptr)
+        {
+            auto algorithms = new Algorithms<float>();
+            auto sortChecker = new SortChecker();
+
+            for (int i = 0; i < GENERATION_COUNT; i++)
+            {
+                auto copy = algorithms->copyArray(floatArrayStorer->Arrays[i], ARRAY_SIZE);
+                std::cout << "Array: " << std::endl;
+                displayArray(copy, ARRAY_SIZE);
+
+                if (userInputStorer->ChosenAlgorithm == 1)
+                {
+                    auto startQuick = std::chrono::high_resolution_clock::now();
+                    algorithms->QuickSort(copy, 0, ARRAY_SIZE - 1);
+                    auto endQuick = std::chrono::high_resolution_clock::now();
+                    double quickSortTime = std::chrono::duration<double, std::milli>(endQuick - startQuick).count();
+                    floatArrayStorer->SortingTimesQuickSort[0] = quickSortTime;
+
+                    std::cout << "\n SortedArray:" << std::endl;
+                    displayArray(copy, ARRAY_SIZE);
+
+                    std::cout << "\n Sorted? " << sortChecker->isSorted(copy, ARRAY_SIZE) << std::endl;
+                    std::cout << "\n Array " << 0 << " - QuickSort Time: " << quickSortTime << " ms" << std::endl;
+                }
+
+                else if (userInputStorer->ChosenAlgorithm == 2)
+                {
+                    auto startInsert = std::chrono::high_resolution_clock::now();
+                    algorithms->InsertSort(copy, ARRAY_SIZE);
+                    auto endInsert = std::chrono::high_resolution_clock::now();
+                    double insertSortTime = std::chrono::duration<double, std::milli>(endInsert - startInsert).count();
+                    floatArrayStorer->SortingTimesInsertSort[0] = insertSortTime;
+
+                    std::cout << "\n SortedArray: " << std::endl;
+                    displayArray(copy, ARRAY_SIZE);
+
+                    std::cout << "\n Sorted? " << sortChecker->isSorted(copy, ARRAY_SIZE) << std::endl;
+                    std::cout << "\n Array " << 0 << " - InsertSort Time: " << insertSortTime << " ms" << std::endl;
+                }
+
+                delete[] copy;
+            }
+
+            delete algorithms;
+        }
+   }
+
+    else if (userInputStorer->Option == 2)
     {
-        auto algorithms = new Algorithms<float>();
         auto sortChecker = new SortChecker();
 
-        for (int i = 0; i < 100; i++)
+        if (userInputStorer->DataType == "int")
         {
-            auto startQuick = std::chrono::high_resolution_clock::now();
-            algorithms->QuickSort(floatArrayStorer->Arrays[i], 0, 100 - 1);
-            auto endQuick = std::chrono::high_resolution_clock::now();
-            double quickSortTime = std::chrono::duration<double, std::milli>(endQuick - startQuick).count();
-            floatArrayStorer->SortingTimesQuickSort[i] = quickSortTime;
+            auto algorithms = new Algorithms<int>();
+            auto copy = algorithms->copyArray(intArrayStorer->Arrays[0], 49);
+            std::cout << "Array: " << std::endl;
+            displayArray(copy, 49);
 
-            auto startInsert = std::chrono::high_resolution_clock::now();
-            algorithms->InsertSort(floatArrayStorer->Arrays[i], 100);
-            auto endInsert = std::chrono::high_resolution_clock::now();
-            double insertSortTime = std::chrono::duration<double, std::milli>(endInsert - startInsert).count();
-            floatArrayStorer->SortingTimesInsertSort[i] = insertSortTime;
+            if (userInputStorer->ChosenAlgorithm == 1)
+            {
+                auto startQuick = std::chrono::high_resolution_clock::now();
+                algorithms->QuickSort(copy, 0, 48);
+                auto endQuick = std::chrono::high_resolution_clock::now();
+                double quickSortTime = std::chrono::duration<double, std::milli>(endQuick - startQuick).count();
+                intArrayStorer->SortingTimesQuickSort[0] = quickSortTime;
 
-            std::cout << "Array " << i << " - QuickSort Time: " << quickSortTime << " ms, InsertSort Time: " << insertSortTime << " ms\n";
-            std::cout << "Is sorted? " << sortChecker->isSorted(floatArrayStorer->Arrays[i], 100) << std::endl;
+                std::cout << "\n SortedArray:" << std::endl;
+                displayArray(copy, 49);
+                std::cout << "\n Sorted? " << sortChecker->isSorted(copy, 49) << std::endl;
+                std::cout << "\n Array " << 0 << " - QuickSort Time: " << quickSortTime << " ms" << std::endl;
+            }
+
+            else if (userInputStorer->ChosenAlgorithm == 2)
+            {
+                auto startInsert = std::chrono::high_resolution_clock::now();
+                algorithms->InsertSort(copy, 49);
+                auto endInsert = std::chrono::high_resolution_clock::now();
+                double insertSortTime = std::chrono::duration<double, std::milli>(endInsert - startInsert).count();
+                intArrayStorer->SortingTimesInsertSort[0] = insertSortTime;
+
+                std::cout << "\n SortedArray: " << std::endl;
+                displayArray(copy, 49);
+
+                std::cout << "\n Sorted? " << sortChecker->isSorted(copy, 49) << std::endl;
+                std::cout << "\n Array " << 0 << " - InsertSort Time: " << insertSortTime << " ms" << std::endl;
+            }
         }
 
-        delete algorithms;
+        else if (userInputStorer->DataType == "float")
+        {
+            auto algorithms = new Algorithms<float>();
+            auto copy = algorithms->copyArray(floatArrayStorer->Arrays[0], 49);
+            std::cout << "Array: " << std::endl;
+            displayArray(copy, 49);
+
+            if (userInputStorer->ChosenAlgorithm == 1)
+            {
+                auto startQuick = std::chrono::high_resolution_clock::now();
+                algorithms->QuickSort(copy, 0, 48);
+                auto endQuick = std::chrono::high_resolution_clock::now();
+                double quickSortTime = std::chrono::duration<double, std::milli>(endQuick - startQuick).count();
+                floatArrayStorer->SortingTimesQuickSort[0] = quickSortTime;
+
+                std::cout << "\n SortedArray:" << std::endl;
+                displayArray(copy, 49);
+                std::cout << "\n Array " << 0 << " - QuickSort Time: " << quickSortTime << " ms" << std::endl;
+                delete[] copy;
+            }
+
+            else if (userInputStorer->ChosenAlgorithm == 2)
+            {
+                auto startInsert = std::chrono::high_resolution_clock::now();
+                algorithms->InsertSort(copy, 49);
+                auto endInsert = std::chrono::high_resolution_clock::now();
+                double insertSortTime = std::chrono::duration<double, std::milli>(endInsert - startInsert).count();
+                floatArrayStorer->SortingTimesInsertSort[0] = insertSortTime;
+
+                std::cout << "\n SortedArray: " << std::endl;
+                displayArray(copy, 49);
+
+                std::cout << "\n Array " << 0 << " - InsertSort Time: " << insertSortTime << " ms" << std::endl;
+                delete[] copy;
+            }
+        }
     }
 
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < GENERATION_COUNT; i++)
     {
         delete[] intArrayStorer->Arrays[i];
         delete[] floatArrayStorer->Arrays[i];

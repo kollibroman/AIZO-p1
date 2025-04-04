@@ -193,16 +193,20 @@ CMakeFiles/Projekt1.dir/main.cpp.o.ddi: \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/basic_file.h \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++io.h \
  /usr/include/c++/14.2.1/bits/fstream.tcc \
+ /usr/include/c++/14.2.1/algorithm \
+ /usr/include/c++/14.2.1/bits/stl_algo.h \
+ /usr/include/c++/14.2.1/bits/algorithmfwd.h \
+ /usr/include/c++/14.2.1/bits/stl_heap.h \
+ /usr/include/c++/14.2.1/bits/stl_tempbuf.h \
+ /usr/include/c++/14.2.1/bits/ranges_algo.h \
+ /usr/include/c++/14.2.1/bits/ranges_algobase.h \
+ /usr/include/c++/14.2.1/pstl/glue_algorithm_defs.h \
  /home/kollibroman/Studia/AIZO/Projekt1/Util/UserInputStorer.h \
  /home/kollibroman/Studia/AIZO/Projekt1/Lib/Algorithms.h \
  /usr/include/c++/14.2.1/chrono /usr/include/c++/14.2.1/bits/chrono.h \
  /usr/include/c++/14.2.1/ratio /usr/include/c++/14.2.1/ctime \
  /usr/include/c++/14.2.1/bits/parse_numbers.h \
  /usr/include/c++/14.2.1/sstream /usr/include/c++/14.2.1/bits/sstream.tcc \
- /usr/include/c++/14.2.1/bits/stl_algo.h \
- /usr/include/c++/14.2.1/bits/algorithmfwd.h \
- /usr/include/c++/14.2.1/bits/stl_heap.h \
- /usr/include/c++/14.2.1/bits/stl_tempbuf.h \
  /usr/include/c++/14.2.1/bits/shared_ptr.h \
  /usr/include/c++/14.2.1/bits/shared_ptr_base.h \
  /usr/include/c++/14.2.1/bits/allocated_ptr.h \
@@ -223,7 +227,6 @@ CMakeFiles/Projekt1.dir/main.cpp.o.ddi: \
  /usr/include/c++/14.2.1/charconv /usr/include/c++/14.2.1/optional \
  /usr/include/c++/14.2.1/bits/enable_special_members.h \
  /usr/include/c++/14.2.1/span /usr/include/c++/14.2.1/variant \
- /usr/include/c++/14.2.1/bits/ranges_algobase.h \
  /usr/include/c++/14.2.1/bits/unicode.h \
  /usr/include/c++/14.2.1/bits/unicode-data.h \
  /home/kollibroman/Studia/AIZO/Projekt1/Util/SortChecker.h

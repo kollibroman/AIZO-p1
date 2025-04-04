@@ -22,7 +22,7 @@ template <typename T> class ArrayDataGenerator
 
                 else if(typeid(T).name() == typeid(float).name())
                 {
-                    float newFloat = std::round(static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * 100) / 100;
+                    float newFloat = std::round(static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX));
                     tab[i] = newFloat + std::rand() % 1001;
                 }
             }

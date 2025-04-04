@@ -11,10 +11,7 @@
 class MainMenu
 {
 public:
-    int GENERATION_COUNT = 1000;
-    int ARRAY_SIZE = 100000;
-
-    explicit MainMenu(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer)
+    explicit MainMenu(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
     {
             std::cout<< "Menu programu" << std::endl;
 
@@ -40,14 +37,14 @@ public:
                     userInput->Option = choice;
                     ChooseDataType(userInput);
                     ChooseAlgorithm(userInput);
-                    HandleDataGeneration(userInput, intArrayStorer, floatArrayStorer);
+                    HandleDataGeneration(userInput, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
                     break;
 
                 case 2:
                     userInput->Option = choice;
                     ChooseDataType(userInput);
                     ChooseAlgorithm(userInput);
-                    HandleDataRead(userInput, intArrayStorer, floatArrayStorer);
+                    HandleDataRead(userInput, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
                     break;
 
                 case 3:
@@ -148,7 +145,7 @@ private:
         }
     }
 
-    void HandleDataGeneration(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer)
+    void HandleDataGeneration(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
     {
         for (int i = 0; i < GENERATION_COUNT; i++)
         {
@@ -168,7 +165,7 @@ private:
         }
     }
 
-    void HandleDataRead(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer)
+    void HandleDataRead(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
     {
         std::cout << "Podaj nazwe pliku" << std::endl;
         std::string fileName;
@@ -179,21 +176,20 @@ private:
             fileName += ".txt";
         }
 
-        for (int i = 0; i < GENERATION_COUNT; i++)
-        {
-            if (userInput->DataType == "int")
-            {
-                auto fileReader = new FileReader<int>();
-                int *tab = fileReader->ReadFile(fileName);
-                intArrayStorer->Arrays[i] = tab;
-            }
+        fileName = "../TestFiles/z1/" + fileName;
 
-            else if (userInput->DataType == "float")
-            {
-                auto fileReader = new FileReader<float>();
-                float *tab = fileReader->ReadFile(fileName);
-                floatArrayStorer->Arrays[i] = tab;
-            }
+        if (userInput->DataType == "int")
+        {
+            auto fileReader = new FileReader<int>();
+            int *tab = fileReader->ReadFile(fileName);
+            intArrayStorer->Arrays[0] = tab;
+        }
+
+        else if (userInput->DataType == "float")
+        {
+            auto fileReader = new FileReader<float>();
+            float *tab = fileReader->ReadFile(fileName);
+            floatArrayStorer->Arrays[0] = tab;
         }
     }
 };
