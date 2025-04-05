@@ -38,7 +38,7 @@ int main()
         reporter->GenerateRandomArrayData(100, 40000, "../40000");
         reporter->GenerateRandomArrayData(100, 60000, "../60000");
         reporter->GenerateRandomArrayData(100, 80000, "../80000");
-        reporter->GenerateRandomArrayData(100, 100000, "../1000000");
+        reporter->GenerateRandomArrayData(100, 100000, "../100000");
     }
 
     else
