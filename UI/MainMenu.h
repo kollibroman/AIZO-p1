@@ -11,6 +11,22 @@
 class MainMenu
 {
 public:
+    template<typename T> static void displayArray(T* tab, int size)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            if (i % 10 == 0 && i != 0)
+            {
+                std::cout << tab[i] << std::endl;
+            }
+
+            else
+            {
+                std::cout << tab[i] << " ";
+            }
+        }
+    }
+
     explicit MainMenu(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
     {
             std::cout<< "Menu programu" << std::endl;
@@ -49,7 +65,7 @@ public:
 
                 case 3:
                     std::cout << "Koncze prace programu" << std::endl;
-                    return;
+                   exit(0);
 
                 default:
                     std::cout << "Wrong input" << std::endl;
@@ -160,6 +176,7 @@ private:
             {
                 auto arrayDataGenerator = new ArrayDataGenerator<float>();
                 float *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
+
                 floatArrayStorer->Arrays[i] = tab;
             }
         }

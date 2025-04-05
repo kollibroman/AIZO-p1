@@ -90,10 +90,10 @@ class Algorithms
                 while (j >= index)
                 {
                     tab[j + 1] = tab[j];
-                    --j;
+                    j--;
                 }
 
-                tab[j] = key;
+                tab[j + 1] = key;
             }
         }
 
@@ -143,7 +143,7 @@ private:
         }
     }
 
-    static int BinarySearch(T* tab, int item, int low, int high)
+    int BinarySearch(T* tab, int item, int low, int high)
     {
         while (low <= high)
         {

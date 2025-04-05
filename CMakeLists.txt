@@ -10,6 +10,8 @@ add_executable(Projekt1 main.cpp
         Lib/ArrayDataGenerator.h
         Lib/CsvGenerator.h
         UI/MainMenu.h
-        Util/UserInputStorer.h)
+        Util/UserInputStorer.h
+        UI/MenuUtils.h
+        Testing/Reporter.h)
 
 

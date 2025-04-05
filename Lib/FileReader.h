@@ -15,46 +15,47 @@ public:
 
         T *tab;
 
+        //Wywalamy pierwsza linijke
+        if (std::getline(file, line))
+        {
+        }
+
         // Dynamicznie wpisuję rzeczy z plików do tablicy
         while (file >> line)
         {
-            //pierwsza linijka to rozmiar tablicy, na razie w ten sposob robie skip
-            if (line != "49")
+            T *temp = new T[base_size];
+            for (int i = 0; i < base_size; i++)
             {
-                T *temp = new T[base_size];
-                for (int i = 0; i < base_size; i++)
-                {
-                    temp[i] = tab[i];
-                }
-
-                delete[] tab;
-                base_size++;
-
-                tab = new T[base_size];
-                for (int i = 0; i < base_size - 1; i++)
-                {
-                    tab[i] = temp[i];
-                }
-
-                if (IsFloat(line) == false)
-                {
-                    tab[base_size - 1] = std::stoi(line);
-                }
-
-                else if(IsFloat(line))
-                {
-                    std::ranges::replace(line, ',', '.');
-                    tab[base_size - 1] = std::stof(line);
-                }
-
-                else
-                {
-                    std::cout << "Niepoprawne dane w pliku" << std::endl;
-                    return nullptr;
-                }
-
-                delete[] temp;
+                temp[i] = tab[i];
             }
+
+            delete[] tab;
+            base_size++;
+
+            tab = new T[base_size];
+            for (int i = 0; i < base_size - 1; i++)
+            {
+                tab[i] = temp[i];
+            }
+
+            if (IsFloat(line) == false)
+            {
+                tab[base_size - 1] = std::stoi(line);
+            }
+
+            else if(IsFloat(line))
+            {
+                std::ranges::replace(line, ',', '.');
+                tab[base_size - 1] = std::stof(line);
+            }
+
+            else
+            {
+                std::cout << "Niepoprawne dane w pliku" << std::endl;
+                return nullptr;
+            }
+
+            delete[] temp;
         }
 
         file.close();

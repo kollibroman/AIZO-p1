@@ -4,9 +4,7 @@
 class SortChecker
 {
     public:
-        SortChecker()
-        {
-        }
+        SortChecker() = default;
         
         template <typename T>
         bool isSortedAscending(T *arr, int size)

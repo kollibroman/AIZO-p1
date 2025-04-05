@@ -2,28 +2,37 @@
 #define ARRAYDATAGENERATOR_H
 #include<random>
 
+#include "Algorithms.h"
+
 template <typename T> class ArrayDataGenerator
 {
     public:
-        ArrayDataGenerator()
-        {
-        }
+        ArrayDataGenerator() = default;
 
         T *GenerateData(int n)
         {
+            std::random_device rd;
+            std::mt19937 gen(rd());
+
             T *tab = new T[n];
 
-            for (int i = 0; i < n; i++)
+            if(typeid(T).name() == typeid(int).name())
             {
-                if(typeid(T).name() == typeid(int).name())
-                {
-                    tab[i] = rand() % 1001;
-                }
+                std::uniform_int_distribution<int> distribution(0, 1000);
 
-                else if(typeid(T).name() == typeid(float).name())
+                for(int i = 0; i < n; i++)
                 {
-                    float newFloat = std::round(static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX));
-                    tab[i] = newFloat + std::rand() % 1001;
+                    tab[i] = static_cast<int>(distribution(gen));
+                }
+            }
+
+            else if(typeid(T).name() == typeid(float).name())
+            {
+                std::uniform_real_distribution<float> dist(0.0, 1000.0);
+
+                for(int i = 0; i < n; i++)
+                {
+                    tab[i] = static_cast<float>(dist(gen));
                 }
             }
 
@@ -34,18 +43,10 @@ template <typename T> class ArrayDataGenerator
         {
             T *tab = new T[n];
 
-            for (T i = 0; i < n; i++)
-            {
-                if (i <= n / 3)
-                {
-                    tab[i] = i;
-                }
+            tab = this->GenerateData(n);
+            auto algorithms = new Algorithms<T>();
 
-                else
-                {
-                    tab[i] = rand() % 1001;
-                }
-            }
+            algorithms->QuickSort(tab, 0, (n - 1)/3);
 
             return tab;
         }
@@ -54,18 +55,10 @@ template <typename T> class ArrayDataGenerator
         {
             T *tab = new T[n];
 
-            for (T i = 0; i < n; i++)
-            {
-                if (i <= n / 2)
-                {
-                    tab[i] = i;
-                }
+            tab = this->GenerateData(n);
+            auto algorithms = new Algorithms<T>();
 
-                else
-                {
-                    tab[i] = rand() % 1001;
-                }
-            }
+            algorithms->QuickSort(tab, 0, (n - 1)/2);
 
             return tab;
         }
@@ -74,18 +67,10 @@ template <typename T> class ArrayDataGenerator
         {
             T *tab = new T[n];
 
-            for (T i = 0; i < n; i++)
-            {
-                if (i <= n * 2/3)
-                {
-                    tab[i] = i;
-                }
+            tab = this->GenerateData(n);
+            auto algorithms = new Algorithms<T>();
 
-                else
-                {
-                    tab[i] = rand() % 1001;
-                }
-            }
+            algorithms->QuickSort(tab, 0, (n - 1)*0.66);
 
             return tab;
         }
@@ -94,10 +79,10 @@ template <typename T> class ArrayDataGenerator
         {
             T *tab = new T[n];
 
-            for (T i = 0; i < n; i++)
-            {
-                tab[i] = i;
-            }
+            tab = this->GenerateData(n);
+            auto algorithms = new Algorithms<T>();
+
+            algorithms->QuickSort(tab, 0, n - 1);
 
             return tab;
         }

@@ -149,64 +149,27 @@ CMakeFiles/Projekt1.dir/main.cpp.o.ddi: \
  /usr/include/c++/14.2.1/bits/basic_ios.tcc \
  /usr/include/c++/14.2.1/bits/ostream.tcc /usr/include/c++/14.2.1/istream \
  /usr/include/c++/14.2.1/bits/istream.tcc \
- /home/kollibroman/Studia/AIZO/Projekt1/UI/MainMenu.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/Util/UserInputStorer.h \
+ /usr/include/c++/14.2.1/utility \
+ /usr/include/c++/14.2.1/bits/stl_relops.h /usr/include/c++/14.2.1/chrono \
+ /usr/include/c++/14.2.1/bits/chrono.h /usr/include/c++/14.2.1/ratio \
+ /usr/include/c++/14.2.1/cstdint \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdint.h \
+ /usr/include/stdint.h /usr/include/bits/stdint-uintn.h \
+ /usr/include/bits/stdint-least.h /usr/include/c++/14.2.1/limits \
+ /usr/include/c++/14.2.1/ctime \
+ /usr/include/c++/14.2.1/bits/parse_numbers.h \
+ /usr/include/c++/14.2.1/sstream /usr/include/c++/14.2.1/bits/sstream.tcc \
  /usr/include/c++/14.2.1/vector \
  /usr/include/c++/14.2.1/bits/stl_uninitialized.h \
  /usr/include/c++/14.2.1/bits/stl_vector.h \
  /usr/include/c++/14.2.1/bits/stl_bvector.h \
  /usr/include/c++/14.2.1/bits/vector.tcc \
- /home/kollibroman/Studia/AIZO/Projekt1/UI/../Util/UserInputStorer.h \
- /home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/ArrayDataGenerator.h \
- /usr/include/c++/14.2.1/random /usr/include/c++/14.2.1/cmath \
- /usr/include/math.h /usr/include/bits/math-vector.h \
- /usr/include/bits/libm-simd-decl-stubs.h \
- /usr/include/bits/flt-eval-method.h /usr/include/bits/fp-logb.h \
- /usr/include/bits/fp-fast.h /usr/include/bits/mathcalls-macros.h \
- /usr/include/bits/mathcalls-helper-functions.h \
- /usr/include/bits/mathcalls.h /usr/include/bits/mathcalls-narrow.h \
- /usr/include/bits/iscanonical.h /usr/include/c++/14.2.1/bits/specfun.h \
- /usr/include/c++/14.2.1/limits /usr/include/c++/14.2.1/tr1/gamma.tcc \
- /usr/include/c++/14.2.1/tr1/special_function_util.h \
- /usr/include/c++/14.2.1/tr1/bessel_function.tcc \
- /usr/include/c++/14.2.1/tr1/beta_function.tcc \
- /usr/include/c++/14.2.1/tr1/ell_integral.tcc \
- /usr/include/c++/14.2.1/tr1/exp_integral.tcc \
- /usr/include/c++/14.2.1/tr1/hypergeometric.tcc \
- /usr/include/c++/14.2.1/tr1/legendre_function.tcc \
- /usr/include/c++/14.2.1/tr1/modified_bessel_func.tcc \
- /usr/include/c++/14.2.1/tr1/poly_hermite.tcc \
- /usr/include/c++/14.2.1/tr1/poly_laguerre.tcc \
- /usr/include/c++/14.2.1/tr1/riemann_zeta.tcc \
- /usr/include/c++/14.2.1/cstdint \
- /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdint.h \
- /usr/include/stdint.h /usr/include/bits/stdint-uintn.h \
- /usr/include/bits/stdint-least.h /usr/include/c++/14.2.1/bits/random.h \
- /usr/include/c++/14.2.1/bits/uniform_int_dist.h \
- /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/opt_random.h \
- /usr/include/c++/14.2.1/bits/random.tcc /usr/include/c++/14.2.1/numeric \
- /usr/include/c++/14.2.1/bits/stl_numeric.h \
- /usr/include/c++/14.2.1/pstl/glue_numeric_defs.h \
- /usr/include/c++/14.2.1/pstl/execution_defs.h \
- /home/kollibroman/Studia/AIZO/Projekt1/UI/../Util/ArrayStorer.h \
- /home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/FileReader.h \
- /usr/include/c++/14.2.1/fstream /usr/include/c++/14.2.1/bits/codecvt.h \
- /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/basic_file.h \
- /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++io.h \
- /usr/include/c++/14.2.1/bits/fstream.tcc \
- /usr/include/c++/14.2.1/algorithm \
  /usr/include/c++/14.2.1/bits/stl_algo.h \
  /usr/include/c++/14.2.1/bits/algorithmfwd.h \
  /usr/include/c++/14.2.1/bits/stl_heap.h \
+ /usr/include/c++/14.2.1/bits/uniform_int_dist.h \
  /usr/include/c++/14.2.1/bits/stl_tempbuf.h \
- /usr/include/c++/14.2.1/bits/ranges_algo.h \
- /usr/include/c++/14.2.1/bits/ranges_algobase.h \
- /usr/include/c++/14.2.1/pstl/glue_algorithm_defs.h \
- /home/kollibroman/Studia/AIZO/Projekt1/Util/UserInputStorer.h \
- /home/kollibroman/Studia/AIZO/Projekt1/Lib/Algorithms.h \
- /usr/include/c++/14.2.1/chrono /usr/include/c++/14.2.1/bits/chrono.h \
- /usr/include/c++/14.2.1/ratio /usr/include/c++/14.2.1/ctime \
- /usr/include/c++/14.2.1/bits/parse_numbers.h \
- /usr/include/c++/14.2.1/sstream /usr/include/c++/14.2.1/bits/sstream.tcc \
  /usr/include/c++/14.2.1/bits/shared_ptr.h \
  /usr/include/c++/14.2.1/bits/shared_ptr_base.h \
  /usr/include/c++/14.2.1/bits/allocated_ptr.h \
@@ -219,7 +182,7 @@ CMakeFiles/Projekt1.dir/main.cpp.o.ddi: \
  /usr/include/c++/14.2.1/bits/locale_facets_nonio.h \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/time_members.h \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/messages_members.h \
- /usr/include/libintl.h \
+ /usr/include/libintl.h /usr/include/c++/14.2.1/bits/codecvt.h \
  /usr/include/c++/14.2.1/bits/locale_facets_nonio.tcc \
  /usr/include/c++/14.2.1/bits/locale_conv.h \
  /usr/include/c++/14.2.1/bits/quoted_string.h \
@@ -227,6 +190,59 @@ CMakeFiles/Projekt1.dir/main.cpp.o.ddi: \
  /usr/include/c++/14.2.1/charconv /usr/include/c++/14.2.1/optional \
  /usr/include/c++/14.2.1/bits/enable_special_members.h \
  /usr/include/c++/14.2.1/span /usr/include/c++/14.2.1/variant \
+ /usr/include/c++/14.2.1/bits/ranges_algobase.h \
  /usr/include/c++/14.2.1/bits/unicode.h \
  /usr/include/c++/14.2.1/bits/unicode-data.h \
- /home/kollibroman/Studia/AIZO/Projekt1/Util/SortChecker.h
+ /home/kollibroman/Studia/AIZO/Projekt1/Testing/Reporter.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/Testing/../Lib/Algorithms.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/Testing/../Util/SortChecker.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/Testing/../Lib/ArrayDataGenerator.h \
+ /usr/include/c++/14.2.1/random /usr/include/c++/14.2.1/cmath \
+ /usr/include/math.h /usr/include/bits/math-vector.h \
+ /usr/include/bits/libm-simd-decl-stubs.h \
+ /usr/include/bits/flt-eval-method.h /usr/include/bits/fp-logb.h \
+ /usr/include/bits/fp-fast.h /usr/include/bits/mathcalls-macros.h \
+ /usr/include/bits/mathcalls-helper-functions.h \
+ /usr/include/bits/mathcalls.h /usr/include/bits/mathcalls-narrow.h \
+ /usr/include/bits/iscanonical.h /usr/include/c++/14.2.1/bits/specfun.h \
+ /usr/include/c++/14.2.1/tr1/gamma.tcc \
+ /usr/include/c++/14.2.1/tr1/special_function_util.h \
+ /usr/include/c++/14.2.1/tr1/bessel_function.tcc \
+ /usr/include/c++/14.2.1/tr1/beta_function.tcc \
+ /usr/include/c++/14.2.1/tr1/ell_integral.tcc \
+ /usr/include/c++/14.2.1/tr1/exp_integral.tcc \
+ /usr/include/c++/14.2.1/tr1/hypergeometric.tcc \
+ /usr/include/c++/14.2.1/tr1/legendre_function.tcc \
+ /usr/include/c++/14.2.1/tr1/modified_bessel_func.tcc \
+ /usr/include/c++/14.2.1/tr1/poly_hermite.tcc \
+ /usr/include/c++/14.2.1/tr1/poly_laguerre.tcc \
+ /usr/include/c++/14.2.1/tr1/riemann_zeta.tcc \
+ /usr/include/c++/14.2.1/bits/random.h \
+ /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/opt_random.h \
+ /usr/include/c++/14.2.1/bits/random.tcc /usr/include/c++/14.2.1/numeric \
+ /usr/include/c++/14.2.1/bits/stl_numeric.h \
+ /usr/include/c++/14.2.1/pstl/glue_numeric_defs.h \
+ /usr/include/c++/14.2.1/pstl/execution_defs.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/Testing/../Lib/Algorithms.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/Testing/../Lib/CsvGenerator.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/Testing/../Lib/../Util/ArrayStorer.h \
+ /usr/include/c++/14.2.1/fstream \
+ /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/basic_file.h \
+ /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++io.h \
+ /usr/include/c++/14.2.1/bits/fstream.tcc \
+ /usr/include/c++/14.2.1/filesystem /usr/include/c++/14.2.1/bits/fs_fwd.h \
+ /usr/include/c++/14.2.1/bits/fs_path.h /usr/include/c++/14.2.1/codecvt \
+ /usr/include/c++/14.2.1/bits/fs_dir.h \
+ /usr/include/c++/14.2.1/bits/fs_ops.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/Testing/../Util/ArrayStorer.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/UI/MenuUtils.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/UI/MainMenu.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/UI/../Util/UserInputStorer.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/ArrayDataGenerator.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/UI/../Util/ArrayStorer.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/FileReader.h \
+ /usr/include/c++/14.2.1/algorithm \
+ /usr/include/c++/14.2.1/bits/ranges_algo.h \
+ /usr/include/c++/14.2.1/pstl/glue_algorithm_defs.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/Algorithms.h \
+ /home/kollibroman/Studia/AIZO/Projekt1/UI/../Util/SortChecker.h
