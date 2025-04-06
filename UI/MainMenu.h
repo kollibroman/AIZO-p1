@@ -69,7 +69,7 @@ public:
 
                 default:
                     std::cout << "Wrong input" << std::endl;
-                    break;
+                    exit(0);
             }
     }
 

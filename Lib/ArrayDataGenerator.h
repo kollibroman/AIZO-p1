@@ -51,14 +51,14 @@ template <typename T> class ArrayDataGenerator
             return tab;
         }
 
-        T *Generate50PercentSortedData(int n)
+        T *GenerateDescendSortedData(int n)
         {
             T *tab = new T[n];
 
             tab = this->GenerateData(n);
             auto algorithms = new Algorithms<T>();
 
-            algorithms->QuickSort(tab, 0, (n - 1)/2);
+            algorithms->QuickSortDesc(tab, 0, (n - 1)/2);
 
             return tab;
         }

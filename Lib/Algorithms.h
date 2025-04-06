@@ -41,6 +41,40 @@ class Algorithms
             }
         }
 
+    void QuickSortDesc(T *tab, int left, int right)
+        {
+            if (left >= right)
+                return;
+
+            T pivot = tab[(right + left) / 2];
+            int i = left, j = right;
+
+            do
+            {
+                while (tab[i] > pivot) // Change this comparison for descending order
+                    i++;
+                while (tab[j] < pivot) // Change this comparison for descending order
+                    j--;
+
+                if (i <= j)
+                {
+                    std::swap(tab[i], tab[j]);
+                    i++;
+                    j--;
+                }
+            } while (i <= j);
+
+            if (j > left)
+            {
+                QuickSort(tab, left, j);
+            }
+
+            if (i < right)
+            {
+                QuickSort(tab, i, right);
+            }
+        }
+
         void HeapSort(T *tab, int n)
         {
             // stworz kopiec

@@ -332,6 +332,8 @@ class MenuUtils
                             algorithms->HeapSort(copy, ARRAY_SIZE);
                             auto endHeap = std::chrono::high_resolution_clock::now();
                             double heapSortTime = std::chrono::duration<double, std::milli>(endHeap - startHeap).count();
+
+                            //TODO: fix segfault here
                             floatArrayStorer->SortingTimesHeapSort[0] = heapSortTime;
 
                             std::cout << "\n SortedArray: " << std::endl;
@@ -408,7 +410,5 @@ private:
         }
     }
 };
-
-
 
 #endif //MENUUTILS_H

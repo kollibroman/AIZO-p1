@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 import os
+import platform
 
 def process_summary_and_create_tables(files, output_dir):
    # Create output directory if it doesn't exist
@@ -120,17 +121,27 @@ def process_summary_and_create_tables(files, output_dir):
     print(f"✅ All tables and charts have been written to separate files in: {output_dir}")
 
 
-# 🧪 Example usage:
 files = [
-    r'..\ReportData\5000.xlsx',
-    r'..\ReportData\10000.xlsx',
-    r'..\ReportData\20000.xlsx',
-    r'..\ReportData\40000.xlsx',
-    r'..\ReportData\60000.xlsx',
-    r'..\ReportData\80000.xlsx',
-    r'..\ReportData\100000.xlsx'
+    '../ReportData/5000.xlsx',
+    '../ReportData/10000.xlsx',
+    '../ReportData/20000.xlsx',
+    '../ReportData/40000.xlsx',
+    '../ReportData/60000.xlsx',
+    '../ReportData/80000.xlsx',
+    '../ReportData/100000.xlsx'
 ]
+output_excel = '../ReportData/PreparedDataPointChart'
 
-output_excel = r'..\ReportData\PreparedDataPointChart'
+if(platform.system() != 'Linux'):
+    files = [
+        r'..\ReportData\5000.xlsx',
+        r'..\ReportData\10000.xlsx',
+        r'..\ReportData\20000.xlsx',
+        r'..\ReportData\40000.xlsx',
+        r'..\ReportData\60000.xlsx',
+        r'..\ReportData\80000.xlsx',
+        r'..\ReportData\100000.xlsx'
+    ]
+    output_excel = r'..\ReportData\PreparedDataPointChart'
 
 process_summary_and_create_tables(files, output_excel)

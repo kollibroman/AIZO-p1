@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import platform
 
 def combine_csvs_to_excel_with_summary(parent_folder, output_excel):
     combined_data = []
@@ -66,8 +67,12 @@ def combine_csvs_to_excel_with_summary(parent_folder, output_excel):
 
 # 🧪 Example usage:
 # Replace with your actual folder path
-parent_folder = r'C:\Users\Filip Kwiek\Desktop\AIZO-p1\1000000'
-output_excel = r'C:\Users\Filip Kwiek\Desktop\AIZO-p1\ReportData\1000000.xlsx'
+parent_folder = '../10000'
+output_excel = '../ReportData/10000.xlsx'
+
+if(platform.system() != 'Linux'):
+    parent_folder = r'C:\Users\Filip Kwiek\Desktop\AIZO-p1\100000'
+    output_excel = r'C:\Users\Filip Kwiek\Desktop\AIZO-p1\ReportData\100000.xlsx'
 
 combine_csvs_to_excel_with_summary(parent_folder, output_excel)
 

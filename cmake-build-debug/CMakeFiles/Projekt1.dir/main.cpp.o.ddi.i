@@ -87444,6 +87444,40 @@ class Algorithms
             }
         }
 
+    void QuickSortDesc(T *tab, int left, int right)
+        {
+            if (left >= right)
+                return;
+
+            T pivot = tab[(right + left) / 2];
+            int i = left, j = right;
+
+            do
+            {
+                while (tab[i] > pivot)
+                    i++;
+                while (tab[j] < pivot)
+                    j--;
+
+                if (i <= j)
+                {
+                    std::swap(tab[i], tab[j]);
+                    i++;
+                    j--;
+                }
+            } while (i <= j);
+
+            if (j > left)
+            {
+                QuickSort(tab, left, j);
+            }
+
+            if (i < right)
+            {
+                QuickSort(tab, i, right);
+            }
+        }
+
         void HeapSort(T *tab, int n)
         {
 
@@ -87570,50 +87604,6 @@ private:
     }
 };
 # 5 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/Reporter.h" 2
-# 1 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/../Util/SortChecker.h" 1
-
-
-
-class SortChecker
-{
-    public:
-        SortChecker() = default;
-
-        template <typename T>
-        bool isSortedAscending(T *arr, int size)
-        {
-            for (int i = 1; i < size; i++)
-            {
-                if (arr[i] < arr[i - 1])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        template <typename T>
-        bool isSortedDescending(T *arr, int size)
-        {
-            for (int i = 1; i < size; i++)
-            {
-                if (arr[i] > arr[i - 1])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        template <typename T>
-        bool isSorted(T *arr, int size)
-        {
-            return isSortedAscending(arr, size) || isSortedDescending(arr, size);
-        }
-};
-# 6 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/Reporter.h" 2
-
-
 
 # 1 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/../Lib/ArrayDataGenerator.h" 1
 
@@ -105652,14 +105642,14 @@ template <typename T> class ArrayDataGenerator
             return tab;
         }
 
-        T *Generate50PercentSortedData(int n)
+        T *GenerateDescendSortedData(int n)
         {
             T *tab = new T[n];
 
             tab = this->GenerateData(n);
             auto algorithms = new Algorithms<T>();
 
-            algorithms->QuickSort(tab, 0, (n - 1)/2);
+            algorithms->QuickSortDesc(tab, 0, (n - 1)/2);
 
             return tab;
         }
@@ -105688,7 +105678,7 @@ template <typename T> class ArrayDataGenerator
             return tab;
         }
 };
-# 10 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/Reporter.h" 2
+# 7 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/Reporter.h" 2
 # 1 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/../Lib/CsvGenerator.h" 1
        
 # 1 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/../Lib/../Util/ArrayStorer.h" 1
@@ -110256,9 +110246,9 @@ template<typename T> class CsvGenerator {
         }
     }
 };
-# 11 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/Reporter.h" 2
+# 8 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/Reporter.h" 2
 # 1 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/../Util/ArrayStorer.h" 1
-# 12 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/Reporter.h" 2
+# 9 "/home/kollibroman/Studia/AIZO/Projekt1/Testing/Reporter.h" 2
 
 class Reporter
 {
@@ -110301,23 +110291,22 @@ public:
         floatArrayStorer33->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
         floatArrayStorer33->SortingTimesHeapSort = new double[GENERATION_COUNT];
 
+        auto intArrayStorerDesc = new ArrayStorer<int>();
+        auto floatArrayStorerDesc = new ArrayStorer<float>();
 
-        auto intArrayStorer50 = new ArrayStorer<int>();
-        auto floatArrayStorer50 = new ArrayStorer<float>();
 
+        intArrayStorerDesc->Arrays = new int *[GENERATION_COUNT];
+        floatArrayStorerDesc->Arrays = new float *[GENERATION_COUNT];
 
-        intArrayStorer50->Arrays = new int *[GENERATION_COUNT];
-        floatArrayStorer50->Arrays = new float *[GENERATION_COUNT];
+        intArrayStorerDesc->SortingTimesQuickSort = new double[GENERATION_COUNT];
+        intArrayStorerDesc->SortingTimesInsertSort = new double[GENERATION_COUNT];
+        intArrayStorerDesc->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
+        intArrayStorerDesc->SortingTimesHeapSort = new double[GENERATION_COUNT];
 
-        intArrayStorer50->SortingTimesQuickSort = new double[GENERATION_COUNT];
-        intArrayStorer50->SortingTimesInsertSort = new double[GENERATION_COUNT];
-        intArrayStorer50->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
-        intArrayStorer50->SortingTimesHeapSort = new double[GENERATION_COUNT];
-
-        floatArrayStorer50->SortingTimesQuickSort = new double[GENERATION_COUNT];
-        floatArrayStorer50->SortingTimesInsertSort = new double[GENERATION_COUNT];
-        floatArrayStorer50->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
-        floatArrayStorer50->SortingTimesHeapSort = new double[GENERATION_COUNT];
+        floatArrayStorerDesc->SortingTimesQuickSort = new double[GENERATION_COUNT];
+        floatArrayStorerDesc->SortingTimesInsertSort = new double[GENERATION_COUNT];
+        floatArrayStorerDesc->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
+        floatArrayStorerDesc->SortingTimesHeapSort = new double[GENERATION_COUNT];
 
 
         auto intArrayStorer66 = new ArrayStorer<int>();
@@ -110374,11 +110363,11 @@ public:
             intArrayStorer33->Arrays[i] = intDataGenerator->Generate33PercentSortedData(ARRAY_SIZE);
             floatArrayStorer33->Arrays[i] = floatDataGenerator->Generate33PercentSortedData(ARRAY_SIZE);
 
-            intArrayStorer50->Arrays[i] = new int[ARRAY_SIZE];
-            floatArrayStorer50->Arrays[i] = new float[ARRAY_SIZE];
+            intArrayStorerDesc->Arrays[i] = new int[ARRAY_SIZE];
+            floatArrayStorerDesc->Arrays[i] = new float[ARRAY_SIZE];
 
-            intArrayStorer50->Arrays[i] = intDataGenerator->Generate50PercentSortedData(ARRAY_SIZE);
-            floatArrayStorer50->Arrays[i] = floatDataGenerator->Generate50PercentSortedData(ARRAY_SIZE);
+            intArrayStorerDesc->Arrays[i] = intDataGenerator->GenerateDescendSortedData(ARRAY_SIZE);
+            floatArrayStorerDesc->Arrays[i] = floatDataGenerator->GenerateDescendSortedData(ARRAY_SIZE);
 
             intArrayStorer66->Arrays[i] = new int[ARRAY_SIZE];
             floatArrayStorer66->Arrays[i] = new float[ARRAY_SIZE];
@@ -110543,8 +110532,6 @@ public:
             delete[] copy;
         }
 
-        auto int33CSVGenerator = new CsvGenerator<int>();
-        auto float33CSVGenerator = new CsvGenerator<float>();
 
         intCSVGenerator->generateCsvFiles(intArrayStorer33, GENERATION_COUNT, mainFolderName + "/RandomInt33");
         floatCSVGenerator->generateCsvFiles(floatArrayStorer33, GENERATION_COUNT, mainFolderName + "/RandomFloat33");
@@ -110552,80 +110539,77 @@ public:
 
         for (int i = 0; i < GENERATION_COUNT; i++)
         {
-            auto copy = intAlgorithms->copyArray(intArrayStorer50->Arrays[i], ARRAY_SIZE);
+            auto copy = intAlgorithms->copyArray(intArrayStorerDesc->Arrays[i], ARRAY_SIZE);
             auto startQuick = std::chrono::high_resolution_clock::now();
             intAlgorithms->QuickSort(copy, 0, ARRAY_SIZE - 1);
             auto endQuick = std::chrono::high_resolution_clock::now();
             double quickSortTime = std::chrono::duration<double, std::milli>(endQuick - startQuick).count();
-            intArrayStorer50->SortingTimesQuickSort[i] = quickSortTime;
+            intArrayStorerDesc->SortingTimesQuickSort[i] = quickSortTime;
             delete[] copy;
 
-            copy = intAlgorithms->copyArray(intArrayStorer50->Arrays[i], ARRAY_SIZE);
+            copy = intAlgorithms->copyArray(intArrayStorerDesc->Arrays[i], ARRAY_SIZE);
             auto startInsert = std::chrono::high_resolution_clock::now();
             intAlgorithms->InsertSort(copy, ARRAY_SIZE);
             auto endInsert = std::chrono::high_resolution_clock::now();
             double insertSortTime = std::chrono::duration<double, std::milli>(endInsert - startInsert).count();
-            intArrayStorer50->SortingTimesInsertSort[i] = insertSortTime;
+            intArrayStorerDesc->SortingTimesInsertSort[i] = insertSortTime;
             delete[] copy;
 
-            copy = intAlgorithms->copyArray(intArrayStorer50->Arrays[i], ARRAY_SIZE);
+            copy = intAlgorithms->copyArray(intArrayStorerDesc->Arrays[i], ARRAY_SIZE);
             auto startBinary = std::chrono::high_resolution_clock::now();
             intAlgorithms->InsertSortBinary(copy,ARRAY_SIZE);
             auto endBinary = std::chrono::high_resolution_clock::now();
             double binarySortTime = std::chrono::duration<double, std::milli>(endBinary - startBinary).count();
-            intArrayStorer50->SortingTimesInsertBinarySort[i] = binarySortTime;
+            intArrayStorerDesc->SortingTimesInsertBinarySort[i] = binarySortTime;
             delete[] copy;
 
-            copy = intAlgorithms->copyArray(intArrayStorer50->Arrays[i], ARRAY_SIZE);
+            copy = intAlgorithms->copyArray(intArrayStorerDesc->Arrays[i], ARRAY_SIZE);
             auto startHeap = std::chrono::high_resolution_clock::now();
             intAlgorithms->HeapSort(copy, ARRAY_SIZE);
             auto endHeap = std::chrono::high_resolution_clock::now();
             double heapSortTime = std::chrono::duration<double, std::milli>(endHeap - startHeap).count();
-            intArrayStorer50->SortingTimesHeapSort[i] = heapSortTime;
+            intArrayStorerDesc->SortingTimesHeapSort[i] = heapSortTime;
             delete[] copy;
         }
 
 
         for (int i = 0; i < GENERATION_COUNT; i++)
         {
-            auto copy = floatAlgorithms->copyArray(floatArrayStorer50->Arrays[i], ARRAY_SIZE);
+            auto copy = floatAlgorithms->copyArray(floatArrayStorerDesc->Arrays[i], ARRAY_SIZE);
             auto startQuick = std::chrono::high_resolution_clock::now();
             floatAlgorithms->QuickSort(copy, 0, ARRAY_SIZE - 1);
             auto endQuick = std::chrono::high_resolution_clock::now();
             double quickSortTime = std::chrono::duration<double, std::milli>(endQuick - startQuick).count();
-            floatArrayStorer50->SortingTimesQuickSort[i] = quickSortTime;
+            floatArrayStorerDesc->SortingTimesQuickSort[i] = quickSortTime;
             delete[] copy;
 
-            copy = floatAlgorithms->copyArray(floatArrayStorer50->Arrays[i], ARRAY_SIZE);
+            copy = floatAlgorithms->copyArray(floatArrayStorerDesc->Arrays[i], ARRAY_SIZE);
             auto startInsert = std::chrono::high_resolution_clock::now();
             floatAlgorithms->InsertSort(copy, ARRAY_SIZE);
             auto endInsert = std::chrono::high_resolution_clock::now();
             double insertSortTime = std::chrono::duration<double, std::milli>(endInsert - startInsert).count();
-            floatArrayStorer50->SortingTimesInsertSort[i] = insertSortTime;
+            floatArrayStorerDesc->SortingTimesInsertSort[i] = insertSortTime;
             delete[] copy;
 
-            copy = floatAlgorithms->copyArray(floatArrayStorer50->Arrays[i], ARRAY_SIZE);
+            copy = floatAlgorithms->copyArray(floatArrayStorerDesc->Arrays[i], ARRAY_SIZE);
             auto startBinary = std::chrono::high_resolution_clock::now();
             floatAlgorithms->InsertSortBinary(copy,ARRAY_SIZE);
             auto endBinary = std::chrono::high_resolution_clock::now();
             double binarySortTime = std::chrono::duration<double, std::milli>(endBinary - startBinary).count();
-            floatArrayStorer50->SortingTimesInsertBinarySort[i] = binarySortTime;
+            floatArrayStorerDesc->SortingTimesInsertBinarySort[i] = binarySortTime;
             delete[] copy;
 
-            copy = floatAlgorithms->copyArray(floatArrayStorer50->Arrays[i], ARRAY_SIZE);
+            copy = floatAlgorithms->copyArray(floatArrayStorerDesc->Arrays[i], ARRAY_SIZE);
             auto startHeap = std::chrono::high_resolution_clock::now();
             floatAlgorithms->HeapSort(copy, ARRAY_SIZE);
             auto endHeap = std::chrono::high_resolution_clock::now();
             double heapSortTime = std::chrono::duration<double, std::milli>(endHeap - startHeap).count();
-            floatArrayStorer50->SortingTimesHeapSort[i] = heapSortTime;
+            floatArrayStorerDesc->SortingTimesHeapSort[i] = heapSortTime;
             delete[] copy;
         }
 
-        auto int50CSVGenerator = new CsvGenerator<int>();
-        auto float50CSVGenerator = new CsvGenerator<float>();
-
-        intCSVGenerator->generateCsvFiles(intArrayStorer50, GENERATION_COUNT, mainFolderName + "/RandomInt50");
-        floatCSVGenerator->generateCsvFiles(floatArrayStorer50, GENERATION_COUNT, mainFolderName + "/RandomFloat50");
+        intCSVGenerator->generateCsvFiles(intArrayStorerDesc, GENERATION_COUNT, mainFolderName + "/RandomIntDesc");
+        floatCSVGenerator->generateCsvFiles(floatArrayStorerDesc, GENERATION_COUNT, mainFolderName + "/RandomFloatDesc");
 
 
         for (int i = 0; i < GENERATION_COUNT; i++)
@@ -110698,9 +110682,6 @@ public:
             floatArrayStorer66->SortingTimesHeapSort[i] = heapSortTime;
             delete[] copy;
         }
-
-        auto int66CSVGenerator = new CsvGenerator<int>();
-        auto float66CSVGenerator = new CsvGenerator<float>();
 
         intCSVGenerator->generateCsvFiles(intArrayStorer66, GENERATION_COUNT, mainFolderName + "/RandomInt66");
         floatCSVGenerator->generateCsvFiles(floatArrayStorer66, GENERATION_COUNT, mainFolderName + "/RandomFloat66");
@@ -110777,9 +110758,6 @@ public:
             delete[] copy;
         }
 
-        auto int100CSVGenerator = new CsvGenerator<int>();
-        auto float100CSVGenerator = new CsvGenerator<float>();
-
         intCSVGenerator->generateCsvFiles(intArrayStorer100, GENERATION_COUNT, mainFolderName + " /RandomInt100");
         floatCSVGenerator->generateCsvFiles(floatArrayStorer100, GENERATION_COUNT, mainFolderName + "/RandomFloat100");
 
@@ -110788,6 +110766,8 @@ public:
         {
             delete[] intArrayStorer->Arrays[i];
             delete[] floatArrayStorer->Arrays[i];
+            delete[] intArrayStorerDesc->Arrays[i];
+            delete[] floatArrayStorerDesc->Arrays[i];
         }
 
         delete[] intArrayStorer->Arrays;
@@ -110802,6 +110782,57 @@ public:
         delete[] floatArrayStorer->SortingTimesHeapSort;
         delete intArrayStorer;
         delete floatArrayStorer;
+
+        delete[] intArrayStorer33->Arrays;
+        delete[] floatArrayStorer33->Arrays;
+        delete[] intArrayStorer33->SortingTimesQuickSort;
+        delete[] intArrayStorer33->SortingTimesInsertSort;
+        delete[] floatArrayStorer33->SortingTimesQuickSort;
+        delete[] floatArrayStorer33->SortingTimesInsertSort;
+        delete[] intArrayStorer33->SortingTimesInsertBinarySort;
+        delete[] intArrayStorer33->SortingTimesHeapSort;
+        delete[] floatArrayStorer33->SortingTimesInsertBinarySort;
+        delete[] floatArrayStorer33->SortingTimesHeapSort;
+        delete intArrayStorer33;
+
+        delete[] intArrayStorerDesc->Arrays;
+        delete[] floatArrayStorerDesc->Arrays;
+        delete[] intArrayStorerDesc->SortingTimesQuickSort;
+        delete[] intArrayStorerDesc->SortingTimesInsertSort;
+        delete[] floatArrayStorerDesc->SortingTimesQuickSort;
+        delete[] floatArrayStorerDesc->SortingTimesInsertSort;
+        delete[] intArrayStorerDesc->SortingTimesInsertBinarySort;
+        delete[] intArrayStorerDesc->SortingTimesHeapSort;
+        delete[] floatArrayStorerDesc->SortingTimesInsertBinarySort;
+        delete[] floatArrayStorerDesc->SortingTimesHeapSort;
+        delete intArrayStorerDesc;
+        delete floatArrayStorerDesc;
+
+        delete[] intArrayStorer66->Arrays;
+        delete[] floatArrayStorer66->Arrays;
+        delete[] intArrayStorer66->SortingTimesQuickSort;
+        delete[] intArrayStorer66->SortingTimesInsertSort;
+        delete[] floatArrayStorer66->SortingTimesQuickSort;
+        delete[] floatArrayStorer66->SortingTimesInsertSort;
+        delete[] intArrayStorer66->SortingTimesInsertBinarySort;
+        delete[] intArrayStorer66->SortingTimesHeapSort;
+        delete[] floatArrayStorer66->SortingTimesInsertBinarySort;
+        delete[] floatArrayStorer66->SortingTimesHeapSort;
+        delete intArrayStorer66;
+        delete floatArrayStorer66;
+
+        delete[] intArrayStorer100->Arrays;
+        delete[] floatArrayStorer100->Arrays;
+        delete[] intArrayStorer100->SortingTimesQuickSort;
+        delete[] intArrayStorer100->SortingTimesInsertSort;
+        delete[] floatArrayStorer100->SortingTimesQuickSort;
+        delete[] floatArrayStorer100->SortingTimesInsertSort;
+        delete[] intArrayStorer100->SortingTimesInsertBinarySort;
+        delete[] intArrayStorer100->SortingTimesHeapSort;
+        delete[] floatArrayStorer100->SortingTimesInsertBinarySort;
+        delete[] floatArrayStorer100->SortingTimesHeapSort;
+        delete intArrayStorer100;
+        delete floatArrayStorer100;
     }
 };
 # 6 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
@@ -114935,7 +114966,6 @@ public:
                 temp[i] = tab[i];
             }
 
-            delete[] tab;
             base_size++;
 
             tab = new T[base_size];
@@ -115037,7 +115067,7 @@ public:
 
                 default:
                     std::cout << "Wrong input" << std::endl;
-                    break;
+                    exit(0);
             }
     }
 
@@ -115183,6 +115213,46 @@ private:
 # 1 "/home/kollibroman/Studia/AIZO/Projekt1/UI/../Lib/Algorithms.h" 1
 # 6 "/home/kollibroman/Studia/AIZO/Projekt1/UI/MenuUtils.h" 2
 # 1 "/home/kollibroman/Studia/AIZO/Projekt1/UI/../Util/SortChecker.h" 1
+
+
+
+class SortChecker
+{
+    public:
+        SortChecker() = default;
+
+        template <typename T>
+        bool isSortedAscending(T *arr, int size)
+        {
+            for (int i = 1; i < size; i++)
+            {
+                if (arr[i] < arr[i - 1])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        template <typename T>
+        bool isSortedDescending(T *arr, int size)
+        {
+            for (int i = 1; i < size; i++)
+            {
+                if (arr[i] > arr[i - 1])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        template <typename T>
+        bool isSorted(T *arr, int size)
+        {
+            return isSortedAscending(arr, size) || isSortedDescending(arr, size);
+        }
+};
 # 7 "/home/kollibroman/Studia/AIZO/Projekt1/UI/MenuUtils.h" 2
 
 
@@ -115623,7 +115693,7 @@ int main()
         reporter->GenerateRandomArrayData(100, 40000, "../40000");
         reporter->GenerateRandomArrayData(100, 60000, "../60000");
         reporter->GenerateRandomArrayData(100, 80000, "../80000");
-        reporter->GenerateRandomArrayData(100, 100000, "../1000000");
+        reporter->GenerateRandomArrayData(100, 100000, "../100000");
     }
 
     else

@@ -29,7 +29,6 @@ public:
                 temp[i] = tab[i];
             }
 
-            delete[] tab;
             base_size++;
 
             tab = new T[base_size];
