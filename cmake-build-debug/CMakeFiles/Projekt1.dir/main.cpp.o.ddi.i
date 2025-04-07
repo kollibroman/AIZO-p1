@@ -115634,46 +115634,8 @@ class MenuUtils
                 if (userInputStorer->Option == 3)
                 {
 
-                    for (int i = 0; i < GENERATION_COUNT; i++)
-                    {
-                        delete[] intArrayStorer->Arrays[i];
-                        delete[] floatArrayStorer->Arrays[i];
-                    }
-
-                    delete[] intArrayStorer->Arrays;
-                    delete[] floatArrayStorer->Arrays;
-                    delete[] intArrayStorer->SortingTimesQuickSort;
-                    delete[] intArrayStorer->SortingTimesInsertSort;
-                    delete[] floatArrayStorer->SortingTimesQuickSort;
-                    delete[] floatArrayStorer->SortingTimesInsertSort;
-                    delete[] intArrayStorer->SortingTimesInsertBinarySort;
-                    delete[] intArrayStorer->SortingTimesHeapSort;
-                    delete[] floatArrayStorer->SortingTimesInsertBinarySort;
-                    delete[] floatArrayStorer->SortingTimesHeapSort;
-                    delete intArrayStorer;
-                    delete floatArrayStorer;
                     break;
                 }
-
-
-                for (int i = 0; i < GENERATION_COUNT; i++)
-                {
-                    delete intArrayStorer->Arrays[i];
-                    delete floatArrayStorer->Arrays[i];
-                }
-
-                delete[] intArrayStorer->Arrays;
-                delete[] floatArrayStorer->Arrays;
-                delete[] intArrayStorer->SortingTimesQuickSort;
-                delete[] intArrayStorer->SortingTimesInsertSort;
-                delete[] floatArrayStorer->SortingTimesQuickSort;
-                delete[] floatArrayStorer->SortingTimesInsertSort;
-                delete[] intArrayStorer->SortingTimesInsertBinarySort;
-                delete[] intArrayStorer->SortingTimesHeapSort;
-                delete[] floatArrayStorer->SortingTimesInsertBinarySort;
-                delete[] floatArrayStorer->SortingTimesHeapSort;
-                delete intArrayStorer;
-                delete floatArrayStorer;
             }
         }
 
