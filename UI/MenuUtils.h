@@ -12,12 +12,14 @@
 class MenuUtils
 {
     public:
-        MenuUtils(UserInputStorer *&userInputStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+        MenuUtils(UserInputStorer *&userInputStorer)
         {
             while (true)
             {
                 auto intArrayStorer = new ArrayStorer<int>();
                 auto floatArrayStorer = new ArrayStorer<float>();
+
+                int GENERATION_COUNT = 1;
 
                 // Allocate arrays properly
                 intArrayStorer->Arrays = new int *[GENERATION_COUNT];
@@ -29,25 +31,14 @@ class MenuUtils
                 floatArrayStorer->SortingTimesQuickSort = new double[GENERATION_COUNT];
                 floatArrayStorer->SortingTimesInsertSort = new double[GENERATION_COUNT];
 
-                intArrayStorer->SortingTimesQuickSort = new double[GENERATION_COUNT];
-                intArrayStorer->SortingTimesInsertSort = new double[GENERATION_COUNT];
-
-                floatArrayStorer->SortingTimesQuickSort = new double[GENERATION_COUNT];
-                floatArrayStorer->SortingTimesInsertSort = new double[GENERATION_COUNT];
-
                 intArrayStorer->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
                 intArrayStorer->SortingTimesHeapSort = new double[GENERATION_COUNT];
 
                 floatArrayStorer->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
-                floatArrayStorer->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
+                floatArrayStorer->SortingTimesHeapSort = new double[GENERATION_COUNT];
 
-                for (int i = 0; i < GENERATION_COUNT; i++)
-                {
-                    intArrayStorer->Arrays[i] = new int[ARRAY_SIZE];     // Allocate space for integers
-                    floatArrayStorer->Arrays[i] = new float[ARRAY_SIZE]; // Allocate space for floats
-                }
-
-                auto menu = new MainMenu(userInputStorer, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
+                auto menu = new MainMenu(userInputStorer, intArrayStorer, floatArrayStorer);
+                int ARRAY_SIZE = userInputStorer->ArraySize;
 
                 if (userInputStorer->Option == 1)
                 {
@@ -128,7 +119,7 @@ class MenuUtils
                         delete algorithms; // Free memory
                     }
 
-                    else if (userInputStorer->DataType == "float") // Ensure it's not null
+                    else if (userInputStorer->DataType == "float")
                     {
                         auto algorithms = new Algorithms<float>();
                         auto sortChecker = new SortChecker();
@@ -374,8 +365,8 @@ class MenuUtils
                 // Free allocated memory
                 for (int i = 0; i < GENERATION_COUNT; i++)
                 {
-                    delete[] intArrayStorer->Arrays[i];
-                    delete[] floatArrayStorer->Arrays[i];
+                    delete intArrayStorer->Arrays[i];
+                    delete floatArrayStorer->Arrays[i];
                 }
 
                 delete[] intArrayStorer->Arrays;

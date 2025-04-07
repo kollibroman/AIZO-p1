@@ -27,7 +27,7 @@ public:
         }
     }
 
-    explicit MainMenu(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+    explicit MainMenu(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer)
     {
             std::cout<< "Menu programu" << std::endl;
 
@@ -53,14 +53,14 @@ public:
                     userInput->Option = choice;
                     ChooseDataType(userInput);
                     ChooseAlgorithm(userInput);
-                    HandleDataGeneration(userInput, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
+                    HandleDataGeneration(userInput, intArrayStorer, floatArrayStorer, userInput->ArraySize);
                     break;
 
                 case 2:
                     userInput->Option = choice;
-                    ChooseDataType(userInput);
+                    ChooseDataTypeForFile(userInput);
                     ChooseAlgorithm(userInput);
-                    HandleDataRead(userInput, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
+                    HandleDataRead(userInput, intArrayStorer, floatArrayStorer);
                     break;
 
                 case 3:
@@ -159,30 +159,71 @@ private:
                 std::cout << "nieakceptowalny wybor" << std::endl;
                 break;
         }
+
+        int array_size = 0;
+
+        std::cout << "Wpisz rozmiar tablicy: " << std::endl;
+        std::cin >> array_size;
+
+        userInput->ArraySize = array_size;
     }
 
-    void HandleDataGeneration(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+    void ChooseDataTypeForFile(UserInputStorer* &userInput)
     {
-        for (int i = 0; i < GENERATION_COUNT; i++)
+        std::cout<< "Wybierz typ danych" << std::endl;
+
+        std::vector<std::string> options =
         {
-            if (userInput->DataType == "int")
-            {
-                auto arrayDataGenerator = new ArrayDataGenerator<int>();
-                int *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
-                intArrayStorer->Arrays[i] = tab;
-            }
+            "Int (1)",
+            "Float (2)",
+        };
 
-            else if (userInput->DataType == "float")
-            {
-                auto arrayDataGenerator = new ArrayDataGenerator<float>();
-                float *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
+        int choice;
 
-                floatArrayStorer->Arrays[i] = tab;
-            }
+        for (auto option : options)
+        {
+            std::cout << option << std::endl;
+        }
+
+        std::cin >> choice;
+
+        switch(choice)
+        {
+            case 1:
+                std::cout << "Wybrano int" << std::endl;
+            userInput->DataType = "int";
+            break;
+
+            case 2:
+                std::cout << "Wybrano float" << std::endl;
+            userInput->DataType = "float";
+            break;
+
+            default:
+                std::cout << "nieakceptowalny wybor" << std::endl;
+            break;
         }
     }
 
-    void HandleDataRead(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+    void HandleDataGeneration(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int ARRAY_SIZE)
+    {
+        if (userInput->DataType == "int")
+        {
+            auto arrayDataGenerator = new ArrayDataGenerator<int>();
+            int *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
+            intArrayStorer->Arrays[0] = tab;
+        }
+
+        else if (userInput->DataType == "float")
+        {
+            auto arrayDataGenerator = new ArrayDataGenerator<float>();
+            float *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
+
+            floatArrayStorer->Arrays[0] = tab;
+        }
+    }
+
+    void HandleDataRead(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer)
     {
         std::cout << "Podaj nazwe pliku" << std::endl;
         std::string fileName;

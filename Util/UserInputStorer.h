@@ -6,7 +6,8 @@
 //Struct gdzie przechowywane są dane wprowadzone przez użytkownika
 struct UserInputStorer
 {
-       UserInputStorer(int option, std::string dataType): ChosenAlgorithm(0) {
+       UserInputStorer(int option, std::string dataType): ChosenAlgorithm(0), ArraySize(0)
+       {
               Option = option;
               DataType = std::move(dataType);
        }
@@ -14,6 +15,7 @@ struct UserInputStorer
        int Option;
        std::string DataType;
        int ChosenAlgorithm;
+       int ArraySize;
 };
 
 #endif //USERINPUTSTORER_H

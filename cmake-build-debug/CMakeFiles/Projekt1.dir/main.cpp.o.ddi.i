@@ -43797,7 +43797,8 @@ namespace std __attribute__ ((__visibility__ ("default")))
 # 7 "/home/kollibroman/Studia/AIZO/Projekt1/Util/UserInputStorer.h"
 struct UserInputStorer
 {
-       UserInputStorer(int option, std::string dataType): ChosenAlgorithm(0) {
+       UserInputStorer(int option, std::string dataType): ChosenAlgorithm(0), ArraySize(0)
+       {
               Option = option;
               DataType = std::move(dataType);
        }
@@ -43805,6 +43806,7 @@ struct UserInputStorer
        int Option;
        std::string DataType;
        int ChosenAlgorithm;
+       int ArraySize;
 };
 # 3 "/home/kollibroman/Studia/AIZO/Projekt1/main.cpp" 2
 # 1 "/usr/include/c++/14.2.1/chrono" 1 3
@@ -115025,7 +115027,7 @@ public:
         }
     }
 
-    explicit MainMenu(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+    explicit MainMenu(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer)
     {
             std::cout<< "Menu programu" << std::endl;
 
@@ -115051,14 +115053,14 @@ public:
                     userInput->Option = choice;
                     ChooseDataType(userInput);
                     ChooseAlgorithm(userInput);
-                    HandleDataGeneration(userInput, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
+                    HandleDataGeneration(userInput, intArrayStorer, floatArrayStorer, userInput->ArraySize);
                     break;
 
                 case 2:
                     userInput->Option = choice;
-                    ChooseDataType(userInput);
+                    ChooseDataTypeForFile(userInput);
                     ChooseAlgorithm(userInput);
-                    HandleDataRead(userInput, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
+                    HandleDataRead(userInput, intArrayStorer, floatArrayStorer);
                     break;
 
                 case 3:
@@ -115157,30 +115159,71 @@ private:
                 std::cout << "nieakceptowalny wybor" << std::endl;
                 break;
         }
+
+        int array_size = 0;
+
+        std::cout << "Wpisz rozmiar tablicy: " << std::endl;
+        std::cin >> array_size;
+
+        userInput->ArraySize = array_size;
     }
 
-    void HandleDataGeneration(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+    void ChooseDataTypeForFile(UserInputStorer* &userInput)
     {
-        for (int i = 0; i < GENERATION_COUNT; i++)
+        std::cout<< "Wybierz typ danych" << std::endl;
+
+        std::vector<std::string> options =
         {
-            if (userInput->DataType == "int")
-            {
-                auto arrayDataGenerator = new ArrayDataGenerator<int>();
-                int *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
-                intArrayStorer->Arrays[i] = tab;
-            }
+            "Int (1)",
+            "Float (2)",
+        };
 
-            else if (userInput->DataType == "float")
-            {
-                auto arrayDataGenerator = new ArrayDataGenerator<float>();
-                float *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
+        int choice;
 
-                floatArrayStorer->Arrays[i] = tab;
-            }
+        for (auto option : options)
+        {
+            std::cout << option << std::endl;
+        }
+
+        std::cin >> choice;
+
+        switch(choice)
+        {
+            case 1:
+                std::cout << "Wybrano int" << std::endl;
+            userInput->DataType = "int";
+            break;
+
+            case 2:
+                std::cout << "Wybrano float" << std::endl;
+            userInput->DataType = "float";
+            break;
+
+            default:
+                std::cout << "nieakceptowalny wybor" << std::endl;
+            break;
         }
     }
 
-    void HandleDataRead(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+    void HandleDataGeneration(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer, int ARRAY_SIZE)
+    {
+        if (userInput->DataType == "int")
+        {
+            auto arrayDataGenerator = new ArrayDataGenerator<int>();
+            int *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
+            intArrayStorer->Arrays[0] = tab;
+        }
+
+        else if (userInput->DataType == "float")
+        {
+            auto arrayDataGenerator = new ArrayDataGenerator<float>();
+            float *tab = arrayDataGenerator->GenerateData(ARRAY_SIZE);
+
+            floatArrayStorer->Arrays[0] = tab;
+        }
+    }
+
+    void HandleDataRead(UserInputStorer *&userInput, ArrayStorer<int> *&intArrayStorer, ArrayStorer<float> *&floatArrayStorer)
     {
         std::cout << "Podaj nazwe pliku" << std::endl;
         std::string fileName;
@@ -115262,12 +115305,14 @@ class SortChecker
 class MenuUtils
 {
     public:
-        MenuUtils(UserInputStorer *&userInputStorer, int GENERATION_COUNT, int ARRAY_SIZE)
+        MenuUtils(UserInputStorer *&userInputStorer)
         {
             while (true)
             {
                 auto intArrayStorer = new ArrayStorer<int>();
                 auto floatArrayStorer = new ArrayStorer<float>();
+
+                int GENERATION_COUNT = 1;
 
 
                 intArrayStorer->Arrays = new int *[GENERATION_COUNT];
@@ -115279,25 +115324,14 @@ class MenuUtils
                 floatArrayStorer->SortingTimesQuickSort = new double[GENERATION_COUNT];
                 floatArrayStorer->SortingTimesInsertSort = new double[GENERATION_COUNT];
 
-                intArrayStorer->SortingTimesQuickSort = new double[GENERATION_COUNT];
-                intArrayStorer->SortingTimesInsertSort = new double[GENERATION_COUNT];
-
-                floatArrayStorer->SortingTimesQuickSort = new double[GENERATION_COUNT];
-                floatArrayStorer->SortingTimesInsertSort = new double[GENERATION_COUNT];
-
                 intArrayStorer->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
                 intArrayStorer->SortingTimesHeapSort = new double[GENERATION_COUNT];
 
                 floatArrayStorer->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
-                floatArrayStorer->SortingTimesInsertBinarySort = new double[GENERATION_COUNT];
+                floatArrayStorer->SortingTimesHeapSort = new double[GENERATION_COUNT];
 
-                for (int i = 0; i < GENERATION_COUNT; i++)
-                {
-                    intArrayStorer->Arrays[i] = new int[ARRAY_SIZE];
-                    floatArrayStorer->Arrays[i] = new float[ARRAY_SIZE];
-                }
-
-                auto menu = new MainMenu(userInputStorer, intArrayStorer, floatArrayStorer, GENERATION_COUNT, ARRAY_SIZE);
+                auto menu = new MainMenu(userInputStorer, intArrayStorer, floatArrayStorer);
+                int ARRAY_SIZE = userInputStorer->ArraySize;
 
                 if (userInputStorer->Option == 1)
                 {
@@ -115582,6 +115616,8 @@ class MenuUtils
                             algorithms->HeapSort(copy, ARRAY_SIZE);
                             auto endHeap = std::chrono::high_resolution_clock::now();
                             double heapSortTime = std::chrono::duration<double, std::milli>(endHeap - startHeap).count();
+
+
                             floatArrayStorer->SortingTimesHeapSort[0] = heapSortTime;
 
                             std::cout << "\n SortedArray: " << std::endl;
@@ -115622,8 +115658,8 @@ class MenuUtils
 
                 for (int i = 0; i < GENERATION_COUNT; i++)
                 {
-                    delete[] intArrayStorer->Arrays[i];
-                    delete[] floatArrayStorer->Arrays[i];
+                    delete intArrayStorer->Arrays[i];
+                    delete floatArrayStorer->Arrays[i];
                 }
 
                 delete[] intArrayStorer->Arrays;
@@ -115677,7 +115713,7 @@ int main()
     {
         auto userInputStorer = new UserInputStorer(0, "");
 
-        auto menuUtils = new MenuUtils(userInputStorer, GENERATION_COUNT, ARRAY_SIZE);
+        auto menuUtils = new MenuUtils(userInputStorer);
 
         delete userInputStorer;
     }

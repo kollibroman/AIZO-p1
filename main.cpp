@@ -22,7 +22,7 @@ int main()
     {
         auto userInputStorer = new UserInputStorer(0, "");
 
-        auto menuUtils = new MenuUtils(userInputStorer, GENERATION_COUNT, ARRAY_SIZE);
+        auto menuUtils = new MenuUtils(userInputStorer);
 
         delete userInputStorer;
     }
